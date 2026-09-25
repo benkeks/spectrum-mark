@@ -7,13 +7,13 @@ The first time you run sbt, it will download Scala dependencies, so network acce
 Clone with `git clone --recurse-submodules`, or initialize an existing checkout:
 
 ```sh
-git submodule update --init equiv-io
+git submodule update --init equivio
 ```
 
 ## Run
 
 ```sh
-python3 run-equiv-io.py
+python3 run-equivio.py
 ```
 
 The script builds the submodule's `shared` assembly jar once with sbt, then
