@@ -1,4 +1,4 @@
-[submodule "equivio"]
-	path = equivio
+[submodule "equiv-io"]
+	path = equiv-io
 	url = https://github.com/benkeks/equivalence-fiddle
 	branch = main
