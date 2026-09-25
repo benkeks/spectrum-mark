@@ -16,4 +16,8 @@ git submodule update --init equiv-io
 python3 run-equiv-io.py
 ```
 
-The script compiles the submodule's `shared` subproject and runs its `compare` command with `--strong-game`. The comparison result is printed by equiv.io.
+The script builds the submodule's `shared` assembly jar once with sbt, then
+launches each of the ten state pairs in both directions directly with Java.
+Each `--strong-game` comparison has a 30-second limit. It writes elapsed
+wall-clock seconds (including Java startup), equiv.io's preorder names, and an
+`ok`, `timeout`, or `error` status to `results/ltbts1-equivio.csv`.
