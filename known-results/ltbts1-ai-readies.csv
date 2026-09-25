@@ -1,0 +1,21 @@
+left,right,seconds,preorders,status
+L13,R13,0.050,"trace, simulation",ok
+R13,L13,0.051,"trace, simulation, failures, ready-simulation",ok
+L16,R16,0.048,"trace, simulation",ok
+R16,L16,0.055,"trace, simulation, failures, ready-simulation",ok
+L21,R21,0.141,"trace",ok
+R21,L21,0.147,"trace",ok
+L24,R24,0.371,"trace, simulation, failures, ready-simulation",ok
+R24,L24,0.102,"trace, failures",ok
+L27,R27,30.006,"",timeout
+R27,L27,30.008,"",timeout
+L31,R31,0.075,"trace, simulation, failures, ready-simulation",ok
+R31,L31,0.136,"trace, failures",ok
+L34,R31,0.070,"trace, simulation, failures, ready-simulation",ok
+R31,L34,0.104,"trace, simulation, failures, ready-simulation",ok
+L38,R24,0.579,"trace, simulation",ok
+R24,L38,1.359,"trace, failures",ok
+L42,R42,0.067,"trace, simulation, failures, ready-simulation",ok
+R42,L42,0.077,"trace, simulation, failures, ready-simulation",ok
+L50,R50,0.088,"trace, simulation, failures, ready-simulation",ok
+R50,L50,0.216,"trace, failures",ok
