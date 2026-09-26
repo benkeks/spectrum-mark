@@ -50,7 +50,7 @@ def compare(jar_path, csv_path, left, right):
 def main():
     root = Path(__file__).resolve().parent
     csv_path = root / "examples" / "ltbts1.csv"
-    equiv_io = root / "equiv-io"
+    equiv_io = root / "equivio"
     subprocess.run(["sbt", "shared/assembly"], cwd=equiv_io, check=True)
     jars = list((equiv_io / "shared" / "target").glob("scala-*/shared-assembly-*.jar"))
     if len(jars) != 1:
