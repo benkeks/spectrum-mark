@@ -1,2 +1,4 @@
 /results/*.csv
 *.pyc
+/build/mcrl2/
+settings.json

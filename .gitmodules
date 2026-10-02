@@ -2,3 +2,7 @@
 	path = equivio
 	url = https://github.com/benkeks/equivalence-fiddle
 	branch = main
+[submodule "mcrl2"]
+	path = mcrl2
+	url = https://github.com/mCRL2org/mCRL2.git
+	shallow = true
