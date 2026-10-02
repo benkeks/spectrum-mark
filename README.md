@@ -11,7 +11,7 @@ git submodule update --init equivio
 ## Run
 
 ```sh
-python3 run-equivio.py
+python3 run_equivio.py
 ```
 
 The script builds the submodule's `shared` assembly jar once with sbt, then launches each of the ten state pairs in both directions directly with Java. Each `--strong-game` comparison has a 30-second limit. It writes elapsed wall-clock seconds (including Java startup), equiv.io's preorder names, and an `ok`, `timeout`, or `error` status to `results/ltbts1-equivio.csv`.
@@ -22,7 +22,7 @@ The `mcrl2` submodule is pinned to a specific revision and configured for shallo
 
 ```sh
 sudo apt install build-essential cmake libboost-dev
-bash build-mcrl2.sh
+bash build_mcrl2.sh
 ```
 
 The script initializes the submodule with `--depth 1`, configures a Release build in `build/mcrl2`, and builds only `ltscompare` and its dependencies. GUI tools, documentation, tests, and the unrelated symbolic tools are disabled. No system installation is needed. Re-running the script uses the existing build.
@@ -35,4 +35,13 @@ build/mcrl2/stage/bin/ltscompare --equivalence=bisim \
 ```
 
 Use `build/mcrl2/stage/bin/ltscompare --help` for other equivalences and preorders.
-mCRL2 benchmark automation is not yet included.
+
+## Run mCRL2
+
+```sh
+python3 run_mcrl2.py
+```
+
+The script runs the incremental mCRL2 build and regenerates the LTBTS1 AUT files before comparing. It discovers all strong equivalence options from `ltscompare --help-all`: strong bisimulation (including alternative and experimental algorithms), simulation, ready simulation, and trace equivalence.
+
+Each comparison has a 30-second limit. Results go to `results/ltbts1-mcrl2.csv`, with one row per directed pair and algorithm: `left`, `right`, `equivalence`, `seconds`, `equivalent` (`true` or `false`), and `status` (`ok`, `timeout`, or `error`). Timing includes process startup, but not building or AUT generation; unsuccessful comparisons leave `equivalent` empty. Each run overwrites the report.
