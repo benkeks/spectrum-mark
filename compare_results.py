@@ -75,7 +75,7 @@ def main():
     second = load_results(args.second)
     mixed_relations = is_equivalence_report(args.first) != is_equivalence_report(args.second)
     if mixed_relations:
-        print("Note: comparing symmetric mCRL2 equivalences with directional preorders; "
+        print("Note: comparing symmetric equivalences with directional preorders; "
               "differences do not necessarily indicate inconsistencies.")
     supported = set().union(*(notions for notions, status in first.values() if status == "ok"))
     for left, right in dict.fromkeys((*first, *second)):
