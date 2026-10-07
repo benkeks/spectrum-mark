@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Record strong-game comparisons for the first LTBTS example."""
+"""Record strong or weak spectroscopy comparisons for the LTBTS examples."""
 
+import argparse
 import csv
 import os
 import signal
@@ -9,25 +10,16 @@ import sys
 import time
 from pathlib import Path
 
-
-PAIRS = (
-    ("L13", "R13"),
-    ("L16", "R16"),
-    ("L21", "R21"),
-    ("L24", "R24"),
-    ("L27", "R27"),
-    ("L31", "R31"),
-    ("L34", "R31"),
-    ("L38", "R24"),
-    ("L42", "R42"),
-    ("L50", "R50"),
-)
+from example import directed_pairs, get_example
 
 
-def compare(jar_path, csv_path, left, right):
+def compare(jar_path, csv_path, left, right, weak=False):
+    command = ["java", "-jar", str(jar_path), "compare", str(csv_path), left, right]
+    if not weak:
+        command.append("--strong-game")
     started = time.perf_counter()
     process = subprocess.Popen(
-        ["java", "-jar", str(jar_path), "compare", str(csv_path), left, right, "--strong-game"],
+        command,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
@@ -48,8 +40,12 @@ def compare(jar_path, csv_path, left, right):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
+    args = parser.parse_args()
+    dataset, pairs = get_example(args.weak)
     root = Path(__file__).resolve().parent
-    csv_path = root / "examples" / "ltbts1.csv"
+    csv_path = root / "examples" / f"{dataset}.csv"
     equiv_io = root / "equivio"
     subprocess.run(["sbt", "shared/assembly"], cwd=equiv_io, check=True)
     jars = list((equiv_io / "shared" / "target").glob("scala-*/shared-assembly-*.jar"))
@@ -57,17 +53,16 @@ def main():
         raise RuntimeError(f"Expected one shared assembly jar, found: {jars}")
     jar_path = jars[0]
 
-    report = root / "results" / "ltbts1-equivio.csv"
+    report = root / "results" / f"{dataset}-equivio.csv"
     report.parent.mkdir(exist_ok=True)
     with report.open("w", newline="") as result_file:
         writer = csv.writer(result_file)
         writer.writerow(("left", "right", "seconds", "preorders", "status"))
-        for left, right in PAIRS:
-            for source, target in ((left, right), (right, left)):
-                seconds, preorders, status = compare(jar_path, csv_path, source, target)
-                writer.writerow((source, target, f"{seconds:.3f}", preorders, status))
-                result_file.flush()
-                print(f"{source},{target}: {status} ({seconds:.3f}s)", flush=True)
+        for source, target in directed_pairs(pairs):
+            seconds, preorders, status = compare(jar_path, csv_path, source, target, args.weak)
+            writer.writerow((source, target, f"{seconds:.3f}", preorders, status))
+            result_file.flush()
+            print(f"{source},{target}: {status} ({seconds:.3f}s)", flush=True)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Record CADP strong-equivalence comparisons for the first LTBTS example."""
+"""Record CADP strong or weak equivalence comparisons for the LTBTS examples."""
 
 import argparse
 import csv
@@ -11,11 +11,29 @@ import tempfile
 import time
 from pathlib import Path
 
-from csv_to_aut import convert_csv_to_aut, generate_aut, parse_csv
-from run_equivio import PAIRS
+from csv_to_aut import generate_aut, parse_csv
+from example import directed_pairs, get_example, prepare_auts
 
 
 EQUIVALENCES = ("bisim-bcg-cmp", "bisim-bisimulator", "trace")
+WEAK_EQUIVALENCES = (
+    "branching-bisim-bcg-cmp", "dpbranching-bisim-bcg-cmp", "weak-bisim-bcg-cmp",
+    "branching-bisim-bisimulator", "weak-bisim-bisimulator",
+    "cadp-taustar", "cadp-safety", "weak-trace",
+)
+CHECKERS = {
+    "bisim-bcg-cmp": ("bcg_cmp", "-strong"),
+    "bisim-bisimulator": ("bisimulator", "-strong"),
+    "trace": ("bisimulator", "-trace"),
+    "branching-bisim-bcg-cmp": ("bcg_cmp", "-branching"),
+    "dpbranching-bisim-bcg-cmp": ("bcg_cmp", "-divbranching"),
+    "weak-bisim-bcg-cmp": ("bcg_cmp", "-observational"),
+    "branching-bisim-bisimulator": ("bisimulator", "-branching"),
+    "weak-bisim-bisimulator": ("bisimulator", "-observational"),
+    "cadp-taustar": ("bisimulator", "-taustar"),
+    "cadp-safety": ("bisimulator", "-safety"),
+    "weak-trace": ("bisimulator", "-weaktrace"),
+}
 
 
 def write_cadp_aut(path, transitions, initial_state):
@@ -52,10 +70,10 @@ def cadp_environment(bin_dir):
 
 
 def compare(bin_dir, left_path, right_path, equivalence, environment, work_dir):
-    if equivalence == "bisim-bcg-cmp":
-        command = [str(bin_dir / "bcg_cmp"), "-strong", str(left_path), str(right_path)]
+    checker, relation = CHECKERS[equivalence]
+    if checker == "bcg_cmp":
+        command = [str(bin_dir / "bcg_cmp"), relation, str(left_path), str(right_path)]
     else:
-        relation = "-trace" if equivalence == "trace" else "-strong"
         command = [
             str(bin_dir.parent / "com" / "bcg_open"), str(left_path),
             str(bin_dir / "bisimulator.a"), relation, "-equal", str(right_path),
@@ -87,6 +105,7 @@ def compare(bin_dir, left_path, right_path, equivalence, environment, work_dir):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
     default_root = Path(os.environ.get("CADP", str(Path.home() / "Software" / "cadp")))
     parser.add_argument(
         "--cadp-bin", type=Path,
@@ -94,6 +113,8 @@ def main():
         help="CADP binary directory (default: CADP_BIN, $CADP/bin.x64, or ~/Software/cadp/bin.x64)",
     )
     args = parser.parse_args()
+    dataset, pairs = get_example(args.weak)
+    equivalences = WEAK_EQUIVALENCES if args.weak else EQUIVALENCES
     bin_dir = args.cadp_bin.expanduser().resolve()
     try:
         environment = cadp_environment(bin_dir)
@@ -101,17 +122,14 @@ def main():
         parser.error(str(error))
 
     root = Path(__file__).resolve().parent
-    csv_path = root / "examples" / "ltbts1.csv"
-    convert_csv_to_aut(csv_path)
+    csv_path = root / "examples" / f"{dataset}.csv"
+    aut_paths = prepare_auts(csv_path, pairs)
     transitions, meta = parse_csv(csv_path)
     initial_states = {entry["state_name"]: entry["state_id"] for entry in meta}
     with tempfile.TemporaryDirectory(prefix="spectrum-cadp-") as directory:
         work_dir = Path(directory)
         bcg_paths = {}
-        for state in dict.fromkeys(state for pair in PAIRS for state in pair):
-            aut_path = csv_path.parent / "aut" / f"{csv_path.stem}_{state}.aut"
-            if not aut_path.is_file():
-                raise FileNotFoundError(aut_path)
+        for state, aut_path in aut_paths.items():
             cadp_aut_path = work_dir / aut_path.name
             write_cadp_aut(cadp_aut_path, transitions, initial_states[state])
             bcg_path = work_dir / f"{csv_path.stem}_{state}.bcg"
@@ -121,24 +139,23 @@ def main():
             )
             bcg_paths[state] = bcg_path
 
-        report = root / "results" / "ltbts1-cadp.csv"
+        report = root / "results" / f"{dataset}-cadp.csv"
         report.parent.mkdir(exist_ok=True)
         with report.open("w", newline="") as result_file:
             writer = csv.writer(result_file)
             writer.writerow(("left", "right", "equivalence", "seconds", "equivalent", "status"))
-            for left, right in PAIRS:
-                for source, target in ((left, right), (right, left)):
-                    for equivalence in EQUIVALENCES:
-                        seconds, equivalent, status = compare(
-                            bin_dir, bcg_paths[source], bcg_paths[target],
-                            equivalence, environment, work_dir,
-                        )
-                        writer.writerow((source, target, equivalence, f"{seconds:.6f}", equivalent, status))
-                        result_file.flush()
-                        print(
-                            f"{source},{target},{equivalence}: {equivalent or status} "
-                            f"({seconds:.6f}s)", flush=True,
-                        )
+            for source, target in directed_pairs(pairs):
+                for equivalence in equivalences:
+                    seconds, equivalent, status = compare(
+                        bin_dir, bcg_paths[source], bcg_paths[target],
+                        equivalence, environment, work_dir,
+                    )
+                    writer.writerow((source, target, equivalence, f"{seconds:.6f}", equivalent, status))
+                    result_file.flush()
+                    print(
+                        f"{source},{target},{equivalence}: {equivalent or status} "
+                        f"({seconds:.6f}s)", flush=True,
+                    )
 
 
 if __name__ == "__main__":

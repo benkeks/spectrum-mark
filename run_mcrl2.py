@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Record mCRL2 strong-equivalence comparisons for the first LTBTS example."""
+"""Record mCRL2 strong or weak relation comparisons for the LTBTS examples."""
 
+import argparse
 import csv
 import os
 import re
@@ -10,43 +11,44 @@ import sys
 import time
 from pathlib import Path
 
-from csv_to_aut import convert_csv_to_aut
+from example import directed_pairs, get_example, prepare_auts
 
 
-PAIRS = (
-    ("L13", "R13"),
-    ("L16", "R16"),
-    ("L21", "R21"),
-    ("L24", "R24"),
-    ("L27", "R27"),
-    ("L31", "R31"),
-    ("L34", "R31"),
-    ("L38", "R24"),
-    ("L42", "R42"),
-    ("L50", "R50"),
-)
-
-
-def strong_equivalences(executable):
+def available_equivalences(executable, weak=False):
     help_text = subprocess.run(
         [str(executable), "--help-all"], capture_output=True, text=True, check=True
     ).stdout
     equivalence_help = help_text.split("--equivalence=", 1)[1].split("--in1=", 1)[0]
     names = re.findall(r"^\s+'([^']+)'", equivalence_help, re.MULTILINE)
-    equivalences = [
+    strong = {
         name for name in names
         if name == "bisim" or name.startswith("bisim-")
         or name in ("sim", "ready-sim", "trace")
-    ]
+    }
+    equivalences = [name for name in names if name != "none" and (name not in strong if weak else name in strong)]
     if not equivalences:
-        raise RuntimeError("No strong equivalences found in ltscompare --help-all")
+        raise RuntimeError("No matching equivalences found in ltscompare --help-all")
     return equivalences
 
 
-def compare(executable, left_path, right_path, equivalence):
+def available_preorders(executable):
+    help_text = subprocess.run(
+        [str(executable), "--help-all"], capture_output=True, text=True, check=True
+    ).stdout
+    preorder_help = help_text.split("--preorder=", 1)[1].split("--strategy=", 1)[0]
+    return set(re.findall(r"^\s+'([^']+)'", preorder_help, re.MULTILINE)) - {"unknown"}
+
+
+def compare(executable, left_path, right_path, equivalence, weak=False, mode="equivalence"):
+    if mode not in ("equivalence", "preorder"):
+        raise ValueError(f"Unknown comparison mode: {mode}")
+    command = [str(executable), f"--{mode}={equivalence}"]
+    if weak:
+        command.append("--tau=i")
+    command.extend((str(left_path), str(right_path)))
     started = time.perf_counter()
     process = subprocess.Popen(
-        [str(executable), f"--equivalence={equivalence}", str(left_path), str(right_path)],
+        command,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -72,39 +74,35 @@ def compare(executable, left_path, right_path, equivalence):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
+    args = parser.parse_args()
+    dataset, pairs = get_example(args.weak)
     root = Path(__file__).resolve().parent
     subprocess.run(["bash", str(root / "build_mcrl2.sh")], cwd=root, check=True)
-    csv_path = root / "examples" / "ltbts1.csv"
-    convert_csv_to_aut(csv_path)
+    csv_path = root / "examples" / f"{dataset}.csv"
+    aut_paths = prepare_auts(csv_path, pairs)
     executable = root / "build" / "mcrl2" / "stage" / "bin" / "ltscompare"
-    equivalences = strong_equivalences(executable)
-    aut_dir = csv_path.parent / "aut"
-    aut_paths = {
-        state: aut_dir / f"{csv_path.stem}_{state}.aut"
-        for pair in PAIRS for state in pair
-    }
-    for aut_path in aut_paths.values():
-        if not aut_path.is_file():
-            raise FileNotFoundError(aut_path)
-
-    report = root / "results" / "ltbts1-mcrl2.csv"
+    equivalences = available_equivalences(executable, args.weak)
+    preorders = available_preorders(executable)
+    report = root / "results" / f"{dataset}-mcrl2.csv"
     report.parent.mkdir(exist_ok=True)
     with report.open("w", newline="") as result_file:
         writer = csv.writer(result_file)
-        writer.writerow(("left", "right", "equivalence", "seconds", "equivalent", "status"))
-        for left, right in PAIRS:
-            for source, target in ((left, right), (right, left)):
-                for equivalence in equivalences:
-                    seconds, equivalent, status = compare(
-                        executable, aut_paths[source], aut_paths[target], equivalence
-                    )
-                    writer.writerow((source, target, equivalence, f"{seconds:.6f}", equivalent, status))
-                    result_file.flush()
-                    print(
-                        f"{source},{target},{equivalence}: {equivalent or status} "
-                        f"({seconds:.6f}s)",
-                        flush=True,
-                    )
+        writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
+        for source, target in directed_pairs(pairs):
+            for equivalence in equivalences:
+                mode = "preorder" if equivalence in preorders else "equivalence"
+                seconds, equivalent, status = compare(
+                    executable, aut_paths[source], aut_paths[target], equivalence, args.weak, mode
+                )
+                writer.writerow((source, target, equivalence, mode, f"{seconds:.6f}", equivalent, status))
+                result_file.flush()
+                print(
+                    f"{source},{target},{equivalence},{mode}: {equivalent or status} "
+                    f"({seconds:.6f}s)",
+                    flush=True,
+                )
 
 
 if __name__ == "__main__":

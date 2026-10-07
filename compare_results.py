@@ -5,22 +5,43 @@ import argparse
 import csv
 import sys
 
-from spectrum import STRONG_SPECTRUM
+from spectrum import STRONG_SPECTRUM, WEAK_SPECTRUM
 
 
 def mcrl2_notion(equivalence):
     if equivalence == "bisim" or equivalence.startswith("bisim-"):
         return "bisimulation"
-    names = {"sim": "simulation", "ready-sim": "ready-simulation", "trace": "trace"}
+    for prefix, notion in (
+        ("branching-bisim", "branching-bisimulation"),
+        ("dpbranching-bisim", "divergence-preserving-branching-bisimulation"),
+        ("weak-bisim", "weak-bisimulation"),
+        ("dpweak-bisim", "divergence-preserving-weak-bisimulation"),
+    ):
+        if equivalence == prefix or equivalence.startswith(prefix + "-"):
+            return notion
+    names = {
+        "sim": "simulation", "ready-sim": "ready-simulation", "trace": "trace",
+        "weak-trace": "weak-trace", "coupled-sim": "coupled-simulation",
+        "cadp-taustar": "cadp-taustar", "cadp-safety": "cadp-safety",
+    }
     if equivalence not in names:
-        raise ValueError(f"Unsupported mCRL2 equivalence: {equivalence}")
+        raise ValueError(f"Unsupported equivalence: {equivalence}")
     return names[equivalence]
 
 
-def is_equivalence_report(path):
+def report_modes(path):
     with open(path, newline="") as file:
-        fields = set(csv.DictReader(file).fieldnames or ())
-    return "preorders" not in fields and {"equivalence", "equivalent"} <= fields
+        reader = csv.DictReader(file)
+        fields = set(reader.fieldnames or ())
+        if "preorders" in fields:
+            return {"preorder"}
+        if {"equivalence", "equivalent"} <= fields:
+            return {row.get("mode", "equivalence") for row in reader}
+    return set()
+
+
+def is_equivalence_report(path):
+    return "equivalence" in report_modes(path)
 
 
 def load_results(path):
@@ -39,8 +60,11 @@ def load_results(path):
             pair = (row["left"], row["right"])
             if is_mcrl2:
                 equivalence = row["equivalence"]
+                mode = row.get("mode", "equivalence")
+                if mode not in ("equivalence", "preorder"):
+                    raise ValueError(f"Invalid comparison mode {mode!r} in {path}")
                 notion = mcrl2_notion(equivalence)
-                algorithm_key = (*pair, equivalence)
+                algorithm_key = (*pair, equivalence, mode)
                 if algorithm_key in algorithms:
                     raise ValueError(f"Duplicate algorithm {algorithm_key} in {path}")
                 algorithms[algorithm_key] = row["status"]
@@ -51,10 +75,14 @@ def load_results(path):
                 equivalent = row["equivalent"].strip().lower()
                 if equivalent not in ("true", "false"):
                     raise ValueError(f"Invalid equivalence result {equivalent!r} for {algorithm_key} in {path}")
-                notion_key = (*pair, notion)
-                if notion_key in outcomes and outcomes[notion_key] != equivalent:
-                    raise ValueError(f"Conflicting algorithm results for {notion_key} in {path}")
-                outcomes[notion_key] = equivalent
+                notion_key = (*pair, notion, mode)
+                answers = outcomes.setdefault(notion_key, set())
+                answers.add(equivalent)
+                if len(answers) > 1:
+                    notions.discard(notion)
+                    results[pair] = (notions, "conflict")
+                    print(f"Conflicting algorithm results for {notion_key} in {path}", file=sys.stderr)
+                    continue
                 if equivalent == "true":
                     notions.add(notion)
                 continue
@@ -67,13 +95,20 @@ def load_results(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--weak", action="store_true", help="Use the weak spectrum (also detected from weak notion names)")
     parser.add_argument("first", help="First result CSV")
     parser.add_argument("second", help="Second result CSV")
     args = parser.parse_args()
 
     first = load_results(args.first)
     second = load_results(args.second)
-    mixed_relations = is_equivalence_report(args.first) != is_equivalence_report(args.second)
+    reported = set().union(*(notions for notions, status in (*first.values(), *second.values())))
+    weak_names = {name for name, _ in WEAK_SPECTRUM.notions}
+    weak = args.weak or bool(reported & weak_names) or any(
+        name.startswith(("divergence-preserving-", "cadp-", "coupled-")) for name in reported
+    )
+    spectrum = WEAK_SPECTRUM if weak else STRONG_SPECTRUM
+    mixed_relations = (report_modes(args.first) | report_modes(args.second)) == {"equivalence", "preorder"}
     if mixed_relations:
         print("Note: comparing symmetric equivalences with directional preorders; "
               "differences do not necessarily indicate inconsistencies.")
@@ -81,8 +116,8 @@ def main():
     for left, right in dict.fromkeys((*first, *second)):
         first_preorders, first_status = first.get((left, right), (set(), "missing"))
         second_preorders, second_status = second.get((left, right), (set(), "missing"))
-        first_only = STRONG_SPECTRUM.unmatched(first_preorders, second_preorders)
-        second_only = STRONG_SPECTRUM.unmatched(second_preorders, first_preorders)
+        first_only = spectrum.unmatched(first_preorders, second_preorders)
+        second_only = spectrum.unmatched(second_preorders, first_preorders)
         if first_only and second_only:
             more_precise = "both"
         elif first_only:
@@ -98,7 +133,7 @@ def main():
         print(f"  second only: {', '.join(sorted(second_only)) or '(none)'}")
         print(f"  more precise: {more_precise}")
         if first_status == second_status == "ok" and not mixed_relations:
-            missing = STRONG_SPECTRUM.missing_intermediates(
+            missing = spectrum.missing_intermediates(
                 first_preorders, second_preorders, supported
             )
             if missing:
