@@ -10,7 +10,9 @@ if [[ ! "$jobs" =~ ^[1-9][0-9]*$ ]]; then
     exit 1
 fi
 
-git -C "$repo_dir" submodule update --init --depth 1 mcrl2
+if [[ ! -f "$repo_dir/mcrl2/CMakeLists.txt" ]]; then
+    git -C "$repo_dir" submodule update --init --depth 1 mcrl2
+fi
 cmake -S "$repo_dir/mcrl2" -B "$build_dir" \
     -DCMAKE_BUILD_TYPE=Release \
     -DMCRL2_ENABLE_GUI_TOOLS=OFF \

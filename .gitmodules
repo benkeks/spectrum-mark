@@ -4,5 +4,5 @@
 	branch = main
 [submodule "mcrl2"]
 	path = mcrl2
-	url = https://github.com/mCRL2org/mCRL2.git
+	url = git@github.com:benkeks/mCRL2.git
 	shallow = true
