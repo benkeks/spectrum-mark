@@ -12,6 +12,7 @@ https://mcrl2.org/web/user_manual/tools/lts.html#language-aut-lts
 
 Each output AUT file represents the full LTS with one named state as the initial state.
 AUT files are written to an 'aut' subdirectory relative to the input CSV file.
+Silent labels tau, Greek tau, and i are normalized to the AUT internal label i.
 """
 
 import csv
@@ -114,7 +115,8 @@ def generate_aut(transitions, meta_entry, basename):
     
     # Transition lines
     for t in transitions:
-        line = f"({t['src']},\"{t['action']}\",{t['tar']})"
+        action = 'i' if t['action'] in ('tau', 'i', '\u03c4') else t['action']
+        line = f"({t['src']},\"{action}\",{t['tar']})"
         lines.append(line)
     
     return "\n".join(lines) + "\n"
