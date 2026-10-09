@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Record CADP strong or weak equivalence comparisons for the LTBTS examples."""
+"""Record CADP strong or weak relation comparisons for the LTBTS examples."""
 
 import argparse
 import csv
@@ -36,6 +36,14 @@ CHECKERS = {
 }
 
 
+def available_comparisons(weak=False):
+    equivalences = WEAK_EQUIVALENCES if weak else EQUIVALENCES
+    return [(name, "equivalence") for name in equivalences] + [
+        (name, "preorder") for name in equivalences
+        if CHECKERS[name][0] == "bisimulator"
+    ]
+
+
 def write_cadp_aut(path, transitions, initial_state):
     states = {transition[field] for transition in transitions for field in ("src", "tar")}
     state_ids = {
@@ -69,14 +77,19 @@ def cadp_environment(bin_dir):
     return environment
 
 
-def compare(bin_dir, left_path, right_path, equivalence, environment, work_dir):
+def compare(bin_dir, left_path, right_path, equivalence, environment, work_dir, mode="equivalence"):
+    if mode not in ("equivalence", "preorder"):
+        raise ValueError(f"Unknown comparison mode: {mode}")
     checker, relation = CHECKERS[equivalence]
     if checker == "bcg_cmp":
+        if mode != "equivalence":
+            raise ValueError("bcg_cmp supports equivalence comparisons only")
         command = [str(bin_dir / "bcg_cmp"), relation, str(left_path), str(right_path)]
     else:
         command = [
             str(bin_dir.parent / "com" / "bcg_open"), str(left_path),
-            str(bin_dir / "bisimulator.a"), relation, "-equal", str(right_path),
+            str(bin_dir / "bisimulator.a"), relation,
+            "-smaller" if mode == "preorder" else "-equal", str(right_path),
         ]
     started = time.perf_counter()
     process = subprocess.Popen(
@@ -114,7 +127,7 @@ def main():
     )
     args = parser.parse_args()
     dataset, pairs = get_example(args.weak)
-    equivalences = WEAK_EQUIVALENCES if args.weak else EQUIVALENCES
+    comparisons = available_comparisons(args.weak)
     bin_dir = args.cadp_bin.expanduser().resolve()
     try:
         environment = cadp_environment(bin_dir)
@@ -143,17 +156,17 @@ def main():
         report.parent.mkdir(exist_ok=True)
         with report.open("w", newline="") as result_file:
             writer = csv.writer(result_file)
-            writer.writerow(("left", "right", "equivalence", "seconds", "equivalent", "status"))
+            writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
             for source, target in directed_pairs(pairs):
-                for equivalence in equivalences:
+                for equivalence, mode in comparisons:
                     seconds, equivalent, status = compare(
                         bin_dir, bcg_paths[source], bcg_paths[target],
-                        equivalence, environment, work_dir,
+                        equivalence, environment, work_dir, mode,
                     )
-                    writer.writerow((source, target, equivalence, f"{seconds:.6f}", equivalent, status))
+                    writer.writerow((source, target, equivalence, mode, f"{seconds:.6f}", equivalent, status))
                     result_file.flush()
                     print(
-                        f"{source},{target},{equivalence}: {equivalent or status} "
+                        f"{source},{target},{equivalence},{mode}: {equivalent or status} "
                         f"({seconds:.6f}s)", flush=True,
                     )
 

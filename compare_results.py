@@ -8,7 +8,16 @@ import sys
 from spectrum import STRONG_SPECTRUM, WEAK_SPECTRUM
 
 
-def mcrl2_notion(equivalence):
+def mcrl2_notion(equivalence, mode="equivalence"):
+    cadp_preorders = {
+        "bisim-bisimulator": "simulation",
+        "weak-bisim-bisimulator": "weak-simulation",
+        "branching-bisim-bisimulator": "cadp-branching-simulation",
+        "cadp-taustar": "cadp-taustar-simulation",
+        "cadp-safety": "cadp-taustar-simulation",
+    }
+    if mode == "preorder" and equivalence in cadp_preorders:
+        return cadp_preorders[equivalence]
     if equivalence == "bisim" or equivalence.startswith("bisim-"):
         return "bisimulation"
     for prefix, notion in (
@@ -23,6 +32,10 @@ def mcrl2_notion(equivalence):
         "sim": "simulation", "ready-sim": "ready-simulation", "trace": "trace",
         "weak-trace": "weak-trace", "coupled-sim": "coupled-simulation",
         "cadp-taustar": "cadp-taustar", "cadp-safety": "cadp-safety",
+        "trace-ac": "trace", "weak-trace-ac": "weak-trace",
+        "failures": "failure", "weak-failures": "stable-failure",
+        "failures-divergence": "failures-divergence",
+        "impossible-futures": "impossible-future",
     }
     if equivalence not in names:
         raise ValueError(f"Unsupported equivalence: {equivalence}")
@@ -63,7 +76,7 @@ def load_results(path):
                 mode = row.get("mode", "equivalence")
                 if mode not in ("equivalence", "preorder"):
                     raise ValueError(f"Invalid comparison mode {mode!r} in {path}")
-                notion = mcrl2_notion(equivalence)
+                notion = mcrl2_notion(equivalence, mode)
                 algorithm_key = (*pair, equivalence, mode)
                 if algorithm_key in algorithms:
                     raise ValueError(f"Duplicate algorithm {algorithm_key} in {path}")

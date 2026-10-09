@@ -39,6 +39,19 @@ def available_preorders(executable):
     return set(re.findall(r"^\s+'([^']+)'", preorder_help, re.MULTILINE)) - {"unknown"}
 
 
+def available_comparisons(executable, weak=False):
+    equivalences = available_equivalences(executable, weak)
+    preorders = available_preorders(executable)
+    weak_preorders = {
+        name for name in preorders
+        if name.startswith("weak-") or name in ("failures-divergence", "coupled-sim")
+    }
+    selected = weak_preorders if weak else preorders - weak_preorders
+    return [(name, "equivalence") for name in equivalences] + [
+        (name, "preorder") for name in sorted(selected)
+    ]
+
+
 def compare(executable, left_path, right_path, equivalence, weak=False, mode="equivalence"):
     if mode not in ("equivalence", "preorder"):
         raise ValueError(f"Unknown comparison mode: {mode}")
@@ -83,16 +96,14 @@ def main():
     csv_path = root / "examples" / f"{dataset}.csv"
     aut_paths = prepare_auts(csv_path, pairs)
     executable = root / "build" / "mcrl2" / "stage" / "bin" / "ltscompare"
-    equivalences = available_equivalences(executable, args.weak)
-    preorders = available_preorders(executable)
+    comparisons = available_comparisons(executable, args.weak)
     report = root / "results" / f"{dataset}-mcrl2.csv"
     report.parent.mkdir(exist_ok=True)
     with report.open("w", newline="") as result_file:
         writer = csv.writer(result_file)
         writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
         for source, target in directed_pairs(pairs):
-            for equivalence in equivalences:
-                mode = "preorder" if equivalence in preorders else "equivalence"
+            for equivalence, mode in comparisons:
                 seconds, equivalent, status = compare(
                     executable, aut_paths[source], aut_paths[target], equivalence, args.weak, mode
                 )
