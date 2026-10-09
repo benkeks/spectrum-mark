@@ -6,7 +6,9 @@ from unittest.mock import Mock, patch
 
 import run_cadp
 import run_mcrl2
+import run_suite
 from compare_results import load_results, mcrl2_notion
+from example import PAIRS, WEAK_PAIRS, resolve_input
 
 
 class RunnerTests(unittest.TestCase):
@@ -75,7 +77,7 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(mcrl2_notion("bisim-bisimulator"), "bisimulation")
         self.assertEqual(mcrl2_notion("weak-bisim-bisimulator"), "weak-bisimulation")
 
-    def test_mixed_report_and_legacy_schema(self):
+    def test_mixed_report_requires_explicit_mode(self):
         with tempfile.TemporaryDirectory() as directory:
             report = Path(directory) / "results.csv"
             with report.open("w", newline="") as result_file:
@@ -90,7 +92,52 @@ class RunnerTests(unittest.TestCase):
                 writer = csv.writer(result_file)
                 writer.writerow(("left", "right", "equivalence", "equivalent", "status"))
                 writer.writerow(("P", "Q", "bisim-bisimulator", "true", "ok"))
-            self.assertEqual(load_results(report), {("P", "Q"): ({"bisimulation"}, "ok")})
+            with self.assertRaisesRegex(ValueError, "mode"):
+                load_results(report)
+
+    def test_custom_csv_pairs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "custom.csv"
+            source.write_text("0,1,a\n0,P,implicit-main\n1,Q,implicit-main\n2,R,implicit-main\n")
+            self.assertEqual(resolve_input(source), (source, [("P", "Q"), ("P", "R"), ("Q", "R")]))
+            self.assertEqual(resolve_input(source, [("Q", "R")])[1], [("Q", "R")])
+            with self.assertRaisesRegex(ValueError, "Invalid comparison pair"):
+                resolve_input(source, [("P", "missing")])
+            with self.assertRaisesRegex(ValueError, "Duplicate comparison pair"):
+                resolve_input(source, [("P", "Q"), ("Q", "P")])
+
+    def test_suite_defaults_to_both_curated_csvs(self):
+        with patch.object(run_suite.sys, "argv", ["run_suite.py"]), \
+                patch.object(run_suite, "run_dataset") as run_dataset:
+            run_suite.main()
+        self.assertEqual(run_dataset.call_count, 2)
+        strong, weak = [call.args for call in run_dataset.call_args_list]
+        self.assertEqual((strong[0].name, strong[1], strong[2]), ("ltbts1.csv", list(PAIRS), False))
+        self.assertEqual((weak[0].name, weak[1], weak[2]), ("ltbts2.csv", list(WEAK_PAIRS), True))
+
+    def test_suite_runs_tools_then_all_comparisons(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output_dir = Path(directory)
+            source = output_dir / "custom.csv"
+            for tool in run_suite.TOOLS:
+                (output_dir / f"custom-{tool}.csv").write_text("status\nok\n")
+            with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"):
+                run_suite.run_dataset(source, [("P", "Q")], True, output_dir, Path("/cadp/bin.x64"))
+            commands = [call.args[0] for call in run.call_args_list]
+            self.assertEqual(len(commands), 6)
+            self.assertEqual(
+                [Path(command[1]).name for command in commands[:3]],
+                ["run_equivio.py", "run_mcrl2.py", "run_cadp.py"],
+            )
+            for command in commands[:3]:
+                self.assertIn("--weak", command)
+                self.assertEqual(command[command.index("--csv") + 1], str(source))
+                self.assertEqual(command[command.index("--pair") + 1:][:2], ["P", "Q"])
+            self.assertIn("--cadp-bin", commands[2])
+            for command in commands[3:]:
+                self.assertEqual(Path(command[1]).name, "compare_results.py")
+                self.assertIn("--weak", command)
+            self.assertEqual(len(list(output_dir.glob("*-vs-*.txt"))), 3)
 
 
 if __name__ == "__main__":

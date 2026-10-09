@@ -48,8 +48,8 @@ def report_modes(path):
         fields = set(reader.fieldnames or ())
         if "preorders" in fields:
             return {"preorder"}
-        if {"equivalence", "equivalent"} <= fields:
-            return {row.get("mode", "equivalence") for row in reader}
+        if {"equivalence", "mode", "equivalent"} <= fields:
+            return {row["mode"] for row in reader}
     return set()
 
 
@@ -67,13 +67,13 @@ def load_results(path):
         if not {"left", "right", "status"} <= fields:
             raise ValueError(f"Missing pair or status columns in {path}")
         is_mcrl2 = "preorders" not in fields
-        if is_mcrl2 and not {"equivalence", "equivalent"} <= fields:
-            raise ValueError(f"Expected preorders or equivalence/equivalent columns in {path}")
+        if is_mcrl2 and not {"equivalence", "mode", "equivalent"} <= fields:
+            raise ValueError(f"Expected preorders or equivalence/mode/equivalent columns in {path}")
         for row in reader:
             pair = (row["left"], row["right"])
             if is_mcrl2:
                 equivalence = row["equivalence"]
-                mode = row.get("mode", "equivalence")
+                mode = row["mode"]
                 if mode not in ("equivalence", "preorder"):
                     raise ValueError(f"Invalid comparison mode {mode!r} in {path}")
                 notion = mcrl2_notion(equivalence, mode)

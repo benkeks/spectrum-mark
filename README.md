@@ -19,30 +19,42 @@ The mCRL2 build initializes a shallow checkout if missing, preserves existing lo
 ## Run
 
 ```sh
-python3 run_equivio.py
-python3 run_mcrl2.py
-python3 run_cadp.py --cadp-bin ~/Software/cadp/bin.x64
+python3 run_suite.py
 ```
 
-Defaults test ten strong LTBTS1 pairs in both directions. Add `--weak` for the 16 weak LTBTS2 pairs (ending with P57-P58):
+This starts from `examples/ltbts1.csv` and `examples/ltbts2.csv`, builds the tools as needed, generates AUT/BCG inputs, runs Equivio, mCRL2 and CADP, and writes all three pairwise result comparisons. It uses ten curated strong LTBTS1 pairs and 16 weak LTBTS2 pairs (ending with P57-P58), each in both directions.
+
+Run only the weak dataset, select a smaller comparison, or provide another CSV:
 
 ```sh
-python3 run_equivio.py --weak
-python3 run_mcrl2.py --weak
-python3 run_cadp.py --weak
+python3 run_suite.py --weak
+python3 run_suite.py --pair L13 R13
+python3 run_suite.py --csv examples/ltbts2.csv --weak --pair P55 P56
+python3 run_suite.py --csv path/to/input.csv --pair P Q --pair R S --output-dir results/custom
 ```
 
-Runners build/generate inputs as needed. Silent AUT labels become `i`; CADP inputs are temporarily remapped to initial state zero. CADP's path defaults to `CADP_BIN`, `$CADP/bin.x64`, then `~/Software/cadp/bin.x64`; `--cadp-bin` overrides it.
+Input CSVs contain transition rows `source_id,target_id,action` and named initial-state rows `state_id,state_name,implicit-main`. For custom CSVs without `--pair`, all distinct named-state pairs are compared in both directions. Use `--weak` to select weak semantics for custom inputs. New inputs use the same CSV interface; the curated default datasets and pairs are defined in `example.py`.
+
+The individual `run_equivio.py`, `run_mcrl2.py` and `run_cadp.py` commands accept the same `--csv`, `--pair`, `--weak` and `--output-dir` options. Without input options they select the strong example, or the weak example with `--weak`.
+
+Silent AUT labels become `i`; CADP inputs are temporarily remapped to initial state zero. CADP's path defaults to `CADP_BIN`, `$CADP/bin.x64`, then `~/Software/cadp/bin.x64`; `--cadp-bin` overrides it for the suite or CADP runner.
 
 ## Results
 
-Each run overwrites `results/ltbts{1,2}-{equivio,mcrl2,cadp}.csv`. Comparisons have a 30-second limit and record elapsed time plus `ok`, `timeout`, or `error`. Timing excludes input generation but includes process startup and CADP compilation/linking.
+Each run writes fresh `<input-stem>-{equivio,mcrl2,cadp}.csv` reports and `<input-stem>-<first>-vs-<second>.txt` comparisons under `results/`, or `--output-dir`. Existing files with those names are overwritten. Use separate output directories for different semantic runs of the same CSV. Comparisons have a 30-second limit per individual tool call and record elapsed time plus `ok`, `timeout`, or `error`. Timing excludes input generation and tool builds but includes process startup and CADP compilation/linking.
 
-Equivio reports directional preorders; CADP reports boolean equivalences. mCRL2 prefers supported preorders and records `mode`: `equivalent=true` means left-to-right inclusion in preorder mode.
+Equivio reports directional preorder frontiers. CADP and mCRL2 record individual boolean checks with a `mode` column: `equivalent=true` means left-to-right inclusion in preorder mode. Both modes are measured separately whenever available, even when equivalence could be inferred from two preorder answers. Every selected check is executed for every directed pair, with no adaptive scheduling or skipped calls; the individual timings remain available for later spectroscopy cost analysis.
+
+- **mCRL2:** runs all advertised nontrivial equivalences and preorders in the selected strong or weak family, retaining every algorithm variant. Strong runs include simulation, ready simulation, trace (including antichains), failures, impossible futures, and bisimulation. Weak runs include weak trace (including antichains), stable failures (`weak-failures`), failures-divergence, coupled simulation, weak/branching bisimulation and their divergence-preserving variants.
+- **CADP:** retains all configured `bcg_cmp` and BISIMULATOR equivalence checks, and adds `-smaller` for every BISIMULATOR relation. Since both pair directions are run, separate `-greater` calls would duplicate the same inclusion tasks. Strong inclusion checks cover simulation and trace; weak checks cover observational/weak simulation, branching simulation, tau*.a/safety simulation and weak trace.
+
+CADP's `-strong -smaller` is simulation, not bisimulation; `-observational -smaller` is weak simulation. Tau*.a and safety have the same associated preorder and are still timed separately. CADP branching simulation and tau*.a simulation remain separately named outside the configured Equivio spectrum rather than assuming an unverified ordering. mCRL2's `weak-failures` maps to `stable-failure`, not `weak-failure`.
 
 ```sh
 python3 compare_results.py results/ltbts1-equivio.csv results/ltbts1-mcrl2.csv
 python3 compare_results.py --weak results/ltbts2-equivio.csv results/ltbts2-mcrl2.csv
 ```
 
-Mixed equivalence/preorder reports are not directly equivalent. Checker disagreements are flagged as `conflict` and excluded from aggregation; notably, CADP's branching checkers disagree on P55-P56. Relations outside the configured spectrum are compared by name without assumed ordering.
+Mixed equivalence/preorder reports are not directly equivalent. Checker disagreements are flagged as `conflict` and excluded from aggregation. Relations outside the configured spectrum are compared by name without assumed ordering.
+
+Run the focused input, suite and runner tests with `python3 -m unittest -v test_runners`.

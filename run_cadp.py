@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 from csv_to_aut import generate_aut, parse_csv
-from example import directed_pairs, get_example, prepare_auts
+from example import add_input_arguments, directed_pairs, prepare_auts, resolve_input
 
 
 EQUIVALENCES = ("bisim-bcg-cmp", "bisim-bisimulator", "trace")
@@ -119,6 +119,7 @@ def compare(bin_dir, left_path, right_path, equivalence, environment, work_dir, 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
+    add_input_arguments(parser)
     default_root = Path(os.environ.get("CADP", str(Path.home() / "Software" / "cadp")))
     parser.add_argument(
         "--cadp-bin", type=Path,
@@ -126,7 +127,10 @@ def main():
         help="CADP binary directory (default: CADP_BIN, $CADP/bin.x64, or ~/Software/cadp/bin.x64)",
     )
     args = parser.parse_args()
-    dataset, pairs = get_example(args.weak)
+    try:
+        csv_path, pairs = resolve_input(args.csv, args.pair, args.weak)
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     comparisons = available_comparisons(args.weak)
     bin_dir = args.cadp_bin.expanduser().resolve()
     try:
@@ -135,7 +139,6 @@ def main():
         parser.error(str(error))
 
     root = Path(__file__).resolve().parent
-    csv_path = root / "examples" / f"{dataset}.csv"
     aut_paths = prepare_auts(csv_path, pairs)
     transitions, meta = parse_csv(csv_path)
     initial_states = {entry["state_name"]: entry["state_id"] for entry in meta}
@@ -152,7 +155,7 @@ def main():
             )
             bcg_paths[state] = bcg_path
 
-        report = root / "results" / f"{dataset}-cadp.csv"
+        report = args.output_dir / f"{csv_path.stem}-cadp.csv"
         report.parent.mkdir(exist_ok=True)
         with report.open("w", newline="") as result_file:
             writer = csv.writer(result_file)

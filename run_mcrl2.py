@@ -11,7 +11,7 @@ import sys
 import time
 from pathlib import Path
 
-from example import directed_pairs, get_example, prepare_auts
+from example import add_input_arguments, directed_pairs, prepare_auts, resolve_input
 
 
 def available_equivalences(executable, weak=False):
@@ -89,15 +89,18 @@ def compare(executable, left_path, right_path, equivalence, weak=False, mode="eq
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
+    add_input_arguments(parser)
     args = parser.parse_args()
-    dataset, pairs = get_example(args.weak)
+    try:
+        csv_path, pairs = resolve_input(args.csv, args.pair, args.weak)
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     root = Path(__file__).resolve().parent
     subprocess.run(["bash", str(root / "build_mcrl2.sh")], cwd=root, check=True)
-    csv_path = root / "examples" / f"{dataset}.csv"
     aut_paths = prepare_auts(csv_path, pairs)
     executable = root / "build" / "mcrl2" / "stage" / "bin" / "ltscompare"
     comparisons = available_comparisons(executable, args.weak)
-    report = root / "results" / f"{dataset}-mcrl2.csv"
+    report = args.output_dir / f"{csv_path.stem}-mcrl2.csv"
     report.parent.mkdir(exist_ok=True)
     with report.open("w", newline="") as result_file:
         writer = csv.writer(result_file)

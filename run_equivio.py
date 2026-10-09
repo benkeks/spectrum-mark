@@ -10,7 +10,7 @@ import sys
 import time
 from pathlib import Path
 
-from example import directed_pairs, get_example
+from example import add_input_arguments, directed_pairs, resolve_input
 
 
 def compare(jar_path, csv_path, left, right, weak=False):
@@ -22,7 +22,7 @@ def compare(jar_path, csv_path, left, right, weak=False):
         command,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        text=True,
+                text=True,
         start_new_session=True,
     )
     try:
@@ -42,10 +42,13 @@ def compare(jar_path, csv_path, left, right, weak=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
+    add_input_arguments(parser)
     args = parser.parse_args()
-    dataset, pairs = get_example(args.weak)
+    try:
+        csv_path, pairs = resolve_input(args.csv, args.pair, args.weak)
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     root = Path(__file__).resolve().parent
-    csv_path = root / "examples" / f"{dataset}.csv"
     equiv_io = root / "equivio"
     subprocess.run(["sbt", "shared/assembly"], cwd=equiv_io, check=True)
     jars = list((equiv_io / "shared" / "target").glob("scala-*/shared-assembly-*.jar"))
@@ -53,7 +56,7 @@ def main():
         raise RuntimeError(f"Expected one shared assembly jar, found: {jars}")
     jar_path = jars[0]
 
-    report = root / "results" / f"{dataset}-equivio.csv"
+    report = args.output_dir / f"{csv_path.stem}-equivio.csv"
     report.parent.mkdir(exist_ok=True)
     with report.open("w", newline="") as result_file:
         writer = csv.writer(result_file)

@@ -1,0 +1,129 @@
+Note: comparing symmetric equivalences with directional preorders; differences do not necessarily indicate inconsistencies.
+P11,P12
+  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P12,P11
+  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P13,P14
+  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
+  more precise: both
+P14,P13
+  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
+  more precise: both
+P15,P16
+  first only: coupled-simulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P16,P15
+  first only: coupled-simulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P21,P22
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P22,P21
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P22,P23
+  first only: failures-divergence, stable-failure
+  second only: (none)
+  more precise: first
+P23,P22
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P24,P25
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P25,P24
+  first only: failures-divergence, stable-failure
+  second only: (none)
+  more precise: first
+P31,P32
+  first only: failures-divergence, stable-failure
+  second only: (none)
+  more precise: first
+P32,P31
+  first only: failures-divergence, stable-failure
+  second only: (none)
+  more precise: first
+P33,P34
+  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P34,P33
+  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  second only: cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P41,P42
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P42,P41
+  first only: failures-divergence, stable-failure
+  second only: (none)
+  more precise: first
+P42,P43
+  first only: (none)
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: second
+P43,P42
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P44,P45
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P45,P44
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P51,P52
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P52,P51
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P53,P54
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P54,P53
+  first only: coupled-simulation, failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P55,P56
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P56,P55
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P56,P57
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P57,P56
+  first only: coupled-simulation, failures-divergence
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P57,P58
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P58,P57
+  first only: failures-divergence, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
