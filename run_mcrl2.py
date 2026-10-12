@@ -39,7 +39,9 @@ def available_preorders(executable):
     return set(re.findall(r"^\s+'([^']+)'", preorder_help, re.MULTILINE)) - {"unknown"}
 
 
-def available_comparisons(executable, weak=False):
+def available_comparisons(executable, weak=False, divergences=False):
+    if divergences and not weak:
+        raise ValueError("Divergence comparisons require weak mode")
     equivalences = available_equivalences(executable, weak)
     preorders = available_preorders(executable)
     weak_preorders = {
@@ -47,8 +49,13 @@ def available_comparisons(executable, weak=False):
         if name.startswith("weak-") or name in ("failures-divergence", "coupled-sim")
     }
     selected = weak_preorders if weak else preorders - weak_preorders
-    return [(name, "equivalence") for name in equivalences] + [
+    comparisons = [(name, "equivalence") for name in equivalences] + [
         (name, "preorder") for name in sorted(selected)
+    ]
+    return [
+        (name, mode) for name, mode in comparisons
+        if (name.startswith(("dpbranching-bisim", "dpweak-bisim"))
+            or name == "failures-divergence") == divergences
     ]
 
 
@@ -89,8 +96,12 @@ def compare(executable, left_path, right_path, equivalence, weak=False, mode="eq
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
+    parser.add_argument("--divergences", action="store_true",
+                        help="Run only divergence-sensitive relations (requires --weak)")
     add_input_arguments(parser)
     args = parser.parse_args()
+    if args.divergences and not args.weak:
+        parser.error("--divergences requires --weak")
     try:
         csv_path, pairs = resolve_input(args.csv, args.pair, args.weak)
     except (OSError, ValueError) as error:
@@ -99,8 +110,9 @@ def main():
     subprocess.run(["bash", str(root / "build_mcrl2.sh")], cwd=root, check=True)
     aut_paths = prepare_auts(csv_path, pairs)
     executable = root / "build" / "mcrl2" / "stage" / "bin" / "ltscompare"
-    comparisons = available_comparisons(executable, args.weak)
-    report = args.output_dir / f"{csv_path.stem}-mcrl2.csv"
+    comparisons = available_comparisons(executable, args.weak, args.divergences)
+    suffix = "mcrl2-divergences" if args.divergences else "mcrl2"
+    report = args.output_dir / f"{csv_path.stem}-{suffix}.csv"
     report.parent.mkdir(exist_ok=True)
     with report.open("w", newline="") as result_file:
         writer = csv.writer(result_file)

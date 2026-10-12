@@ -11,7 +11,8 @@ import run_mcrl2
 import run_suite
 import compare_results
 from compare_results import load_results, mcrl2_notion
-from example import PAIRS, WEAK_PAIRS, resolve_input
+from csv_to_aut import parse_csv
+from example import PAIRS, PETERSON_PAIRS, WEAK_PAIRS, resolve_input
 from spectrum import WEAK_COMPARISON_SPECTRUM
 
 
@@ -38,24 +39,34 @@ class RunnerTests(unittest.TestCase):
                 patch.object(run_mcrl2, "available_preorders", return_value=preorders):
             strong = run_mcrl2.available_comparisons(Path("ltscompare"))
             weak = run_mcrl2.available_comparisons(Path("ltscompare"), weak=True)
-        self.assertEqual({name for name, mode in strong + weak if mode == "preorder"}, preorders)
+            divergent = run_mcrl2.available_comparisons(Path("ltscompare"), weak=True, divergences=True)
+        self.assertEqual({name for name, mode in strong + weak + divergent if mode == "preorder"}, preorders)
         self.assertIn(("sim", "equivalence"), strong)
         self.assertIn(("sim", "preorder"), strong)
         self.assertIn(("failures", "preorder"), strong)
         self.assertIn(("impossible-futures", "preorder"), strong)
-        self.assertIn(("failures-divergence", "preorder"), weak)
+        self.assertNotIn(("failures-divergence", "preorder"), weak)
+        self.assertIn(("failures-divergence", "preorder"), divergent)
         self.assertIn(("weak-failures", "preorder"), weak)
         self.assertEqual(len(strong), len(set(strong)))
         self.assertEqual(len(weak), len(set(weak)))
 
-    def test_divergence_input_requires_deadlock_and_fresh_delta(self):
+    def test_divergence_input_adds_unreachable_sink_and_reserves_delta(self):
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "input.csv"
             source.write_text("0,0,tau\n0,P,implicit-main\n")
-            with self.assertRaisesRegex(ValueError, "deadlock"):
-                run_equivio.validate_divergence_input(source)
-            source.write_text("0,0,tau\n0,P,implicit-main\n1,Q,implicit-main\n")
+            original = source.read_text()
             run_equivio.validate_divergence_input(source)
+            prepared = run_equivio.prepare_divergence_input(source, Path(directory) / "prepared.csv")
+            transitions, meta = parse_csv(prepared)
+            self.assertEqual(source.read_text(), original)
+            self.assertEqual(transitions, [
+                {"src": 0, "tar": 0, "action": "tau"},
+                {"src": 2, "tar": 1, "action": "tau"},
+            ])
+            self.assertEqual([entry["state_name"] for entry in meta], ["P"])
+            source.write_text("0,1,a\n0,P,main\n")
+            self.assertEqual(run_equivio.prepare_divergence_input(source, prepared), source)
             source.write_text("0,1,\u03b4\n0,P,implicit-main\n1,Q,implicit-main\n")
             with self.assertRaisesRegex(ValueError, "delta"):
                 run_equivio.validate_divergence_input(source)
@@ -96,13 +107,35 @@ class RunnerTests(unittest.TestCase):
     def test_cadp_selects_all_bisimulator_preorders(self):
         for weak in (False, True):
             comparisons = run_cadp.available_comparisons(weak)
-            equivalences = run_cadp.WEAK_EQUIVALENCES if weak else run_cadp.EQUIVALENCES
+            equivalences = [name for name in (run_cadp.WEAK_EQUIVALENCES if weak else run_cadp.EQUIVALENCES)
+                            if not name.startswith("dpbranching-bisim")]
             self.assertEqual({name for name, mode in comparisons if mode == "equivalence"}, set(equivalences))
             self.assertEqual(
                 {name for name, mode in comparisons if mode == "preorder"},
                 {name for name in equivalences if run_cadp.CHECKERS[name][0] == "bisimulator"},
             )
             self.assertEqual(len(comparisons), len(set(comparisons)))
+
+    def test_native_divergence_checks_are_exclusive_to_divergence_mode(self):
+        equivalences = ["weak-bisim", "branching-bisim", "dpweak-bisim", "dpbranching-bisim-gv"]
+        with patch.object(run_mcrl2, "available_equivalences", return_value=equivalences), \
+                patch.object(run_mcrl2, "available_preorders", return_value={"weak-trace", "failures-divergence"}):
+            ordinary = set(run_mcrl2.available_comparisons(Path("ltscompare"), weak=True))
+            divergent = set(run_mcrl2.available_comparisons(Path("ltscompare"), weak=True, divergences=True))
+        self.assertEqual(divergent, {("dpweak-bisim", "equivalence"),
+                                     ("dpbranching-bisim-gv", "equivalence"),
+                                     ("failures-divergence", "preorder")})
+        self.assertFalse(ordinary & divergent)
+        self.assertEqual(ordinary | divergent, {(name, "equivalence") for name in equivalences}
+                         | {("weak-trace", "preorder"), ("failures-divergence", "preorder")})
+        self.assertEqual(run_cadp.available_comparisons(weak=True, divergences=True),
+                         [("dpbranching-bisim-bcg-cmp", "equivalence")])
+        self.assertNotIn(("dpbranching-bisim-bcg-cmp", "equivalence"),
+                         run_cadp.available_comparisons(weak=True))
+        with self.assertRaises(ValueError):
+            run_mcrl2.available_comparisons(Path("ltscompare"), divergences=True)
+        with self.assertRaises(ValueError):
+            run_cadp.available_comparisons(divergences=True)
 
     def test_cadp_command_direction(self):
         process = Mock(returncode=0)
@@ -168,29 +201,66 @@ class RunnerTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Duplicate comparison pair"):
                 resolve_input(source, [("P", "Q"), ("Q", "P")])
 
-    def test_suite_defaults_to_both_curated_csvs(self):
+    def test_peterson_metadata_pairs_and_divergence_preparation(self):
+        source = Path(__file__).resolve().parent / "examples" / "peterson-silent.csv"
+        original = source.read_bytes()
+        transitions, meta = parse_csv(source)
+        self.assertEqual({entry["state_name"]: entry["state_id"] for entry in meta},
+                         {"Pe": 19, "Mx": 24, "MxIC": 16})
+        self.assertEqual(resolve_input(source, weak=True)[1], list(PETERSON_PAIRS))
+        with tempfile.TemporaryDirectory() as directory:
+            prepared = run_equivio.prepare_divergence_input(source, Path(directory) / source.name)
+            marked_transitions, marked_meta = parse_csv(prepared)
+            self.assertEqual(marked_transitions[:-1], transitions)
+            self.assertEqual(marked_meta, meta)
+            states = {row[field] for row in transitions for field in ("src", "tar")}
+            added = marked_transitions[-1]
+            self.assertNotIn(added["src"], states)
+            self.assertNotIn(added["tar"], states)
+            self.assertNotEqual(added["src"], added["tar"])
+        self.assertEqual(source.read_bytes(), original)
+
+    def test_suite_defaults_to_all_curated_csvs(self):
         with patch.object(run_suite.sys, "argv", ["run_suite.py"]), \
                 patch.object(run_suite, "run_dataset") as run_dataset:
             run_suite.main()
-        self.assertEqual(run_dataset.call_count, 2)
-        strong, weak = [call.args for call in run_dataset.call_args_list]
+        self.assertEqual(run_dataset.call_count, 3)
+        strong, weak, peterson = [call.args for call in run_dataset.call_args_list]
         self.assertEqual((strong[0].name, strong[1], strong[2]), ("ltbts1.csv", list(PAIRS), False))
         self.assertEqual((weak[0].name, weak[1], weak[2]), ("ltbts2.csv", list(WEAK_PAIRS), True))
+        self.assertEqual((peterson[0].name, peterson[1], peterson[2]),
+                         ("peterson-silent.csv", list(PETERSON_PAIRS), True))
+        self.assertTrue(run_dataset.call_args_list[2].kwargs["divergences"])
+
+    def test_weak_suite_includes_peterson(self):
+        with patch.object(run_suite.sys, "argv", ["run_suite.py", "--weak"]), \
+                patch.object(run_suite, "run_dataset") as run_dataset:
+            run_suite.main()
+        self.assertEqual([call.args[0].stem for call in run_dataset.call_args_list],
+                         ["ltbts2", "peterson-silent"])
 
     def test_suite_collects_both_weak_spectra(self):
         with tempfile.TemporaryDirectory() as directory:
             output_dir = Path(directory)
             source = output_dir / "custom.csv"
             source.write_text("0,0,tau\n0,P,implicit-main\n1,Q,implicit-main\n")
-            for tool in (*run_suite.TOOLS, "equivio-divergences"):
+            for tool in (*run_suite.TOOLS, *(f"{tool}-divergences" for tool in run_suite.TOOLS)):
                 (output_dir / f"custom-{tool}.csv").write_text("status\nok\n")
             with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"):
                 run_suite.run_dataset(source, [("P", "Q")], True, output_dir, divergences=True)
             commands = [call.args[0] for call in run.call_args_list]
-            self.assertEqual(len(commands), 10)
+            self.assertEqual(len(commands), 12)
             self.assertEqual(Path(commands[3][1]).name, "run_equivio.py")
-            self.assertIn("--divergences", commands[3])
-            self.assertNotIn("--divergences", commands[0])
+            for command in commands[:3]:
+                self.assertNotIn("--divergences", command)
+            for command in commands[3:6]:
+                self.assertIn("--divergences", command)
+            self.assertEqual([Path(command[1]).name for command in commands[3:6]],
+                             ["run_equivio.py", "run_mcrl2.py", "run_cadp.py"])
+            for command in commands[6:9]:
+                self.assertTrue(all("-divergences.csv" not in path for path in command[-2:]))
+            for command in commands[9:12]:
+                self.assertTrue(all(path.endswith("-divergences.csv") for path in command[-2:]))
             self.assertEqual(len(list(output_dir.glob("*-vs-*.txt"))), 6)
 
     def test_suite_runs_tools_then_all_comparisons(self):

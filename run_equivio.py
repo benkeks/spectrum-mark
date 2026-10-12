@@ -7,6 +7,7 @@ import os
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -15,15 +16,28 @@ from example import add_input_arguments, directed_pairs, resolve_input
 
 
 def validate_divergence_input(csv_path):
-    transitions, meta = parse_csv(csv_path)
+    transitions, _ = parse_csv(csv_path)
     if any(transition["action"] == "\u03b4" for transition in transitions):
         raise ValueError("Divergence marking reserves the visible delta action")
-    states = {entry["state_id"] for entry in meta} | {
+
+
+def prepare_divergence_input(csv_path, output_path):
+    validate_divergence_input(csv_path)
+    transitions, meta = parse_csv(csv_path)
+    graph_states = {
         transition[field] for transition in transitions for field in ("src", "tar")
     }
     sources = {transition["src"] for transition in transitions}
-    if not states - sources:
-        raise ValueError("Divergence marking requires a deadlock state in the input CSV")
+    if graph_states - sources:
+        return csv_path
+    states = graph_states | {entry["state_id"] for entry in meta}
+    sink = max(states, default=-1) + 1
+    with output_path.open("w", newline="") as result_file:
+        writer = csv.writer(result_file)
+        writer.writerows((row["src"], row["tar"], row["action"]) for row in transitions)
+        writer.writerows((row["state_id"], row["state_name"], row["state_meta"]) for row in meta)
+        writer.writerow((sink + 1, sink, "tau"))
+    return output_path
 
 
 def compare(jar_path, csv_path, left, right, weak=False, divergences=False):
@@ -60,7 +74,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
     parser.add_argument("--divergences", action="store_true",
-                        help="Mark divergence with visible delta transitions (requires --weak and a deadlock state)")
+                        help="Mark divergence with visible delta transitions (requires --weak)")
     add_input_arguments(parser)
     args = parser.parse_args()
     if args.divergences and not args.weak:
@@ -83,12 +97,15 @@ def main():
     spectrum = "weak-divergences" if args.divergences else "weak" if args.weak else "strong"
     report = args.output_dir / f"{csv_path.stem}-{suffix}.csv"
     report.parent.mkdir(exist_ok=True)
-    with report.open("w", newline="") as result_file:
+    with tempfile.TemporaryDirectory(prefix="spectrum-equivio-") as directory, \
+            report.open("w", newline="") as result_file:
+        compared_csv = prepare_divergence_input(csv_path, Path(directory) / csv_path.name) \
+            if args.divergences else csv_path
         writer = csv.writer(result_file)
         writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status"))
         for source, target in directed_pairs(pairs):
             seconds, preorders, status = compare(
-                jar_path, csv_path, source, target, args.weak, args.divergences
+                jar_path, compared_csv, source, target, args.weak, args.divergences
             )
             writer.writerow((source, target, spectrum, f"{seconds:.3f}", preorders, status))
             result_file.flush()

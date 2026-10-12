@@ -36,8 +36,11 @@ CHECKERS = {
 }
 
 
-def available_comparisons(weak=False):
+def available_comparisons(weak=False, divergences=False):
+    if divergences and not weak:
+        raise ValueError("Divergence comparisons require weak mode")
     equivalences = WEAK_EQUIVALENCES if weak else EQUIVALENCES
+    equivalences = [name for name in equivalences if name.startswith("dpbranching-bisim") == divergences]
     return [(name, "equivalence") for name in equivalences] + [
         (name, "preorder") for name in equivalences
         if CHECKERS[name][0] == "bisimulator"
@@ -119,6 +122,8 @@ def compare(bin_dir, left_path, right_path, equivalence, environment, work_dir, 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--weak", action="store_true", help="Test weak notions on LTBTS2")
+    parser.add_argument("--divergences", action="store_true",
+                        help="Run only divergence-sensitive relations (requires --weak)")
     add_input_arguments(parser)
     default_root = Path(os.environ.get("CADP", str(Path.home() / "Software" / "cadp")))
     parser.add_argument(
@@ -127,11 +132,13 @@ def main():
         help="CADP binary directory (default: CADP_BIN, $CADP/bin.x64, or ~/Software/cadp/bin.x64)",
     )
     args = parser.parse_args()
+    if args.divergences and not args.weak:
+        parser.error("--divergences requires --weak")
     try:
         csv_path, pairs = resolve_input(args.csv, args.pair, args.weak)
     except (OSError, ValueError) as error:
         parser.error(str(error))
-    comparisons = available_comparisons(args.weak)
+    comparisons = available_comparisons(args.weak, args.divergences)
     bin_dir = args.cadp_bin.expanduser().resolve()
     try:
         environment = cadp_environment(bin_dir)
@@ -155,7 +162,8 @@ def main():
             )
             bcg_paths[state] = bcg_path
 
-        report = args.output_dir / f"{csv_path.stem}-cadp.csv"
+        suffix = "cadp-divergences" if args.divergences else "cadp"
+        report = args.output_dir / f"{csv_path.stem}-{suffix}.csv"
         report.parent.mkdir(exist_ok=True)
         with report.open("w", newline="") as result_file:
             writer = csv.writer(result_file)

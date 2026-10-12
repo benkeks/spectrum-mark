@@ -29,6 +29,15 @@ WEAK_PAIRS = (
 )
 
 
+PETERSON_PAIRS = (("Pe", "Mx"), ("Pe", "MxIC"))
+
+SUITE_DATASETS = (
+    ("ltbts1", PAIRS, False, False),
+    ("ltbts2", WEAK_PAIRS, True, False),
+    ("peterson-silent", PETERSON_PAIRS, True, True),
+)
+
+
 def get_example(weak=False):
     return ("ltbts2", WEAK_PAIRS) if weak else ("ltbts1", PAIRS)
 
@@ -43,7 +52,7 @@ def add_input_arguments(parser):
 
 
 def resolve_input(csv_path=None, pairs=None, weak=False):
-    dataset, default_pairs = get_example(weak)
+    dataset = get_example(weak)[0]
     default_path = Path(__file__).resolve().parent / "examples" / f"{dataset}.csv"
     csv_path = (csv_path or default_path).expanduser().resolve()
     _, meta = parse_csv(csv_path)
@@ -51,7 +60,12 @@ def resolve_input(csv_path=None, pairs=None, weak=False):
     if not states or len(states) != len(set(states)):
         raise ValueError(f"Expected unique named initial states in {csv_path}")
     if pairs is None:
-        pairs = default_pairs if csv_path == default_path else list(combinations(states, 2))
+        examples = Path(__file__).resolve().parent / "examples"
+        registered_pairs = {
+            examples / f"{name}.csv": example_pairs
+            for name, example_pairs, _, _ in SUITE_DATASETS
+        }
+        pairs = registered_pairs.get(csv_path, list(combinations(states, 2)))
     pairs = [tuple(pair) for pair in pairs]
     if not pairs:
         raise ValueError(f"No comparison pairs selected for {csv_path}")

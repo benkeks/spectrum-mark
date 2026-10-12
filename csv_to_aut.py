@@ -5,7 +5,7 @@ CSV to AUT format converter for Labeled Transition Systems.
 This script converts CSV files containing LTS data into AUT format files.
 Each CSV file contains two types of triples:
 - Transition: src_state_id, tar_state_id, transition_action_name
-- Meta: state_id, state_name, state_meta (where state_meta is "implicit-main")
+- Meta: state_id, state_name, state_meta ("main" or "implicit-main")
 
 The AUT format is documented at:
 https://mcrl2.org/web/user_manual/tools/lts.html#language-aut-lts
@@ -50,8 +50,7 @@ def parse_csv(filepath):
             
             field0, field1, field2 = [cell.strip() for cell in row]
             
-            # Check if this is a meta entry (state_meta == "implicit-main")
-            if field2 == "implicit-main":
+            if field2 in ("main", "implicit-main"):
                 try:
                     state_id = int(field0)
                 except ValueError:

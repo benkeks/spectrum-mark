@@ -22,18 +22,23 @@ The mCRL2 build initializes a shallow checkout if missing, preserves existing lo
 python3 run_suite.py
 ```
 
-This starts from `examples/ltbts1.csv` and `examples/ltbts2.csv`, builds the tools as needed, generates AUT/BCG inputs, runs Equivio, mCRL2 and CADP, and writes all three pairwise result comparisons. It uses ten curated strong LTBTS1 pairs and 16 weak LTBTS2 pairs (ending with P57-P58), each in both directions.
+This starts from the registered CSV datasets, builds the tools as needed, generates AUT/BCG inputs, runs Equivio, mCRL2 and CADP, and writes pairwise result comparisons. All selected pairs are checked in both directions:
 
-Run only the weak dataset, select a smaller comparison, or provide another CSV:
+- `examples/ltbts1.csv`: ten curated strong LTBTS1 pairs.
+- `examples/ltbts2.csv`: 16 weak LTBTS2 pairs (ending with P57-P58).
+- `examples/peterson-silent.csv`: Peterson implementation `Pe` versus specifications `Mx` and `MxIC`, with ordinary and delta-marked weak Equivio spectroscopy. mCRL2 and CADP also check their native divergence-sensitive relations.
+
+Run only the weak datasets, select a smaller comparison, or provide another CSV:
 
 ```sh
 python3 run_suite.py --weak
 python3 run_suite.py --pair L13 R13
 python3 run_suite.py --csv examples/ltbts2.csv --weak --pair P55 P56
+python3 run_suite.py --csv examples/peterson-silent.csv --weak --divergences
 python3 run_suite.py --csv path/to/input.csv --pair P Q --pair R S --output-dir results/custom
 ```
 
-Input CSVs contain transition rows `source_id,target_id,action` and named initial-state rows `state_id,state_name,implicit-main`. For custom CSVs without `--pair`, all distinct named-state pairs are compared in both directions. Use `--weak` to select weak semantics for custom inputs. New inputs use the same CSV interface; the curated default datasets and pairs are defined in `example.py`.
+Input CSVs contain transition rows `source_id,target_id,action` and named initial-state rows `state_id,state_name,main` or `state_id,state_name,implicit-main`. Registered CSVs use their curated pairs; other CSVs without `--pair` use all distinct named-state pairs in both directions. Use `--weak` to select weak semantics for custom inputs. Default datasets, pairs and divergence-marking settings are defined in `example.py`.
 
 The individual `run_equivio.py`, `run_mcrl2.py` and `run_cadp.py` commands accept the same `--csv`, `--pair`, `--weak` and `--output-dir` options. Without input options they select the strong example, or the weak example with `--weak`.
 
