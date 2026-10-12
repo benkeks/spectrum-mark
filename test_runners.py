@@ -1,17 +1,34 @@
 import csv
+import io
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 import run_cadp
+import run_equivio
 import run_mcrl2
 import run_suite
+import compare_results
 from compare_results import load_results, mcrl2_notion
 from example import PAIRS, WEAK_PAIRS, resolve_input
+from spectrum import WEAK_COMPARISON_SPECTRUM
 
 
 class RunnerTests(unittest.TestCase):
+    def test_equivio_divergence_command(self):
+        process = Mock(returncode=0)
+        process.communicate.return_value = ("weak-bisimulation\n", None)
+        with patch.object(run_equivio.subprocess, "Popen", return_value=process) as popen:
+            result = run_equivio.compare(Path("equivio.jar"), Path("input.csv"), "P", "Q",
+                                         weak=True, divergences=True)
+        command = popen.call_args.args[0]
+        self.assertIn("--divergences", command)
+        self.assertNotIn("--strong-game", command)
+        self.assertEqual(result[1:], ("weak-bisimulation", "ok"))
+        with self.assertRaisesRegex(ValueError, "weak"):
+            run_equivio.compare(Path("equivio.jar"), Path("input.csv"), "P", "Q", divergences=True)
+
     def test_mcrl2_selects_all_relations_in_both_modes(self):
         preorders = {
             "sim", "ready-sim", "trace", "trace-ac", "failures", "impossible-futures",
@@ -30,6 +47,51 @@ class RunnerTests(unittest.TestCase):
         self.assertIn(("weak-failures", "preorder"), weak)
         self.assertEqual(len(strong), len(set(strong)))
         self.assertEqual(len(weak), len(set(weak)))
+
+    def test_divergence_input_requires_deadlock_and_fresh_delta(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "input.csv"
+            source.write_text("0,0,tau\n0,P,implicit-main\n")
+            with self.assertRaisesRegex(ValueError, "deadlock"):
+                run_equivio.validate_divergence_input(source)
+            source.write_text("0,0,tau\n0,P,implicit-main\n1,Q,implicit-main\n")
+            run_equivio.validate_divergence_input(source)
+            source.write_text("0,1,\u03b4\n0,P,implicit-main\n1,Q,implicit-main\n")
+            with self.assertRaisesRegex(ValueError, "delta"):
+                run_equivio.validate_divergence_input(source)
+
+    def test_delta_frontiers_do_not_imply_native_relations(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            with report.open("w", newline="") as result_file:
+                writer = csv.writer(result_file)
+                writer.writerow(("left", "right", "spectrum", "preorders", "status"))
+                writer.writerow(("P", "Q", "weak-divergences", "branching-bisimulation", "ok"))
+            self.assertEqual(load_results(report), {("P", "Q"): ({"delta-branching-bisimulation"}, "ok")})
+        spectrum = WEAK_COMPARISON_SPECTRUM
+        self.assertTrue(spectrum.dominates("delta-branching-bisimulation", "delta-weak-trace"))
+        self.assertFalse(spectrum.dominates("delta-branching-bisimulation", "weak-trace"))
+        self.assertFalse(spectrum.dominates("branching-bisimulation", "delta-weak-trace"))
+        self.assertEqual(spectrum.unmatched({"delta-branching-bisimulation"},
+                                           {"divergence-preserving-branching-bisimulation"}),
+                         {"delta-branching-bisimulation"})
+
+    def test_comparison_does_not_rank_different_spectrum_families(self):
+        with tempfile.TemporaryDirectory() as directory:
+            reports = []
+            for spectrum in ("weak", "weak-divergences"):
+                report = Path(directory) / f"{spectrum}.csv"
+                with report.open("w", newline="") as result_file:
+                    writer = csv.writer(result_file)
+                    writer.writerow(("left", "right", "spectrum", "preorders", "status"))
+                    writer.writerow(("P", "Q", spectrum, "branching-bisimulation", "ok"))
+                reports.append(report)
+            output = io.StringIO()
+            with patch.object(compare_results.sys, "argv", ["compare_results.py", *map(str, reports)]), \
+                    patch.object(compare_results.sys, "stdout", output):
+                compare_results.main()
+            self.assertIn("not comparable (different spectrum families)", output.getvalue())
+            self.assertNotIn("INCONSISTENCY", output.getvalue())
 
     def test_cadp_selects_all_bisimulator_preorders(self):
         for weak in (False, True):
@@ -114,6 +176,22 @@ class RunnerTests(unittest.TestCase):
         strong, weak = [call.args for call in run_dataset.call_args_list]
         self.assertEqual((strong[0].name, strong[1], strong[2]), ("ltbts1.csv", list(PAIRS), False))
         self.assertEqual((weak[0].name, weak[1], weak[2]), ("ltbts2.csv", list(WEAK_PAIRS), True))
+
+    def test_suite_collects_both_weak_spectra(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output_dir = Path(directory)
+            source = output_dir / "custom.csv"
+            source.write_text("0,0,tau\n0,P,implicit-main\n1,Q,implicit-main\n")
+            for tool in (*run_suite.TOOLS, "equivio-divergences"):
+                (output_dir / f"custom-{tool}.csv").write_text("status\nok\n")
+            with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"):
+                run_suite.run_dataset(source, [("P", "Q")], True, output_dir, divergences=True)
+            commands = [call.args[0] for call in run.call_args_list]
+            self.assertEqual(len(commands), 10)
+            self.assertEqual(Path(commands[3][1]).name, "run_equivio.py")
+            self.assertIn("--divergences", commands[3])
+            self.assertNotIn("--divergences", commands[0])
+            self.assertEqual(len(list(output_dir.glob("*-vs-*.txt"))), 6)
 
     def test_suite_runs_tools_then_all_comparisons(self):
         with tempfile.TemporaryDirectory() as directory:

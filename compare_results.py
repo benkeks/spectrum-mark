@@ -5,7 +5,7 @@ import argparse
 import csv
 import sys
 
-from spectrum import STRONG_SPECTRUM, WEAK_SPECTRUM
+from spectrum import STRONG_SPECTRUM, WEAK_COMPARISON_SPECTRUM, WEAK_SPECTRUM
 
 
 def mcrl2_notion(equivalence, mode="equivalence"):
@@ -57,6 +57,14 @@ def is_equivalence_report(path):
     return "equivalence" in report_modes(path)
 
 
+def report_spectra(path):
+    with open(path, newline="") as file:
+        reader = csv.DictReader(file)
+        if "spectrum" in (reader.fieldnames or ()):
+            return {row["spectrum"] for row in reader}
+    return set()
+
+
 def load_results(path):
     results = {}
     algorithms = {}
@@ -69,6 +77,8 @@ def load_results(path):
         is_mcrl2 = "preorders" not in fields
         if is_mcrl2 and not {"equivalence", "mode", "equivalent"} <= fields:
             raise ValueError(f"Expected preorders or equivalence/mode/equivalent columns in {path}")
+        if not is_mcrl2 and "spectrum" not in fields:
+            raise ValueError(f"Missing spectrum column in {path}")
         for row in reader:
             pair = (row["left"], row["right"])
             if is_mcrl2:
@@ -102,6 +112,10 @@ def load_results(path):
             if pair in results:
                 raise ValueError(f"Duplicate pair {pair} in {path}")
             notions = {name.strip() for name in row["preorders"].split(",") if name.strip()}
+            if row["spectrum"] not in ("strong", "weak", "weak-divergences"):
+                raise ValueError(f"Invalid spectrum {row['spectrum']!r} in {path}")
+            if row["spectrum"] == "weak-divergences":
+                notions = {f"delta-{name}" for name in notions}
             results[pair] = (notions, row["status"])
     return results
 
@@ -115,12 +129,17 @@ def main():
 
     first = load_results(args.first)
     second = load_results(args.second)
+    first_spectra, second_spectra = report_spectra(args.first), report_spectra(args.second)
+    different_families = ("weak-divergences" in first_spectra) != ("weak-divergences" in second_spectra)
     reported = set().union(*(notions for notions, status in (*first.values(), *second.values())))
     weak_names = {name for name, _ in WEAK_SPECTRUM.notions}
-    weak = args.weak or bool(reported & weak_names) or any(
-        name.startswith(("divergence-preserving-", "cadp-", "coupled-")) for name in reported
+    weak = args.weak or bool((first_spectra | second_spectra) & {"weak", "weak-divergences"}) or bool(reported & weak_names) or any(
+        name.startswith(("divergence-preserving-", "cadp-", "coupled-", "delta-")) for name in reported
     )
-    spectrum = WEAK_SPECTRUM if weak else STRONG_SPECTRUM
+    spectrum = WEAK_COMPARISON_SPECTRUM if weak else STRONG_SPECTRUM
+    if "weak-divergences" in first_spectra | second_spectra:
+        print("Note: delta-marked weak notions are separate from ordinary weak and native "
+              "divergence-preserving notions; no cross-family equivalence is assumed.")
     mixed_relations = (report_modes(args.first) | report_modes(args.second)) == {"equivalence", "preorder"}
     if mixed_relations:
         print("Note: comparing symmetric equivalences with directional preorders; "
@@ -131,7 +150,9 @@ def main():
         second_preorders, second_status = second.get((left, right), (set(), "missing"))
         first_only = spectrum.unmatched(first_preorders, second_preorders)
         second_only = spectrum.unmatched(second_preorders, first_preorders)
-        if first_only and second_only:
+        if different_families:
+            more_precise = "not comparable (different spectrum families)"
+        elif first_only and second_only:
             more_precise = "both"
         elif first_only:
             more_precise = "first"
@@ -145,7 +166,7 @@ def main():
         print(f"  first only: {', '.join(sorted(first_only)) or '(none)'}")
         print(f"  second only: {', '.join(sorted(second_only)) or '(none)'}")
         print(f"  more precise: {more_precise}")
-        if first_status == second_status == "ok" and not mixed_relations:
+        if first_status == second_status == "ok" and not mixed_relations and not different_families:
             missing = spectrum.missing_intermediates(
                 first_preorders, second_preorders, supported
             )

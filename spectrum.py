@@ -113,3 +113,13 @@ WEAK_SPECTRUM = Spectrum(
         ("sr-branching-bisimulation", (INFTY, INFTY, INFTY, INFTY, INFTY, INFTY, INFTY, INFTY, INFTY)),
     ],
 )
+
+
+WEAK_COMPARISON_SPECTRUM = Spectrum(
+    coordinates=("ordinary", "deltaMarked", *WEAK_SPECTRUM.coordinates),
+    notions=[
+        (name, (1, 0, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
+    ] + [
+        (f"delta-{name}", (0, 1, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
+    ],
+)
