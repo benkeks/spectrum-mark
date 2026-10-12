@@ -1,129 +1,193 @@
 Note: comparing symmetric equivalences with directional preorders; differences do not necessarily indicate inconsistencies.
 P11,P12
+  first spectroscopy: 0.214000s; notions decided: 26/26
+  second spectroscopy: 6.486708s; notions decided: 9/9
   first only: eta-bisimulation, sr-delay-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P12,P11
+  first spectroscopy: 0.216000s; notions decided: 26/26
+  second spectroscopy: 6.225300s; notions decided: 9/9
   first only: eta-bisimulation, sr-delay-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P13,P14
+  first spectroscopy: 0.208000s; notions decided: 26/26
+  second spectroscopy: 6.559677s; notions decided: 9/9
   first only: eta-bisimulation, stable-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P14,P13
+  first spectroscopy: 0.208000s; notions decided: 26/26
+  second spectroscopy: 7.006409s; notions decided: 9/9
   first only: eta-bisimulation, stable-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P15,P16
+  first spectroscopy: 0.216000s; notions decided: 26/26
+  second spectroscopy: 7.282158s; notions decided: 9/9
   first only: contrasimulation, eta-simulation, stable-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P16,P15
+  first spectroscopy: 0.224000s; notions decided: 26/26
+  second spectroscopy: 6.778024s; notions decided: 9/9
   first only: 2-nested-weak-simulation, contrasimulation, eta-simulation, stable-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P21,P22
+  first spectroscopy: 0.231000s; notions decided: 26/26
+  second spectroscopy: 6.455972s; notions decided: 9/9
   first only: eta-simulation, s-ready-simulation, weak-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P22,P21
+  first spectroscopy: 0.239000s; notions decided: 26/26
+  second spectroscopy: 6.074180s; notions decided: 9/9
   first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P22,P23
+  first spectroscopy: 0.243000s; notions decided: 26/26
+  second spectroscopy: 7.079540s; notions decided: 9/9
   first only: s-impossible-future, stable-ready-trace, weak-impossible-future, weak-readiness
   second only: (none)
   more precise: first
 P23,P22
+  first spectroscopy: 0.260000s; notions decided: 26/26
+  second spectroscopy: 6.208428s; notions decided: 9/9
   first only: eta-simulation, s-ready-simulation, weak-ready-simulation
   second only: cadp-branching-simulation, cadp-taustar-simulation
   more precise: both
 P24,P25
+  first spectroscopy: 0.256000s; notions decided: 26/26
+  second spectroscopy: 6.365798s; notions decided: 9/9
   first only: contrasimulation, eta-simulation, stable-bisimulation, weak-possible-future, weak-ready-simulation
   second only: cadp-branching-simulation, cadp-taustar-simulation
   more precise: both
 P25,P24
+  first spectroscopy: 0.265000s; notions decided: 26/26
+  second spectroscopy: 6.173301s; notions decided: 9/9
   first only: contrasimulation, stable-bisimulation
   second only: (none)
   more precise: first
 P31,P32
+  first spectroscopy: 0.292000s; notions decided: 26/26
+  second spectroscopy: 6.407429s; notions decided: 9/9
   first only: stable-readiness, weak-readiness
   second only: (none)
   more precise: first
 P32,P31
+  first spectroscopy: 0.301000s; notions decided: 26/26
+  second spectroscopy: 5.953853s; notions decided: 9/9
   first only: stable-readiness, weak-readiness
   second only: (none)
   more precise: first
 P33,P34
+  first spectroscopy: 0.220000s; notions decided: 26/26
+  second spectroscopy: 6.484638s; notions decided: 9/9
   first only: eta-simulation, sr-delay-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P34,P33
+  first spectroscopy: 0.213000s; notions decided: 26/26
+  second spectroscopy: 6.182050s; notions decided: 9/9
   first only: sr-delay-bisimulation
   second only: cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P41,P42
+  first spectroscopy: 0.238000s; notions decided: 26/26
+  second spectroscopy: 6.422446s; notions decided: 9/9
   first only: eta-simulation, s-impossible-future, s-ready-simulation, weak-possible-future, weak-ready-simulation
   second only: cadp-branching-simulation, cadp-taustar-simulation
   more precise: both
 P42,P41
+  first spectroscopy: 0.246000s; notions decided: 26/26
+  second spectroscopy: 6.152327s; notions decided: 9/9
   first only: s-impossible-future, stable-failure-trace, weak-impossible-future
   second only: (none)
   more precise: first
 P42,P43
+  first spectroscopy: 0.218000s; notions decided: 26/26
+  second spectroscopy: 6.329810s; notions decided: 9/9
   first only: eta-simulation, stable-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P43,P42
+  first spectroscopy: 0.217000s; notions decided: 26/26
+  second spectroscopy: 6.080532s; notions decided: 9/9
   first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P44,P45
+  first spectroscopy: 0.271000s; notions decided: 26/26
+  second spectroscopy: 6.708161s; notions decided: 9/9
   first only: eta-simulation, stable-readiness, weak-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P45,P44
+  first spectroscopy: 0.278000s; notions decided: 26/26
+  second spectroscopy: 6.114641s; notions decided: 9/9
   first only: eta-simulation, stable-readiness, weak-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P51,P52
+  first spectroscopy: 0.227000s; notions decided: 26/26
+  second spectroscopy: 6.755844s; notions decided: 9/9
   first only: eta-simulation, s-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P52,P51
+  first spectroscopy: 0.223000s; notions decided: 26/26
+  second spectroscopy: 6.384081s; notions decided: 9/9
   first only: 2-nested-weak-simulation, eta-simulation, stable-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
   more precise: both
 P53,P54
+  first spectroscopy: 0.225000s; notions decided: 26/26
+  second spectroscopy: 6.436338s; notions decided: 9/9
   first only: sr-branching-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P54,P53
+  first spectroscopy: 0.214000s; notions decided: 26/26
+  second spectroscopy: 6.058187s; notions decided: 9/9
   first only: sr-branching-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P55,P56
+  first spectroscopy: 0.217000s; notions decided: 26/26
+  second spectroscopy: 6.484436s; notions decided: 9/9
   first only: 2-nested-weak-simulation, eta-simulation, stable-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P56,P55
+  first spectroscopy: 0.230000s; notions decided: 26/26
+  second spectroscopy: 6.018478s; notions decided: 9/9
   first only: eta-simulation, stable-bisimulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P56,P57
+  first spectroscopy: 0.227000s; notions decided: 26/26
+  second spectroscopy: 6.300212s; notions decided: 9/9
   first only: s-impossible-future, s-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P57,P56
+  first spectroscopy: 0.225000s; notions decided: 26/26
+  second spectroscopy: 6.199534s; notions decided: 9/9
   first only: (none)
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: second
 P57,P58
+  first spectroscopy: 0.258000s; notions decided: 26/26
+  second spectroscopy: 6.270188s; notions decided: 9/9
   first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P58,P57
+  first spectroscopy: 0.260000s; notions decided: 26/26
+  second spectroscopy: 6.859935s; notions decided: 9/9
   first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both

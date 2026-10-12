@@ -3,7 +3,9 @@
 
 import argparse
 import csv
+import math
 import sys
+from dataclasses import dataclass
 
 from spectrum import STRONG_SPECTRUM, WEAK_COMPARISON_SPECTRUM, WEAK_SPECTRUM
 
@@ -65,15 +67,28 @@ def report_spectra(path):
     return set()
 
 
-def load_results(path):
+@dataclass
+class SpectroscopyCost:
+    supported: int
+    decided: int
+    seconds: float
+
+    @property
+    def complete(self):
+        return self.decided == self.supported
+
+
+def load_report(path):
     results = {}
+    costs = {}
     algorithms = {}
     outcomes = {}
+    checks = {}
     with open(path, newline="") as file:
         reader = csv.DictReader(file)
         fields = set(reader.fieldnames or ())
-        if not {"left", "right", "status"} <= fields:
-            raise ValueError(f"Missing pair or status columns in {path}")
+        if not {"left", "right", "seconds", "status"} <= fields:
+            raise ValueError(f"Missing pair, seconds or status columns in {path}")
         is_mcrl2 = "preorders" not in fields
         if is_mcrl2 and not {"equivalence", "mode", "equivalent"} <= fields:
             raise ValueError(f"Expected preorders or equivalence/mode/equivalent columns in {path}")
@@ -81,6 +96,9 @@ def load_results(path):
             raise ValueError(f"Missing spectrum column in {path}")
         for row in reader:
             pair = (row["left"], row["right"])
+            seconds = float(row["seconds"])
+            if not math.isfinite(seconds) or seconds < 0:
+                raise ValueError(f"Invalid elapsed time {row['seconds']!r} for {pair} in {path}")
             if is_mcrl2:
                 equivalence = row["equivalence"]
                 mode = row["mode"]
@@ -91,6 +109,8 @@ def load_results(path):
                 if algorithm_key in algorithms:
                     raise ValueError(f"Duplicate algorithm {algorithm_key} in {path}")
                 algorithms[algorithm_key] = row["status"]
+                notion_checks = checks.setdefault(pair, {}).setdefault(notion, {})
+                mode_checks = notion_checks.setdefault(mode, [])
                 notions, status = results.setdefault(pair, (set(), "ok"))
                 if row["status"] != "ok":
                     results[pair] = (notions, row["status"] if status == "ok" else status)
@@ -98,6 +118,7 @@ def load_results(path):
                 equivalent = row["equivalent"].strip().lower()
                 if equivalent not in ("true", "false"):
                     raise ValueError(f"Invalid equivalence result {equivalent!r} for {algorithm_key} in {path}")
+                mode_checks.append(seconds)
                 notion_key = (*pair, notion, mode)
                 answers = outcomes.setdefault(notion_key, set())
                 answers.add(equivalent)
@@ -117,7 +138,36 @@ def load_results(path):
             if row["spectrum"] == "weak-divergences":
                 notions = {f"delta-{name}" for name in notions}
             results[pair] = (notions, row["status"])
-    return results
+            supported = len(STRONG_SPECTRUM.notions if row["spectrum"] == "strong" else WEAK_SPECTRUM.notions)
+            costs[pair] = SpectroscopyCost(supported, supported if row["status"] == "ok" else 0,
+                                           seconds if row["status"] == "ok" else 0.0)
+    for pair, notion_checks in checks.items():
+        decided = 0
+        seconds = 0.0
+        for notion, modes in notion_checks.items():
+            conflicting = any(len(outcomes.get((*pair, notion, mode), set())) > 1 for mode in modes)
+            if conflicting:
+                results[pair][0].discard(notion)
+                continue
+            mode = "preorder" if "preorder" in modes else "equivalence"
+            if modes[mode]:
+                decided += 1
+                seconds += min(modes[mode])
+        costs[pair] = SpectroscopyCost(len(notion_checks), decided, seconds)
+    return results, costs
+
+
+def load_results(path):
+    return load_report(path)[0]
+
+
+def format_cost(cost):
+    if cost is None:
+        return "missing"
+    if cost.complete:
+        return f"{cost.seconds:.6f}s; notions decided: {cost.decided}/{cost.supported}"
+    return (f"incomplete; notions decided: {cost.decided}/{cost.supported}; "
+            f"decided-notion subtotal: {cost.seconds:.6f}s")
 
 
 def main():
@@ -127,8 +177,8 @@ def main():
     parser.add_argument("second", help="Second result CSV")
     args = parser.parse_args()
 
-    first = load_results(args.first)
-    second = load_results(args.second)
+    first, first_costs = load_report(args.first)
+    second, second_costs = load_report(args.second)
     first_spectra, second_spectra = report_spectra(args.first), report_spectra(args.second)
     different_families = ("weak-divergences" in first_spectra) != ("weak-divergences" in second_spectra)
     reported = set().union(*(notions for notions, status in (*first.values(), *second.values())))
@@ -161,6 +211,8 @@ def main():
         else:
             more_precise = "neither"
         print(f"{left},{right}")
+        print(f"  first spectroscopy: {format_cost(first_costs.get((left, right)))}")
+        print(f"  second spectroscopy: {format_cost(second_costs.get((left, right)))}")
         if first_status != "ok" or second_status != "ok":
             print(f"  status: first={first_status}, second={second_status}")
         print(f"  first only: {', '.join(sorted(first_only)) or '(none)'}")

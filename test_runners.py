@@ -10,7 +10,7 @@ import run_equivio
 import run_mcrl2
 import run_suite
 import compare_results
-from compare_results import load_results, mcrl2_notion
+from compare_results import load_report, load_results, mcrl2_notion
 from csv_to_aut import parse_csv
 from example import PAIRS, PETERSON_PAIRS, WEAK_PAIRS, resolve_input
 from spectrum import WEAK_COMPARISON_SPECTRUM
@@ -76,8 +76,8 @@ class RunnerTests(unittest.TestCase):
             report = Path(directory) / "results.csv"
             with report.open("w", newline="") as result_file:
                 writer = csv.writer(result_file)
-                writer.writerow(("left", "right", "spectrum", "preorders", "status"))
-                writer.writerow(("P", "Q", "weak-divergences", "branching-bisimulation", "ok"))
+                writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status"))
+                writer.writerow(("P", "Q", "weak-divergences", "1", "branching-bisimulation", "ok"))
             self.assertEqual(load_results(report), {("P", "Q"): ({"delta-branching-bisimulation"}, "ok")})
         spectrum = WEAK_COMPARISON_SPECTRUM
         self.assertTrue(spectrum.dominates("delta-branching-bisimulation", "delta-weak-trace"))
@@ -94,8 +94,8 @@ class RunnerTests(unittest.TestCase):
                 report = Path(directory) / f"{spectrum}.csv"
                 with report.open("w", newline="") as result_file:
                     writer = csv.writer(result_file)
-                    writer.writerow(("left", "right", "spectrum", "preorders", "status"))
-                    writer.writerow(("P", "Q", spectrum, "branching-bisimulation", "ok"))
+                    writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status"))
+                    writer.writerow(("P", "Q", spectrum, "1", "branching-bisimulation", "ok"))
                 reports.append(report)
             output = io.StringIO()
             with patch.object(compare_results.sys, "argv", ["compare_results.py", *map(str, reports)]), \
@@ -177,18 +177,104 @@ class RunnerTests(unittest.TestCase):
             report = Path(directory) / "results.csv"
             with report.open("w", newline="") as result_file:
                 writer = csv.writer(result_file)
-                writer.writerow(("left", "right", "equivalence", "mode", "equivalent", "status"))
-                writer.writerow(("P", "Q", "bisim-bisimulator", "equivalence", "false", "ok"))
-                writer.writerow(("P", "Q", "bisim-bisimulator", "preorder", "true", "ok"))
-                writer.writerow(("P", "Q", "trace", "equivalence", "false", "ok"))
-                writer.writerow(("P", "Q", "trace", "preorder", "true", "ok"))
+                writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
+                writer.writerow(("P", "Q", "bisim-bisimulator", "equivalence", "1", "false", "ok"))
+                writer.writerow(("P", "Q", "bisim-bisimulator", "preorder", "1", "true", "ok"))
+                writer.writerow(("P", "Q", "trace", "equivalence", "1", "false", "ok"))
+                writer.writerow(("P", "Q", "trace", "preorder", "1", "true", "ok"))
             self.assertEqual(load_results(report), {("P", "Q"): ({"simulation", "trace"}, "ok")})
             with report.open("w", newline="") as result_file:
                 writer = csv.writer(result_file)
-                writer.writerow(("left", "right", "equivalence", "equivalent", "status"))
-                writer.writerow(("P", "Q", "bisim-bisimulator", "true", "ok"))
+                writer.writerow(("left", "right", "equivalence", "seconds", "equivalent", "status"))
+                writer.writerow(("P", "Q", "bisim-bisimulator", "1", "true", "ok"))
             with self.assertRaisesRegex(ValueError, "mode"):
                 load_results(report)
+
+    def test_spectroscopy_cost_uses_fastest_algorithm_and_counts_false_answers(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            with report.open("w", newline="") as result_file:
+                writer = csv.writer(result_file)
+                writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
+                writer.writerows([
+                    ("P", "Q", "branching-bisim", "equivalence", 4, "false", "ok"),
+                    ("P", "Q", "branching-bisim-gv", "equivalence", 2, "false", "ok"),
+                    ("P", "Q", "branching-bisim-gjkw", "equivalence", 3, "false", "ok"),
+                    ("P", "Q", "weak-trace", "equivalence", 0.1, "false", "ok"),
+                    ("P", "Q", "weak-trace", "preorder", 3, "true", "ok"),
+                    ("P", "Q", "weak-trace-ac", "preorder", 1, "true", "ok"),
+                    ("P", "Q", "weak-bisim", "equivalence", 5, "false", "ok"),
+                ])
+            results, costs = load_report(report)
+            self.assertEqual(results, {("P", "Q"): ({"weak-trace"}, "ok")})
+            cost = costs[("P", "Q")]
+            self.assertEqual((cost.supported, cost.decided, cost.seconds), (3, 3, 8))
+            self.assertTrue(cost.complete)
+
+    def test_equivio_cost_counts_the_whole_spectrum(self):
+        with tempfile.TemporaryDirectory() as directory:
+            for spectrum, count in (("strong", 13), ("weak", 26), ("weak-divergences", 26)):
+                report = Path(directory) / f"{spectrum}.csv"
+                with report.open("w", newline="") as result_file:
+                    writer = csv.writer(result_file)
+                    writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status"))
+                    writer.writerow(("P", "Q", spectrum, 0.7, "trace" if spectrum == "strong" else "weak-trace", "ok"))
+                    writer.writerow(("Q", "P", spectrum, 0.9, "", "ok"))
+                _, costs = load_report(report)
+                self.assertEqual((costs[("P", "Q")].supported, costs[("P", "Q")].decided,
+                                  costs[("P", "Q")].seconds), (count, count, 0.7))
+                self.assertEqual(costs[("Q", "P")].decided, count)
+                self.assertEqual(costs[("Q", "P")].seconds, 0.9)
+
+    def test_conflicting_algorithms_are_reported_not_timed_as_decisions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            with report.open("w", newline="") as result_file:
+                writer = csv.writer(result_file)
+                writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
+                writer.writerows([
+                    ("P", "Q", "branching-bisim", "equivalence", 3, "true", "ok"),
+                    ("P", "Q", "branching-bisim-gv", "equivalence", 2, "false", "ok"),
+                    ("P", "Q", "branching-bisim-gj", "equivalence", 1, "true", "ok"),
+                    ("P", "Q", "weak-trace", "preorder", 0.5, "true", "ok"),
+                ])
+            errors = io.StringIO()
+            with patch.object(compare_results.sys, "stderr", errors):
+                results, costs = load_report(report)
+            self.assertIn("Conflicting algorithm results", errors.getvalue())
+            self.assertEqual(results, {("P", "Q"): ({"weak-trace"}, "conflict")})
+            cost = costs[("P", "Q")]
+            self.assertEqual((cost.supported, cost.decided, cost.seconds), (2, 1, 0.5))
+            self.assertFalse(cost.complete)
+            self.assertIn("incomplete", compare_results.format_cost(cost))
+
+    def test_failed_checks_do_not_become_fastest_decisions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            with report.open("w", newline="") as result_file:
+                writer = csv.writer(result_file)
+                writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
+                writer.writerows([
+                    ("P", "Q", "branching-bisim", "equivalence", 0.01, "", "error"),
+                    ("P", "Q", "branching-bisim-gv", "equivalence", 2, "false", "ok"),
+                    ("P", "Q", "weak-trace", "equivalence", 0.1, "false", "ok"),
+                    ("P", "Q", "weak-trace", "preorder", 30, "", "timeout"),
+                ])
+            _, costs = load_report(report)
+            cost = costs[("P", "Q")]
+            self.assertEqual((cost.supported, cost.decided, cost.seconds), (2, 1, 2))
+            self.assertFalse(cost.complete)
+
+    def test_invalid_timings_are_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            for seconds in ("nan", "inf", "-1"):
+                with report.open("w", newline="") as result_file:
+                    writer = csv.writer(result_file)
+                    writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
+                    writer.writerow(("P", "Q", "trace", "preorder", seconds, "true", "ok"))
+                with self.assertRaisesRegex(ValueError, "elapsed time"):
+                    load_report(report)
 
     def test_custom_csv_pairs(self):
         with tempfile.TemporaryDirectory() as directory:

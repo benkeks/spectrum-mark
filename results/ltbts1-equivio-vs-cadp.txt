@@ -1,81 +1,140 @@
-Note: comparing symmetric equivalences with directional preorders; differences do not necessarily indicate inconsistencies.
 L13,R13
-  first only: (none)
+  first spectroscopy: 0.203000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
+  first only: simulation
   second only: (none)
-  more precise: neither
+  more precise: first
 R13,L13
+  first spectroscopy: 0.204000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L16,R16
-  first only: (none)
+  first spectroscopy: 0.202000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
+  first only: simulation
   second only: (none)
-  more precise: neither
+  more precise: first
 R16,L16
+  first spectroscopy: 0.196000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L21,R21
+  first spectroscopy: 0.222000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: readiness
   second only: (none)
   more precise: first
 R21,L21
+  first spectroscopy: 0.223000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: readiness
   second only: (none)
   more precise: first
 L24,R24
+  first spectroscopy: 0.213000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: possible-future, ready-simulation
   second only: (none)
   more precise: first
 R24,L24
+  first spectroscopy: 0.211000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: failure-trace, impossible-future
   second only: (none)
   more precise: first
 L27,R27
+  first spectroscopy: 0.245000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: possible-future
   second only: (none)
   more precise: first
 R27,L27
+  first spectroscopy: 0.240000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: possible-future
   second only: (none)
   more precise: first
 L31,R31
+  first spectroscopy: 0.206000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: ready-simulation
   second only: (none)
   more precise: first
 R31,L31
+  first spectroscopy: 0.219000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: impossible-future, ready-trace
   second only: (none)
   more precise: first
 L34,R31
+  first spectroscopy: 0.225000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: ready-simulation
   second only: (none)
   more precise: first
 R31,L34
+  first spectroscopy: 0.194000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L38,R24
-  first only: (none)
+  first spectroscopy: 0.212000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
+  first only: simulation
   second only: (none)
-  more precise: neither
+  more precise: first
 R24,L38
+  first spectroscopy: 0.218000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: failure-trace, impossible-future
   second only: (none)
   more precise: first
 L42,R42
+  first spectroscopy: 0.209000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 R42,L42
+  first spectroscopy: 0.196000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L50,R50
+  first spectroscopy: 0.212000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: ready-simulation
   second only: (none)
   more precise: first
 R50,L50
+  first spectroscopy: 0.221000s; notions decided: 13/13
+  second spectroscopy: missing
+  status: first=ok, second=missing
   first only: impossible-future, ready-trace
   second only: (none)
   more precise: first

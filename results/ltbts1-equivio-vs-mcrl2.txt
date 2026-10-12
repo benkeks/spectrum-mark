@@ -1,81 +1,121 @@
 Note: comparing symmetric equivalences with directional preorders; differences do not necessarily indicate inconsistencies.
 L13,R13
+  first spectroscopy: 0.203000s; notions decided: 13/13
+  second spectroscopy: 0.034538s; notions decided: 6/6
   first only: (none)
   second only: (none)
   more precise: neither
 R13,L13
+  first spectroscopy: 0.204000s; notions decided: 13/13
+  second spectroscopy: 0.037769s; notions decided: 6/6
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L16,R16
+  first spectroscopy: 0.202000s; notions decided: 13/13
+  second spectroscopy: 0.034090s; notions decided: 6/6
   first only: (none)
   second only: (none)
   more precise: neither
 R16,L16
+  first spectroscopy: 0.196000s; notions decided: 13/13
+  second spectroscopy: 0.036929s; notions decided: 6/6
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L21,R21
+  first spectroscopy: 0.222000s; notions decided: 13/13
+  second spectroscopy: 0.037802s; notions decided: 6/6
   first only: readiness
   second only: (none)
   more precise: first
 R21,L21
+  first spectroscopy: 0.223000s; notions decided: 13/13
+  second spectroscopy: 0.036701s; notions decided: 6/6
   first only: readiness
   second only: (none)
   more precise: first
 L24,R24
+  first spectroscopy: 0.213000s; notions decided: 13/13
+  second spectroscopy: 0.035469s; notions decided: 6/6
   first only: possible-future
   second only: (none)
   more precise: first
 R24,L24
+  first spectroscopy: 0.211000s; notions decided: 13/13
+  second spectroscopy: 0.037126s; notions decided: 6/6
   first only: failure-trace
   second only: (none)
   more precise: first
 L27,R27
+  first spectroscopy: 0.245000s; notions decided: 13/13
+  second spectroscopy: 0.033514s; notions decided: 6/6
   first only: possible-future
   second only: (none)
   more precise: first
 R27,L27
+  first spectroscopy: 0.240000s; notions decided: 13/13
+  second spectroscopy: 0.036303s; notions decided: 6/6
   first only: possible-future
   second only: (none)
   more precise: first
 L31,R31
+  first spectroscopy: 0.206000s; notions decided: 13/13
+  second spectroscopy: 0.035837s; notions decided: 6/6
   first only: (none)
   second only: (none)
   more precise: neither
 R31,L31
+  first spectroscopy: 0.219000s; notions decided: 13/13
+  second spectroscopy: 0.035623s; notions decided: 6/6
   first only: ready-trace
   second only: (none)
   more precise: first
 L34,R31
+  first spectroscopy: 0.225000s; notions decided: 13/13
+  second spectroscopy: 0.041510s; notions decided: 6/6
   first only: (none)
   second only: (none)
   more precise: neither
 R31,L34
+  first spectroscopy: 0.194000s; notions decided: 13/13
+  second spectroscopy: 0.034303s; notions decided: 6/6
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L38,R24
+  first spectroscopy: 0.212000s; notions decided: 13/13
+  second spectroscopy: 0.033703s; notions decided: 6/6
   first only: (none)
   second only: (none)
   more precise: neither
 R24,L38
+  first spectroscopy: 0.218000s; notions decided: 13/13
+  second spectroscopy: 0.038692s; notions decided: 6/6
   first only: failure-trace
   second only: (none)
   more precise: first
 L42,R42
+  first spectroscopy: 0.209000s; notions decided: 13/13
+  second spectroscopy: 0.035043s; notions decided: 6/6
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 R42,L42
+  first spectroscopy: 0.196000s; notions decided: 13/13
+  second spectroscopy: 0.035867s; notions decided: 6/6
   first only: 2-nested-simulation
   second only: (none)
   more precise: first
 L50,R50
+  first spectroscopy: 0.212000s; notions decided: 13/13
+  second spectroscopy: 0.036995s; notions decided: 6/6
   first only: (none)
   second only: (none)
   more precise: neither
 R50,L50
+  first spectroscopy: 0.221000s; notions decided: 13/13
+  second spectroscopy: 0.036692s; notions decided: 6/6
   first only: ready-trace
   second only: (none)
   more precise: first
