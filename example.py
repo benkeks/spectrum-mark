@@ -33,7 +33,7 @@ PETERSON_PAIRS = (("Pe", "Mx"), ("Pe", "MxIC"))
 
 SUITE_DATASETS = (
     ("ltbts1", PAIRS, False, False),
-    ("ltbts2", WEAK_PAIRS, True, False),
+    ("ltbts2", WEAK_PAIRS, True, True),
     ("peterson-silent", PETERSON_PAIRS, True, True),
 )
 

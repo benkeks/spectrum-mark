@@ -16,7 +16,9 @@ from run_equivio import validate_divergence_input
 TOOLS = ("equivio", "mcrl2", "cadp")
 
 
-def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=False):
+def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=None):
+    if divergences is None:
+        divergences = weak
     if divergences:
         if not weak:
             raise ValueError("Divergence marking requires weak spectroscopy")
@@ -64,7 +66,7 @@ def main():
     add_input_arguments(parser)
     parser.add_argument("--weak", action="store_true", help="Run only weak datasets, or weak notions for --csv")
     parser.add_argument("--divergences", action="store_true",
-                        help="Also run the divergence track for all three tools on weak datasets")
+                        help="Include the divergence track (already standard for weak datasets)")
     parser.add_argument("--cadp-bin", type=Path, help="Override the CADP binary directory")
     args = parser.parse_args()
     if args.divergences and not args.weak and (args.csv is not None or args.pair is not None):
@@ -72,7 +74,7 @@ def main():
     try:
         if args.csv is not None or args.pair is not None:
             csv_path, pairs = resolve_input(args.csv, args.pair, args.weak)
-            datasets = [(csv_path, pairs, args.weak, args.divergences)]
+            datasets = [(csv_path, pairs, args.weak, args.weak or args.divergences)]
         else:
             examples = Path(__file__).resolve().parent / "examples"
             datasets = [

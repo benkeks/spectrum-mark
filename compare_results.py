@@ -78,9 +78,37 @@ class SpectroscopyCost:
         return self.decided == self.supported
 
 
-def load_report(path):
+def notion_family(notion):
+    if notion.startswith(("delta-", "divergence-preserving-")) or notion == "failures-divergence":
+        return "weak-divergences"
+    if notion in dict(STRONG_SPECTRUM.notions):
+        return "strong"
+    return "weak"
+
+
+def decision_mode(notion, mode):
+    if notion == "bisimulation" or notion.endswith("-bisimulation"):
+        return "equivalence"
+    return mode
+
+
+def notion_implies(stronger, weaker, family):
+    if stronger == weaker:
+        return True
+    if family == "strong":
+        spectrum = STRONG_SPECTRUM
+    elif family in ("weak", "weak-divergences"):
+        spectrum = WEAK_COMPARISON_SPECTRUM
+    else:
+        return False
+    known = dict(spectrum.notions)
+    return stronger in known and weaker in known and spectrum.dominates(stronger, weaker)
+
+
+def load_report_details(path):
     results = {}
     costs = {}
+    decisions = {}
     algorithms = {}
     outcomes = {}
     checks = {}
@@ -141,11 +169,30 @@ def load_report(path):
             supported = len(STRONG_SPECTRUM.notions if row["spectrum"] == "strong" else WEAK_SPECTRUM.notions)
             costs[pair] = SpectroscopyCost(supported, supported if row["status"] == "ok" else 0,
                                            seconds if row["status"] == "ok" else 0.0)
+            spectrum = STRONG_SPECTRUM if row["spectrum"] == "strong" else WEAK_SPECTRUM
+            names = {name for name, _ in spectrum.notions}
+            if row["spectrum"] == "weak-divergences":
+                names = {f"delta-{name}" for name in names}
+            decisions[pair] = {
+                (row["spectrum"], name, decision_mode(name, "preorder")):
+                    any(notion_implies(stronger, name, row["spectrum"]) for stronger in notions)
+                    if row["status"] == "ok" else None
+                for name in names | notions
+            }
     for pair, notion_checks in checks.items():
         decided = 0
         seconds = 0.0
+        pair_decisions = decisions.setdefault(pair, {})
         for notion, modes in notion_checks.items():
             conflicting = any(len(outcomes.get((*pair, notion, mode), set())) > 1 for mode in modes)
+            for mode in modes:
+                answers = outcomes.get((*pair, notion, mode), set())
+                key = (notion_family(notion), notion, decision_mode(notion, mode))
+                answer = next(iter(answers)) == "true" if len(answers) == 1 and not conflicting else None
+                if key in pair_decisions and pair_decisions[key] != answer:
+                    pair_decisions[key] = None
+                else:
+                    pair_decisions[key] = answer
             if conflicting:
                 results[pair][0].discard(notion)
                 continue
@@ -154,6 +201,26 @@ def load_report(path):
                 decided += 1
                 seconds += min(modes[mode])
         costs[pair] = SpectroscopyCost(len(notion_checks), decided, seconds)
+    for (left, right), pair_decisions in decisions.items():
+        reverse = decisions.get((right, left), {})
+        for (family, notion, mode), answer in list(pair_decisions.items()):
+            key = (family, notion, "equivalence")
+            if mode != "preorder" or answer is None or key in pair_decisions:
+                continue
+            if notion not in dict(
+                STRONG_SPECTRUM.notions if family == "strong" else WEAK_COMPARISON_SPECTRUM.notions
+            ):
+                continue
+            reverse_answer = reverse.get((family, notion, mode))
+            if answer is False or reverse_answer is False:
+                pair_decisions[key] = False
+            elif answer is True and reverse_answer is True:
+                pair_decisions[key] = True
+    return results, costs, decisions
+
+
+def load_report(path):
+    results, costs, _ = load_report_details(path)
     return results, costs
 
 
@@ -170,6 +237,22 @@ def format_cost(cost):
             f"decided-notion subtotal: {cost.seconds:.6f}s")
 
 
+def find_inconsistencies(decisions, other):
+    inconsistencies = []
+    for (family, notion, mode), answer in sorted(decisions.items()):
+        if answer is not False:
+            continue
+        for (other_family, stronger, other_mode), other_answer in sorted(other.items()):
+            if other_answer is not True or family != other_family:
+                continue
+            if mode != other_mode and (mode, other_mode) != ("preorder", "equivalence"):
+                continue
+            if notion_implies(stronger, notion, family):
+                inconsistencies.append((notion, mode, stronger, other_mode))
+                break
+    return inconsistencies
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--weak", action="store_true", help="Use the weak spectrum (also detected from weak notion names)")
@@ -177,24 +260,22 @@ def main():
     parser.add_argument("second", help="Second result CSV")
     args = parser.parse_args()
 
-    first, first_costs = load_report(args.first)
-    second, second_costs = load_report(args.second)
+    first, first_costs, first_decisions = load_report_details(args.first)
+    second, second_costs, second_decisions = load_report_details(args.second)
     first_spectra, second_spectra = report_spectra(args.first), report_spectra(args.second)
-    different_families = ("weak-divergences" in first_spectra) != ("weak-divergences" in second_spectra)
+    first_families = {family for pair in first_decisions.values() for family, _, _ in pair}
+    second_families = {family for pair in second_decisions.values() for family, _, _ in pair}
+    different_families = first_families != second_families
     reported = set().union(*(notions for notions, status in (*first.values(), *second.values())))
     weak_names = {name for name, _ in WEAK_SPECTRUM.notions}
     weak = args.weak or bool((first_spectra | second_spectra) & {"weak", "weak-divergences"}) or bool(reported & weak_names) or any(
         name.startswith(("divergence-preserving-", "cadp-", "coupled-", "delta-")) for name in reported
     )
     spectrum = WEAK_COMPARISON_SPECTRUM if weak else STRONG_SPECTRUM
-    if "weak-divergences" in first_spectra | second_spectra:
-        print("Note: delta-marked weak notions are separate from ordinary weak and native "
-              "divergence-preserving notions; no cross-family equivalence is assumed.")
+    if "weak-divergences" in first_families | second_families:
+        print("Note: marked and native divergence checks are compared as the same notions "
+              "under Spectrum II; ordinary weak notions remain separate.")
     mixed_relations = (report_modes(args.first) | report_modes(args.second)) == {"equivalence", "preorder"}
-    if mixed_relations:
-        print("Note: comparing symmetric equivalences with directional preorders; "
-              "differences do not necessarily indicate inconsistencies.")
-    supported = set().union(*(notions for notions, status in first.values() if status == "ok"))
     for left, right in dict.fromkeys((*first, *second)):
         first_preorders, first_status = first.get((left, right), (set(), "missing"))
         second_preorders, second_status = second.get((left, right), (set(), "missing"))
@@ -218,12 +299,14 @@ def main():
         print(f"  first only: {', '.join(sorted(first_only)) or '(none)'}")
         print(f"  second only: {', '.join(sorted(second_only)) or '(none)'}")
         print(f"  more precise: {more_precise}")
-        if first_status == second_status == "ok" and not mixed_relations and not different_families:
-            missing = spectrum.missing_intermediates(
-                first_preorders, second_preorders, supported
-            )
-            if missing:
-                warning = f"  INCONSISTENCY: first omitted supported notion(s): {', '.join(sorted(missing))}"
+        pair = (left, right)
+        for side, other_side, decisions, other in (
+            ("first", "second", first_decisions.get(pair, {}), second_decisions.get(pair, {})),
+            ("second", "first", second_decisions.get(pair, {}), first_decisions.get(pair, {})),
+        ):
+            for notion, mode, stronger, other_mode in find_inconsistencies(decisions, other):
+                warning = (f"  INCONSISTENCY: {side} reports {notion} ({mode}) false, "
+                           f"but {other_side} implies it via {stronger} ({other_mode})")
                 print(f"\033[31m{warning}\033[0m" if sys.stdout.isatty() else warning)
 
 

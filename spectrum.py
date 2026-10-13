@@ -121,5 +121,12 @@ WEAK_COMPARISON_SPECTRUM = Spectrum(
         (name, (1, 0, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
     ] + [
         (f"delta-{name}", (0, 1, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
+    ] + [
+        (native, (0, 1, *dict(WEAK_SPECTRUM.notions)[name]))
+        for native, name in (
+            ("divergence-preserving-branching-bisimulation", "branching-bisimulation"),
+            ("divergence-preserving-weak-bisimulation", "weak-bisimulation"),
+            ("failures-divergence", "stable-failure"),
+        )
     ],
 )

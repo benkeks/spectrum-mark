@@ -25,7 +25,7 @@ python3 run_suite.py
 This starts from the registered CSV datasets, builds the tools as needed, generates AUT/BCG inputs, runs Equivio, mCRL2 and CADP, and writes pairwise result comparisons. All selected pairs are checked in both directions:
 
 - `examples/ltbts1.csv`: ten curated strong LTBTS1 pairs.
-- `examples/ltbts2.csv`: 16 weak LTBTS2 pairs (ending with P57-P58).
+- `examples/ltbts2.csv`: 16 weak LTBTS2 pairs (ending with P57-P58), with ordinary and divergence-sensitive checks.
 - `examples/peterson-silent.csv`: Peterson implementation `Pe` versus specifications `Mx` and `MxIC`, with ordinary and delta-marked weak Equivio spectroscopy. mCRL2 and CADP also check their native divergence-sensitive relations.
 
 Run only the weak datasets, select a smaller comparison, or provide another CSV:
@@ -34,11 +34,11 @@ Run only the weak datasets, select a smaller comparison, or provide another CSV:
 python3 run_suite.py --weak
 python3 run_suite.py --pair L13 R13
 python3 run_suite.py --csv examples/ltbts2.csv --weak --pair P55 P56
-python3 run_suite.py --csv examples/peterson-silent.csv --weak --divergences
+python3 run_suite.py --csv examples/peterson-silent.csv --weak
 python3 run_suite.py --csv path/to/input.csv --pair P Q --pair R S --output-dir results/custom
 ```
 
-Input CSVs contain transition rows `source_id,target_id,action` and named initial-state rows `state_id,state_name,main` or `state_id,state_name,implicit-main`. Registered CSVs use their curated pairs; other CSVs without `--pair` use all distinct named-state pairs in both directions. Use `--weak` to select weak semantics for custom inputs. Default datasets, pairs and divergence-marking settings are defined in `example.py`.
+Input CSVs contain transition rows `source_id,target_id,action` and named initial-state rows `state_id,state_name,main` or `state_id,state_name,implicit-main`. Registered CSVs use their curated pairs; other CSVs without `--pair` use all distinct named-state pairs in both directions. Use `--weak` to select weak semantics for custom inputs. Every weak suite run includes both ordinary and divergence-sensitive tracks for all three tools, with separate reports and within-track comparisons. The `--divergences` suite option remains accepted but is no longer needed. Default datasets and pairs are defined in `example.py`.
 
 The individual `run_equivio.py`, `run_mcrl2.py` and `run_cadp.py` commands accept the same `--csv`, `--pair`, `--weak` and `--output-dir` options. Without input options they select the strong example, or the weak example with `--weak`.
 
