@@ -6,6 +6,7 @@ import csv
 import math
 import sys
 from dataclasses import dataclass
+from statistics import median
 
 from spectrum import STRONG_SPECTRUM, WEAK_COMPARISON_SPECTRUM, WEAK_SPECTRUM
 
@@ -112,6 +113,7 @@ def load_report_details(path):
     algorithms = {}
     outcomes = {}
     checks = {}
+    equivio_rows = {}
     with open(path, newline="") as file:
         reader = csv.DictReader(file)
         fields = set(reader.fieldnames or ())
@@ -124,6 +126,12 @@ def load_report_details(path):
             raise ValueError(f"Missing spectrum column in {path}")
         for row in reader:
             pair = (row["left"], row["right"])
+            try:
+                run = int(row.get("run", "1"))
+            except (TypeError, ValueError) as error:
+                raise ValueError(f"Invalid run identifier for {pair} in {path}") from error
+            if not 1 <= run <= 5:
+                raise ValueError(f"Invalid run identifier {run} for {pair} in {path}")
             seconds = float(row["seconds"])
             if not math.isfinite(seconds) or seconds < 0:
                 raise ValueError(f"Invalid elapsed time {row['seconds']!r} for {pair} in {path}")
@@ -133,12 +141,13 @@ def load_report_details(path):
                 if mode not in ("equivalence", "preorder"):
                     raise ValueError(f"Invalid comparison mode {mode!r} in {path}")
                 notion = mcrl2_notion(equivalence, mode)
-                algorithm_key = (*pair, equivalence, mode)
+                algorithm_key = (*pair, equivalence, mode, run)
                 if algorithm_key in algorithms:
                     raise ValueError(f"Duplicate algorithm {algorithm_key} in {path}")
                 algorithms[algorithm_key] = row["status"]
                 notion_checks = checks.setdefault(pair, {}).setdefault(notion, {})
-                mode_checks = notion_checks.setdefault(mode, [])
+                mode_checks = notion_checks.setdefault(mode, {})
+                samples = mode_checks.setdefault(equivalence, [])
                 notions, status = results.setdefault(pair, (set(), "ok"))
                 if row["status"] != "ok":
                     results[pair] = (notions, row["status"] if status == "ok" else status)
@@ -146,7 +155,7 @@ def load_report_details(path):
                 equivalent = row["equivalent"].strip().lower()
                 if equivalent not in ("true", "false"):
                     raise ValueError(f"Invalid equivalence result {equivalent!r} for {algorithm_key} in {path}")
-                mode_checks.append(seconds)
+                samples.append(seconds)
                 notion_key = (*pair, notion, mode)
                 answers = outcomes.setdefault(notion_key, set())
                 answers.add(equivalent)
@@ -158,27 +167,51 @@ def load_report_details(path):
                 if equivalent == "true":
                     notions.add(notion)
                 continue
-            if pair in results:
-                raise ValueError(f"Duplicate pair {pair} in {path}")
             notions = {name.strip() for name in row["preorders"].split(",") if name.strip()}
             if row["spectrum"] not in ("strong", "weak", "weak-divergences"):
                 raise ValueError(f"Invalid spectrum {row['spectrum']!r} in {path}")
+            algorithm_key = (*pair, row["spectrum"], run)
+            if algorithm_key in algorithms:
+                raise ValueError(f"Duplicate pair/run {algorithm_key} in {path}")
+            algorithms[algorithm_key] = row["status"]
+            rows = equivio_rows.setdefault(pair, [])
+            if rows and rows[0][0]["spectrum"] != row["spectrum"]:
+                raise ValueError(f"Different spectrum families for {pair} in {path}")
             if row["spectrum"] == "weak-divergences":
                 notions = {f"delta-{name}" for name in notions}
-            results[pair] = (notions, row["status"])
-            supported = len(STRONG_SPECTRUM.notions if row["spectrum"] == "strong" else WEAK_SPECTRUM.notions)
-            costs[pair] = SpectroscopyCost(supported, supported if row["status"] == "ok" else 0,
-                                           seconds if row["status"] == "ok" else 0.0)
-            spectrum = STRONG_SPECTRUM if row["spectrum"] == "strong" else WEAK_SPECTRUM
-            names = {name for name, _ in spectrum.notions}
-            if row["spectrum"] == "weak-divergences":
-                names = {f"delta-{name}" for name in names}
-            decisions[pair] = {
-                (row["spectrum"], name, decision_mode(name, "preorder")):
-                    any(notion_implies(stronger, name, row["spectrum"]) for stronger in notions)
-                    if row["status"] == "ok" else None
-                for name in names | notions
-            }
+            rows.append((row, seconds, notions))
+    for pair, rows in equivio_rows.items():
+        family = rows[0][0]["spectrum"]
+        spectrum = STRONG_SPECTRUM if family == "strong" else WEAK_SPECTRUM
+        supported = len(spectrum.notions)
+        names = {name for name, _ in spectrum.notions}
+        if family == "weak-divergences":
+            names = {f"delta-{name}" for name in names}
+        names.update(name for _, _, notions in rows for name in notions)
+        answers = {name: set() for name in names}
+        frontier = set()
+        samples = []
+        status = next((row["status"] for row, _, _ in rows if row["status"] != "ok"), "ok")
+        for row, seconds, notions in rows:
+            if row["status"] != "ok":
+                continue
+            samples.append(seconds)
+            frontier.update(notions)
+            for name in names:
+                answers[name].add(any(notion_implies(stronger, name, family) for stronger in notions))
+        conflicting = any(len(values) > 1 for values in answers.values())
+        if conflicting:
+            status = "conflict"
+            frontier.clear()
+            print(f"Conflicting spectroscopy results for {pair} in {path}", file=sys.stderr)
+        results[pair] = (frontier, status)
+        costs[pair] = SpectroscopyCost(supported, supported if samples and not conflicting else 0,
+                                      median(samples) if samples and not conflicting else 0.0)
+        decisions[pair] = {
+            (family, name, decision_mode(name, "preorder")):
+                next(iter(values)) if len(values) == 1 and not conflicting else None
+            for name, values in answers.items()
+        }
     for pair, notion_checks in checks.items():
         decided = 0
         seconds = 0.0
@@ -197,9 +230,10 @@ def load_report_details(path):
                 results[pair][0].discard(notion)
                 continue
             mode = "preorder" if "preorder" in modes else "equivalence"
-            if modes[mode]:
+            timings = [median(samples) for samples in modes[mode].values() if samples]
+            if timings:
                 decided += 1
-                seconds += min(modes[mode])
+                seconds += min(timings)
         costs[pair] = SpectroscopyCost(len(notion_checks), decided, seconds)
     for (left, right), pair_decisions in decisions.items():
         reverse = decisions.get((right, left), {})
@@ -265,23 +299,25 @@ def main():
     first_spectra, second_spectra = report_spectra(args.first), report_spectra(args.second)
     first_families = {family for pair in first_decisions.values() for family, _, _ in pair}
     second_families = {family for pair in second_decisions.values() for family, _, _ in pair}
-    different_families = first_families != second_families
+    different_families = bool(first_families and second_families and first_families != second_families)
     reported = set().union(*(notions for notions, status in (*first.values(), *second.values())))
     weak_names = {name for name, _ in WEAK_SPECTRUM.notions}
-    weak = args.weak or bool((first_spectra | second_spectra) & {"weak", "weak-divergences"}) or bool(reported & weak_names) or any(
+    weak = args.weak or bool((first_families | second_families) & {"weak", "weak-divergences"}) or bool(reported & weak_names) or any(
         name.startswith(("divergence-preserving-", "cadp-", "coupled-", "delta-")) for name in reported
     )
     spectrum = WEAK_COMPARISON_SPECTRUM if weak else STRONG_SPECTRUM
     if "weak-divergences" in first_families | second_families:
-        print("Note: marked and native divergence checks are compared as the same notions "
-              "under Spectrum II; ordinary weak notions remain separate.")
+          print("Note: marked and native divergence-preserving bisimulations share notions "
+              "under Spectrum II; ordinary weak notions and failures-divergence remain separate.")
     mixed_relations = (report_modes(args.first) | report_modes(args.second)) == {"equivalence", "preorder"}
     for left, right in dict.fromkeys((*first, *second)):
         first_preorders, first_status = first.get((left, right), (set(), "missing"))
         second_preorders, second_status = second.get((left, right), (set(), "missing"))
         first_only = spectrum.unmatched(first_preorders, second_preorders)
         second_only = spectrum.unmatched(second_preorders, first_preorders)
-        if different_families:
+        if first_status == "missing" or second_status == "missing":
+            more_precise = "not comparable (missing results)"
+        elif different_families:
             more_precise = "not comparable (different spectrum families)"
         elif first_only and second_only:
             more_precise = "both"

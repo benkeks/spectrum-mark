@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 from csv_to_aut import parse_csv
-from example import add_input_arguments, directed_pairs, resolve_input
+from example import add_input_arguments, comparison_runs, resolve_input
 
 
 def validate_divergence_input(csv_path):
@@ -102,14 +102,14 @@ def main():
         compared_csv = prepare_divergence_input(csv_path, Path(directory) / csv_path.name) \
             if args.divergences else csv_path
         writer = csv.writer(result_file)
-        writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status"))
-        for source, target in directed_pairs(pairs):
+        writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status", "run"))
+        for run, source, target, _ in comparison_runs(pairs, benchmark_performance=args.benchmark_performance):
             seconds, preorders, status = compare(
                 jar_path, compared_csv, source, target, args.weak, args.divergences
             )
-            writer.writerow((source, target, spectrum, f"{seconds:.3f}", preorders, status))
+            writer.writerow((source, target, spectrum, f"{seconds:.6f}", preorders, status, run))
             result_file.flush()
-            print(f"{source},{target}: {status} ({seconds:.3f}s)", flush=True)
+            print(f"run {run}: {source},{target}: {status} ({seconds:.6f}s)", flush=True)
 
 
 if __name__ == "__main__":

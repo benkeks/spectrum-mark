@@ -32,6 +32,7 @@ Run only the weak datasets, select a smaller comparison, or provide another CSV:
 
 ```sh
 python3 run_suite.py --weak
+python3 run_suite.py --weak --benchmark-performance --output-dir results/performance
 python3 run_suite.py --pair L13 R13
 python3 run_suite.py --csv examples/ltbts2.csv --weak --pair P55 P56
 python3 run_suite.py --csv examples/peterson-silent.csv --weak
@@ -49,6 +50,10 @@ Silent AUT labels become `i`; CADP inputs are temporarily remapped to initial st
 Each run writes fresh `<input-stem>-{equivio,mcrl2,cadp}.csv` reports and `<input-stem>-<first>-vs-<second>.txt` comparisons under `results/`, or `--output-dir`. Existing files with those names are overwritten. Use separate output directories for different semantic runs of the same CSV. Comparisons have a 30-second limit per individual tool call and record elapsed time plus `ok`, `timeout`, or `error`. Timing excludes input generation and tool builds but includes process startup and CADP compilation/linking.
 
 Equivio reports directional preorder frontiers. CADP and mCRL2 record individual boolean checks with a `mode` column: `equivalent=true` means left-to-right inclusion in preorder mode. Both modes are measured separately whenever available, even when equivalence could be inferred from two preorder answers. Every selected check is executed for every directed pair, with no adaptive scheduling or skipped calls; the individual timings remain available for later spectroscopy cost analysis.
+
+Use `--benchmark-performance` on the suite or an individual runner to execute each query five times. Each round uses a reproducibly shuffled order of directed examples and, for native tools, relation/algorithm checks. Builds and input preparation happen once, outside the timed rounds. Every call is retained in the CSV with a `run` identifier from 1 to 5; ordinary runs use 1. CSV row order records execution order. Existing CSVs without a `run` column remain supported as single-run reports.
+
+Comparison timings use the median of successful repetitions for each exact query. Native spectroscopy costs then select the fastest algorithm median for each notion in its required relation mode, rather than selecting the fastest individual repetition. Errors and timeouts remain visible but are excluded from timing samples; contradictory answers are reported as conflicts and excluded from costs. A separate `--output-dir` keeps performance measurements from overwriting normal results.
 
 - **mCRL2:** runs all advertised nontrivial equivalences and preorders in the selected strong or weak family, retaining every algorithm variant. Strong runs include simulation, ready simulation, trace (including antichains), failures, impossible futures, and bisimulation. Weak runs include weak trace (including antichains), stable failures (`weak-failures`), failures-divergence, coupled simulation, weak/branching bisimulation and their divergence-preserving variants.
 - **CADP:** retains all configured `bcg_cmp` and BISIMULATOR equivalence checks, and adds `-smaller` for every BISIMULATOR relation. Since both pair directions are run, separate `-greater` calls would duplicate the same inclusion tasks. Strong inclusion checks cover simulation and trace; weak checks cover observational/weak simulation, branching simulation, tau*.a/safety simulation and weak trace.

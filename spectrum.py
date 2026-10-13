@@ -116,17 +116,18 @@ WEAK_SPECTRUM = Spectrum(
 
 
 WEAK_COMPARISON_SPECTRUM = Spectrum(
-    coordinates=("ordinary", "deltaMarked", *WEAK_SPECTRUM.coordinates),
+    coordinates=("ordinary", "deltaMarked", "failuresDivergence", *WEAK_SPECTRUM.coordinates),
     notions=[
-        (name, (1, 0, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
+        (name, (1, 0, 0, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
     ] + [
-        (f"delta-{name}", (0, 1, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
+        (f"delta-{name}", (0, 1, 0, *coordinates)) for name, coordinates in WEAK_SPECTRUM.notions
     ] + [
-        (native, (0, 1, *dict(WEAK_SPECTRUM.notions)[name]))
+        (native, (0, 1, 0, *dict(WEAK_SPECTRUM.notions)[name]))
         for native, name in (
             ("divergence-preserving-branching-bisimulation", "branching-bisimulation"),
             ("divergence-preserving-weak-bisimulation", "weak-bisimulation"),
-            ("failures-divergence", "stable-failure"),
         )
+    ] + [
+        ("failures-divergence", (0, 0, 1, *(0 for _ in WEAK_SPECTRUM.coordinates))),
     ],
 )

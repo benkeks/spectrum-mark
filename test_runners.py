@@ -2,6 +2,7 @@ import csv
 import io
 import tempfile
 import unittest
+from contextlib import ExitStack
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -12,11 +13,76 @@ import run_suite
 import compare_results
 from compare_results import load_report, load_results, mcrl2_notion
 from csv_to_aut import parse_csv
-from example import PAIRS, PETERSON_PAIRS, WEAK_PAIRS, resolve_input
+from example import PAIRS, PETERSON_PAIRS, WEAK_PAIRS, comparison_runs, resolve_input
 from spectrum import WEAK_COMPARISON_SPECTRUM
 
 
 class RunnerTests(unittest.TestCase):
+    def test_performance_schedule_repeats_every_query_in_varying_orders(self):
+        pairs = [("P", "Q"), ("A", "B")]
+        comparisons = [("bisim", "equivalence"), ("trace", "preorder")]
+        ordinary = list(comparison_runs(pairs, comparisons))
+        benchmark = list(comparison_runs(pairs, comparisons, benchmark_performance=True))
+        expected = {query[1:] for query in ordinary}
+        self.assertEqual(len(ordinary), 8)
+        self.assertEqual(len(benchmark), 40)
+        orders = []
+        for run in range(1, 6):
+            queries = [query[1:] for query in benchmark if query[0] == run]
+            self.assertEqual(len(queries), len(expected))
+            self.assertEqual(set(queries), expected)
+            orders.append(tuple(queries))
+        self.assertEqual(len(set(orders)), 5)
+        self.assertEqual(benchmark, list(comparison_runs(pairs, comparisons, True)))
+
+    def test_runners_document_every_performance_run_in_csv(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output_dir = Path(directory)
+            source = output_dir / "custom.csv"
+            source.write_text("0,1,a\n0,P,implicit-main\n1,Q,implicit-main\n")
+            aut_paths = {name: output_dir / f"custom_{name}.aut" for name in ("P", "Q")}
+            for module, tool in ((run_equivio, "equivio"), (run_mcrl2, "mcrl2"), (run_cadp, "cadp")):
+                for benchmark in (False, True):
+                    with self.subTest(tool=tool, benchmark=benchmark), ExitStack() as context:
+                        argv = [f"run_{tool}.py", "--csv", str(source), "--output-dir", str(output_dir)]
+                        if benchmark:
+                            argv.append("--benchmark-performance")
+                        context.enter_context(patch.object(module.sys, "argv", argv))
+                        context.enter_context(patch.object(module.subprocess, "run"))
+                        context.enter_context(patch("builtins.print"))
+                        answer = "ready-simulation" if tool == "equivio" else "true"
+                        compare = context.enter_context(patch.object(module, "compare", return_value=(0.25, answer, "ok")))
+                        if tool == "equivio":
+                            context.enter_context(patch.object(module.Path, "glob", return_value=[output_dir / "equivio.jar"]))
+                        else:
+                            context.enter_context(patch.object(module, "prepare_auts", return_value=aut_paths))
+                            bisim = "bisim-bcg-cmp" if tool == "cadp" else "bisim"
+                            context.enter_context(patch.object(module, "available_comparisons", return_value=[
+                                (bisim, "equivalence"), ("trace", "preorder"),
+                            ]))
+                            if tool == "cadp":
+                                context.enter_context(patch.object(module, "cadp_environment", return_value={}))
+                        module.main()
+                        report = output_dir / f"custom-{tool}.csv"
+                        with report.open(newline="") as result_file:
+                            rows = list(csv.DictReader(result_file))
+                        repetitions = 5 if benchmark else 1
+                        query_count = 2 if tool == "equivio" else 4
+                        self.assertEqual(len(rows), query_count * repetitions)
+                        self.assertEqual(compare.call_count, len(rows))
+                        queries = {}
+                        for row in rows:
+                            key = (row["left"], row["right"], row.get("equivalence"), row.get("mode"))
+                            queries.setdefault(key, []).append(int(row["run"]))
+                            self.assertEqual(row["status"], "ok")
+                            self.assertEqual(float(row["seconds"]), 0.25)
+                        for runs in queries.values():
+                            self.assertEqual(sorted(runs), list(range(1, repetitions + 1)))
+                        _, costs = load_report(report)
+                        self.assertTrue(all(cost.complete for cost in costs.values()))
+                        self.assertTrue(all(cost.seconds == (0.25 if tool == "equivio" else 0.5)
+                                            for cost in costs.values()))
+
     def test_equivio_divergence_command(self):
         process = Mock(returncode=0)
         process.communicate.return_value = ("weak-bisimulation\n", None)
@@ -89,12 +155,25 @@ class RunnerTests(unittest.TestCase):
         for native, marked in (
             ("divergence-preserving-branching-bisimulation", "delta-branching-bisimulation"),
             ("divergence-preserving-weak-bisimulation", "delta-weak-bisimulation"),
-            ("failures-divergence", "delta-stable-failure"),
         ):
             with self.subTest(native=native):
                 self.assertTrue(spectrum.dominates(native, marked))
                 self.assertTrue(spectrum.dominates(marked, native))
                 self.assertEqual(compare_results.notion_family(native), "weak-divergences")
+
+    def test_failures_divergence_is_beside_the_weak_spectrum(self):
+        spectrum = WEAK_COMPARISON_SPECTRUM
+        self.assertTrue(spectrum.dominates("failures-divergence", "failures-divergence"))
+        for notion, _ in spectrum.notions:
+            if notion == "failures-divergence":
+                continue
+            with self.subTest(notion=notion):
+                self.assertFalse(spectrum.dominates("failures-divergence", notion))
+                self.assertFalse(spectrum.dominates(notion, "failures-divergence"))
+        frontier = {"failures-divergence", "delta-sr-branching-bisimulation"}
+        self.assertEqual(spectrum.pareto_front(frontier), frontier)
+        self.assertEqual(spectrum.unmatched({"failures-divergence"}, {"delta-stable-failure"}),
+                         {"failures-divergence"})
 
     def test_comparison_does_not_rank_different_spectrum_families(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -112,6 +191,32 @@ class RunnerTests(unittest.TestCase):
                 compare_results.main()
             self.assertIn("not comparable (different spectrum families)", output.getvalue())
             self.assertNotIn("INCONSISTENCY", output.getvalue())
+
+    def test_comparison_does_not_rank_missing_results_as_different_families(self):
+        with tempfile.TemporaryDirectory() as directory:
+            first = Path(directory) / "first.csv"
+            second = Path(directory) / "second.csv"
+            fields = ("left", "right", "equivalence", "mode", "seconds", "equivalent", "status")
+            with first.open("w", newline="") as result_file:
+                writer = csv.writer(result_file)
+                writer.writerow(fields)
+                writer.writerow(("P", "Q", "sim", "preorder", 1, "true", "ok"))
+            for rows in ([], [("A", "B", "sim", "preorder", 1, "false", "ok")]):
+                with second.open("w", newline="") as result_file:
+                    writer = csv.writer(result_file)
+                    writer.writerow(fields)
+                    writer.writerows(rows)
+                for reports in ((first, second), (second, first)):
+                    with self.subTest(rows=rows, reports=reports):
+                        output = io.StringIO()
+                        with patch.object(compare_results.sys, "argv", [
+                            "compare_results.py", *map(str, reports),
+                        ]), patch.object(compare_results.sys, "stdout", output):
+                            compare_results.main()
+                        self.assertIn("not comparable (missing results)", output.getvalue())
+                        self.assertNotIn("different spectrum families", output.getvalue())
+                        self.assertNotIn("more precise: first", output.getvalue())
+                        self.assertNotIn("more precise: second", output.getvalue())
 
     def test_cross_tool_checks_false_notions_in_both_reports(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -163,7 +268,7 @@ class RunnerTests(unittest.TestCase):
                           "(equivalence) false", output.getvalue())
             self.assertIn("INCONSISTENCY: first reports delta-branching-bisimulation "
                           "(equivalence) false", output.getvalue())
-            self.assertIn("INCONSISTENCY: second reports failures-divergence "
+            self.assertNotIn("INCONSISTENCY: second reports failures-divergence "
                           "(preorder) false", output.getvalue())
             self.assertNotIn("not comparable", output.getvalue())
             self.assertIn("under Spectrum II", output.getvalue())
@@ -188,7 +293,13 @@ class RunnerTests(unittest.TestCase):
             ({("weak-divergences", "delta-weak-bisimulation", "equivalence"): False},
              {("weak-divergences", "divergence-preserving-branching-bisimulation", "equivalence"): True}, True),
             ({("weak-divergences", "failures-divergence", "preorder"): False},
-             {("weak-divergences", "delta-sr-branching-bisimulation", "equivalence"): True}, True),
+             {("weak-divergences", "delta-sr-branching-bisimulation", "equivalence"): True}, False),
+            ({("weak-divergences", "delta-weak-trace", "preorder"): False},
+             {("weak-divergences", "failures-divergence", "equivalence"): True}, False),
+            ({("weak-divergences", "delta-stable-failure", "equivalence"): False},
+             {("weak-divergences", "failures-divergence", "equivalence"): True}, False),
+            ({("weak-divergences", "failures-divergence", "preorder"): False},
+             {("weak-divergences", "failures-divergence", "equivalence"): True}, True),
             ({("weak-divergences", "delta-weak-trace", "preorder"): False},
              {("weak-divergences", "delta-branching-bisimulation", "equivalence"): True}, True),
             ({("weak-divergences", "divergence-preserving-branching-bisimulation", "equivalence"): False},
@@ -346,6 +457,108 @@ class RunnerTests(unittest.TestCase):
             self.assertEqual((cost.supported, cost.decided, cost.seconds), (3, 3, 8))
             self.assertTrue(cost.complete)
 
+    def test_repeated_native_queries_use_fastest_algorithm_median(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "native.csv"
+            with report.open("w", newline="") as result_file:
+                writer = csv.writer(result_file)
+                writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run"))
+                for algorithm, samples in (
+                    ("bisim", [0.01, 9, 9, 10, 11]),
+                    ("bisim-gv", [3, 2, 4, 3, 2]),
+                ):
+                    for run, seconds in enumerate(samples, 1):
+                        writer.writerow(("P", "Q", algorithm, "equivalence", seconds, "false", "ok", run))
+            results, costs, decisions = compare_results.load_report_details(report)
+            self.assertEqual(results[("P", "Q")], (set(), "ok"))
+            cost = costs[("P", "Q")]
+            self.assertEqual((cost.supported, cost.decided, cost.seconds), (1, 1, 3))
+            self.assertIs(decisions[("P", "Q")][("strong", "bisimulation", "equivalence")], False)
+
+    def test_repeated_equivio_queries_use_median_and_retain_decisions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "equivio.csv"
+            for family, frontier, trace, count in (
+                ("strong", "ready-simulation", "trace", 13),
+                ("weak-divergences", "sr-delay-bisimulation", "delta-weak-trace", 26),
+            ):
+                with self.subTest(family=family):
+                    with report.open("w", newline="") as result_file:
+                        writer = csv.writer(result_file)
+                        writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status", "run"))
+                        for run, seconds in enumerate([0.01, 9, 2, 4, 3], 1):
+                            writer.writerow(("P", "Q", family, seconds, frontier, "ok", run))
+                    _, costs, decisions = compare_results.load_report_details(report)
+                    cost = costs[("P", "Q")]
+                    self.assertEqual((cost.supported, cost.decided, cost.seconds), (count, count, 3))
+                    self.assertIs(decisions[("P", "Q")][(family, trace, "preorder")], True)
+
+    def test_repeated_query_conflicts_are_not_timed_as_decisions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            cases = [
+                (("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run"), [
+                    ("P", "Q", "sim", "preorder", 1, "true", "ok", 1),
+                    ("P", "Q", "sim", "preorder", 2, "false", "ok", 2),
+                    ("P", "Q", "sim", "preorder", 30, "", "timeout", 3),
+                ]),
+                (("left", "right", "spectrum", "seconds", "preorders", "status", "run"), [
+                    ("P", "Q", "strong", 1, "trace", "ok", 1),
+                    ("P", "Q", "strong", 2, "", "ok", 2),
+                    ("P", "Q", "strong", 30, "", "timeout", 3),
+                ]),
+            ]
+            for fields, rows in cases:
+                with self.subTest(fields=fields):
+                    with report.open("w", newline="") as result_file:
+                        writer = csv.writer(result_file)
+                        writer.writerow(fields)
+                        writer.writerows(rows)
+                    with patch.object(compare_results.sys, "stderr", io.StringIO()):
+                        results, costs, decisions = compare_results.load_report_details(report)
+                    self.assertEqual(results[("P", "Q")], (set(), "conflict"))
+                    self.assertEqual(costs[("P", "Q")].decided, 0)
+                    self.assertEqual(costs[("P", "Q")].seconds, 0)
+                    self.assertTrue(all(answer is None for answer in decisions[("P", "Q")].values()))
+
+    def test_repeated_query_failures_are_excluded_from_median_samples(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            for native in (False, True):
+                with self.subTest(native=native):
+                    with report.open("w", newline="") as result_file:
+                        writer = csv.writer(result_file)
+                        writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run")
+                                        if native else ("left", "right", "spectrum", "seconds", "preorders", "status", "run"))
+                        for run, (seconds, status) in enumerate([(1, "ok"), (3, "ok"), (5, "ok"),
+                                                                (30, "timeout"), (30, "error")], 1):
+                            writer.writerow(("P", "Q", "sim", "preorder", seconds,
+                                             "false" if status == "ok" else "", status, run)
+                                            if native else ("P", "Q", "strong", seconds,
+                                                            "trace" if status == "ok" else "", status, run))
+                    results, costs, decisions = compare_results.load_report_details(report)
+                    self.assertEqual(results[("P", "Q")][1], "timeout")
+                    self.assertEqual(costs[("P", "Q")].seconds, 3)
+                    self.assertTrue(costs[("P", "Q")].complete)
+                    key = ("strong", "simulation" if native else "trace", "preorder")
+                    self.assertIs(decisions[("P", "Q")][key], not native)
+
+    def test_repeated_query_run_ids_are_valid_and_unique(self):
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "results.csv"
+            for native in (False, True):
+                for runs in ([0], [6], ["invalid"], [""], [1, 1]):
+                    with self.subTest(native=native, runs=runs):
+                        with report.open("w", newline="") as result_file:
+                            writer = csv.writer(result_file)
+                            writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run")
+                                            if native else ("left", "right", "spectrum", "seconds", "preorders", "status", "run"))
+                            for run in runs:
+                                writer.writerow(("P", "Q", "sim", "preorder", 1, "true", "ok", run)
+                                                if native else ("P", "Q", "strong", 1, "trace", "ok", run))
+                        with self.assertRaises(ValueError):
+                            load_report(report)
+
     def test_equivio_cost_counts_the_whole_spectrum(self):
         with tempfile.TemporaryDirectory() as directory:
             for spectrum, count in (("strong", 13), ("weak", 26), ("weak-divergences", 26)):
@@ -460,12 +673,17 @@ class RunnerTests(unittest.TestCase):
         self.assertTrue(run_dataset.call_args_list[2].kwargs["divergences"])
 
     def test_weak_suite_includes_peterson(self):
-        with patch.object(run_suite.sys, "argv", ["run_suite.py", "--weak"]), \
-                patch.object(run_suite, "run_dataset") as run_dataset:
-            run_suite.main()
-        self.assertEqual([call.args[0].stem for call in run_dataset.call_args_list],
-                         ["ltbts2", "peterson-silent"])
-        self.assertTrue(all(call.kwargs["divergences"] for call in run_dataset.call_args_list))
+        for extra_options in ([], ["--divergence"], ["--divergences"], ["--benchmark-performance"]):
+            with self.subTest(extra_options=extra_options):
+                with patch.object(run_suite.sys, "argv", ["run_suite.py", "--weak", *extra_options]), \
+                        patch.object(run_suite, "run_dataset") as run_dataset:
+                    run_suite.main()
+                self.assertEqual([call.args[0].stem for call in run_dataset.call_args_list],
+                                 ["ltbts2", "peterson-silent"])
+                self.assertTrue(all(call.args[2] for call in run_dataset.call_args_list))
+                self.assertTrue(all(call.kwargs["divergences"] for call in run_dataset.call_args_list))
+                self.assertTrue(all(call.kwargs["benchmark_performance"] == ("--benchmark-performance" in extra_options)
+                                    for call in run_dataset.call_args_list))
 
     def test_custom_weak_suite_includes_divergence_by_default(self):
         for extra_options in ([], ["--divergences"]):
@@ -485,10 +703,12 @@ class RunnerTests(unittest.TestCase):
             for tool in (*run_suite.TOOLS, *(f"{tool}-divergences" for tool in run_suite.TOOLS)):
                 (output_dir / f"custom-{tool}.csv").write_text("status\nok\n")
             with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"):
-                run_suite.run_dataset(source, [("P", "Q")], True, output_dir)
+                run_suite.run_dataset(source, [("P", "Q")], True, output_dir, benchmark_performance=True)
             commands = [call.args[0] for call in run.call_args_list]
             self.assertEqual(len(commands), 12)
             self.assertEqual(Path(commands[3][1]).name, "run_equivio.py")
+            self.assertTrue(all("--benchmark-performance" in command for command in commands[:6]))
+            self.assertTrue(all("--benchmark-performance" not in command for command in commands[6:]))
             for command in commands[:3]:
                 self.assertNotIn("--divergences", command)
             for command in commands[3:6]:

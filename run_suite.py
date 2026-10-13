@@ -16,7 +16,7 @@ from run_equivio import validate_divergence_input
 TOOLS = ("equivio", "mcrl2", "cadp")
 
 
-def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=None):
+def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=None, benchmark_performance=False):
     if divergences is None:
         divergences = weak
     if divergences:
@@ -29,6 +29,8 @@ def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=No
     options = ["--csv", str(csv_path), "--output-dir", str(output_dir)]
     if weak:
         options.append("--weak")
+    if benchmark_performance:
+        options.append("--benchmark-performance")
     for left, right in pairs:
         options.extend(("--pair", left, right))
     reports = {False: {}, True: {}}
@@ -84,7 +86,8 @@ def main():
             ]
         for csv_path, pairs, weak, divergences in datasets:
             run_dataset(csv_path, pairs, weak, args.output_dir, args.cadp_bin,
-                        divergences=divergences or (args.divergences and weak))
+                        divergences=divergences or (args.divergences and weak),
+                        benchmark_performance=args.benchmark_performance)
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Suite failed: {error}\n")
 

@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 from csv_to_aut import generate_aut, parse_csv
-from example import add_input_arguments, directed_pairs, prepare_auts, resolve_input
+from example import add_input_arguments, comparison_runs, prepare_auts, resolve_input
 
 
 EQUIVALENCES = ("bisim-bcg-cmp", "bisim-bisimulator", "trace")
@@ -167,19 +167,19 @@ def main():
         report.parent.mkdir(exist_ok=True)
         with report.open("w", newline="") as result_file:
             writer = csv.writer(result_file)
-            writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
-            for source, target in directed_pairs(pairs):
-                for equivalence, mode in comparisons:
-                    seconds, equivalent, status = compare(
-                        bin_dir, bcg_paths[source], bcg_paths[target],
-                        equivalence, environment, work_dir, mode,
-                    )
-                    writer.writerow((source, target, equivalence, mode, f"{seconds:.6f}", equivalent, status))
-                    result_file.flush()
-                    print(
-                        f"{source},{target},{equivalence},{mode}: {equivalent or status} "
-                        f"({seconds:.6f}s)", flush=True,
-                    )
+            writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run"))
+            for run, source, target, comparison in comparison_runs(pairs, comparisons, args.benchmark_performance):
+                equivalence, mode = comparison
+                seconds, equivalent, status = compare(
+                    bin_dir, bcg_paths[source], bcg_paths[target],
+                    equivalence, environment, work_dir, mode,
+                )
+                writer.writerow((source, target, equivalence, mode, f"{seconds:.6f}", equivalent, status, run))
+                result_file.flush()
+                print(
+                    f"run {run}: {source},{target},{equivalence},{mode}: {equivalent or status} "
+                    f"({seconds:.6f}s)", flush=True,
+                )
 
 
 if __name__ == "__main__":

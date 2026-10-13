@@ -1,0 +1,193 @@
+Note: marked and native divergence-preserving bisimulations share notions under Spectrum II; ordinary weak notions and failures-divergence remain separate.
+P55,P56
+  first spectroscopy: 0.240913s; notions decided: 26/26
+  second spectroscopy: 0.616740s; notions decided: 1/1
+  first only: delta-2-nested-weak-simulation, delta-stable-bisimulation
+  second only: (none)
+  more precise: first
+P42,P41
+  first spectroscopy: 0.260517s; notions decided: 26/26
+  second spectroscopy: 0.613730s; notions decided: 1/1
+  first only: delta-s-impossible-future, delta-stable-failure-trace, delta-weak-impossible-future
+  second only: (none)
+  more precise: first
+P25,P24
+  first spectroscopy: 0.246884s; notions decided: 26/26
+  second spectroscopy: 0.622940s; notions decided: 1/1
+  first only: delta-contrasimulation, delta-stable-bisimulation
+  second only: (none)
+  more precise: first
+P24,P25
+  first spectroscopy: 0.253435s; notions decided: 26/26
+  second spectroscopy: 0.617200s; notions decided: 1/1
+  first only: delta-contrasimulation, delta-eta-simulation, delta-stable-bisimulation, delta-weak-possible-future, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P56,P57
+  first spectroscopy: 0.247593s; notions decided: 26/26
+  second spectroscopy: 0.617828s; notions decided: 1/1
+  first only: delta-weak-enabledness
+  second only: (none)
+  more precise: first
+P12,P11
+  first spectroscopy: 0.233682s; notions decided: 26/26
+  second spectroscopy: 0.615431s; notions decided: 1/1
+  first only: delta-eta-bisimulation, delta-sr-delay-bisimulation
+  second only: (none)
+  more precise: first
+P16,P15
+  first spectroscopy: 0.237790s; notions decided: 26/26
+  second spectroscopy: 0.612710s; notions decided: 1/1
+  first only: delta-2-nested-weak-simulation, delta-contrasimulation, delta-eta-simulation, delta-stable-bisimulation
+  second only: (none)
+  more precise: first
+P15,P16
+  first spectroscopy: 0.232999s; notions decided: 26/26
+  second spectroscopy: 0.621509s; notions decided: 1/1
+  first only: delta-contrasimulation, delta-eta-simulation, delta-stable-bisimulation
+  second only: (none)
+  more precise: first
+P22,P21
+  first spectroscopy: 0.236492s; notions decided: 26/26
+  second spectroscopy: 0.607915s; notions decided: 1/1
+  first only: delta-2-nested-weak-simulation, delta-eta-simulation, delta-s-impossible-future, delta-s-ready-simulation
+  second only: (none)
+  more precise: first
+P41,P42
+  first spectroscopy: 0.256615s; notions decided: 26/26
+  second spectroscopy: 0.621925s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-s-impossible-future, delta-s-ready-simulation, delta-weak-possible-future, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P23,P22
+  first spectroscopy: 0.265112s; notions decided: 26/26
+  second spectroscopy: 0.621356s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-s-ready-simulation, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P43,P42
+  first spectroscopy: 0.240788s; notions decided: 26/26
+  second spectroscopy: 0.623261s; notions decided: 1/1
+  first only: delta-2-nested-weak-simulation, delta-eta-simulation, delta-s-impossible-future, delta-s-ready-simulation
+  second only: (none)
+  more precise: first
+P57,P58
+  first spectroscopy: 0.274843s; notions decided: 26/26
+  second spectroscopy: 0.630395s; notions decided: 1/1
+  first only: delta-2-nested-weak-simulation, delta-eta-simulation, delta-s-impossible-future, delta-s-ready-simulation
+  second only: (none)
+  more precise: first
+P32,P31
+  first spectroscopy: 0.299370s; notions decided: 26/26
+  second spectroscopy: 0.625458s; notions decided: 1/1
+  first only: delta-stable-readiness, delta-weak-readiness
+  second only: (none)
+  more precise: first
+P51,P52
+  first spectroscopy: 0.242649s; notions decided: 26/26
+  second spectroscopy: 0.617070s; notions decided: 1/1
+  first only: delta-weak-enabledness
+  second only: (none)
+  more precise: first
+P11,P12
+  first spectroscopy: 0.238371s; notions decided: 26/26
+  second spectroscopy: 0.622651s; notions decided: 1/1
+  first only: delta-eta-bisimulation, delta-sr-delay-bisimulation
+  second only: (none)
+  more precise: first
+P45,P44
+  first spectroscopy: 0.294988s; notions decided: 26/26
+  second spectroscopy: 0.622450s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-stable-readiness, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P57,P56
+  first spectroscopy: 0.248004s; notions decided: 26/26
+  second spectroscopy: 0.624682s; notions decided: 1/1
+  first only: delta-eta-simulation
+  second only: (none)
+  more precise: first
+P21,P22
+  first spectroscopy: 0.242683s; notions decided: 26/26
+  second spectroscopy: 0.618833s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-s-ready-simulation, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P31,P32
+  first spectroscopy: 0.304561s; notions decided: 26/26
+  second spectroscopy: 0.612742s; notions decided: 1/1
+  first only: delta-stable-readiness, delta-weak-readiness
+  second only: (none)
+  more precise: first
+P44,P45
+  first spectroscopy: 0.280885s; notions decided: 26/26
+  second spectroscopy: 0.620224s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-stable-readiness, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P52,P51
+  first spectroscopy: 0.244037s; notions decided: 26/26
+  second spectroscopy: 0.621069s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-stable-bisimulation, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P33,P34
+  first spectroscopy: 0.232236s; notions decided: 26/26
+  second spectroscopy: 0.616156s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-sr-delay-bisimulation
+  second only: (none)
+  more precise: first
+P34,P33
+  first spectroscopy: 0.230557s; notions decided: 26/26
+  second spectroscopy: 0.635959s; notions decided: 1/1
+  first only: delta-sr-delay-bisimulation
+  second only: (none)
+  more precise: first
+P14,P13
+  first spectroscopy: 0.231575s; notions decided: 26/26
+  second spectroscopy: 0.623142s; notions decided: 1/1
+  first only: delta-eta-bisimulation, delta-stable-bisimulation
+  second only: (none)
+  more precise: first
+P58,P57
+  first spectroscopy: 0.281139s; notions decided: 26/26
+  second spectroscopy: 0.612505s; notions decided: 1/1
+  first only: delta-2-nested-weak-simulation, delta-eta-simulation, delta-s-impossible-future
+  second only: (none)
+  more precise: first
+P13,P14
+  first spectroscopy: 0.227321s; notions decided: 26/26
+  second spectroscopy: 0.616014s; notions decided: 1/1
+  first only: delta-eta-bisimulation, delta-stable-bisimulation
+  second only: (none)
+  more precise: first
+P53,P54
+  first spectroscopy: 0.232904s; notions decided: 26/26
+  second spectroscopy: 0.616392s; notions decided: 1/1
+  first only: delta-weak-enabledness
+  second only: (none)
+  more precise: first
+P54,P53
+  first spectroscopy: 0.228663s; notions decided: 26/26
+  second spectroscopy: 0.612882s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-s-ready-simulation, delta-weak-ready-simulation
+  second only: (none)
+  more precise: first
+P56,P55
+  first spectroscopy: 0.245548s; notions decided: 26/26
+  second spectroscopy: 0.616550s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-stable-bisimulation
+  second only: (none)
+  more precise: first
+P42,P43
+  first spectroscopy: 0.234458s; notions decided: 26/26
+  second spectroscopy: 0.613902s; notions decided: 1/1
+  first only: delta-eta-simulation, delta-stable-simulation
+  second only: (none)
+  more precise: first
+P22,P23
+  first spectroscopy: 0.262448s; notions decided: 26/26
+  second spectroscopy: 0.611943s; notions decided: 1/1
+  first only: delta-s-impossible-future, delta-stable-ready-trace, delta-weak-impossible-future, delta-weak-readiness
+  second only: (none)
+  more precise: first

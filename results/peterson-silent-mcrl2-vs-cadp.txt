@@ -1,0 +1,24 @@
+MxIC,Pe
+  first spectroscopy: 0.048944s; notions decided: 5/5
+  second spectroscopy: 5.498198s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+Pe,Mx
+  first spectroscopy: 0.049163s; notions decided: 5/5
+  second spectroscopy: 5.451465s; notions decided: 8/8
+  first only: (none)
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: second
+Pe,MxIC
+  first spectroscopy: 0.048398s; notions decided: 5/5
+  second spectroscopy: 5.577932s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+Mx,Pe
+  first spectroscopy: 0.049272s; notions decided: 5/5
+  second spectroscopy: 5.516810s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both

@@ -1,0 +1,25 @@
+Note: marked and native divergence-preserving bisimulations share notions under Spectrum II; ordinary weak notions and failures-divergence remain separate.
+MxIC,Pe
+  first spectroscopy: 0.017358s; notions decided: 3/3
+  second spectroscopy: 0.616589s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Pe,MxIC
+  first spectroscopy: 0.017381s; notions decided: 3/3
+  second spectroscopy: 0.607742s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Mx,Pe
+  first spectroscopy: 0.019320s; notions decided: 3/3
+  second spectroscopy: 0.616595s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Pe,Mx
+  first spectroscopy: 0.018855s; notions decided: 3/3
+  second spectroscopy: 0.628573s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither

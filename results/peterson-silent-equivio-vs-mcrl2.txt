@@ -1,0 +1,24 @@
+MxIC,Pe
+  first spectroscopy: 0.655211s; notions decided: 26/26
+  second spectroscopy: 0.048944s; notions decided: 5/5
+  first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, stable-readiness
+  second only: (none)
+  more precise: first
+Pe,Mx
+  first spectroscopy: 0.303014s; notions decided: 26/26
+  second spectroscopy: 0.049163s; notions decided: 5/5
+  first only: eta-simulation, stable-simulation
+  second only: (none)
+  more precise: first
+Pe,MxIC
+  first spectroscopy: 0.496338s; notions decided: 26/26
+  second spectroscopy: 0.048398s; notions decided: 5/5
+  first only: eta-simulation, s-ready-simulation, weak-ready-simulation
+  second only: (none)
+  more precise: first
+Mx,Pe
+  first spectroscopy: 0.344713s; notions decided: 26/26
+  second spectroscopy: 0.049272s; notions decided: 5/5
+  first only: 2-nested-weak-simulation, s-impossible-future, stable-revivals
+  second only: (none)
+  more precise: first

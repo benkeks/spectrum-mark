@@ -1,0 +1,193 @@
+Note: marked and native divergence-preserving bisimulations share notions under Spectrum II; ordinary weak notions and failures-divergence remain separate.
+P57,P56
+  first spectroscopy: 0.018219s; notions decided: 3/3
+  second spectroscopy: 0.624682s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P58,P57
+  first spectroscopy: 0.017392s; notions decided: 3/3
+  second spectroscopy: 0.612505s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P22,P23
+  first spectroscopy: 0.019083s; notions decided: 3/3
+  second spectroscopy: 0.611943s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P51,P52
+  first spectroscopy: 0.018698s; notions decided: 3/3
+  second spectroscopy: 0.617070s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P12,P11
+  first spectroscopy: 0.019392s; notions decided: 3/3
+  second spectroscopy: 0.615431s; notions decided: 1/1
+  first only: divergence-preserving-weak-bisimulation, failures-divergence
+  second only: (none)
+  more precise: first
+P55,P56
+  first spectroscopy: 0.016883s; notions decided: 3/3
+  second spectroscopy: 0.616740s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P56,P55
+  first spectroscopy: 0.018453s; notions decided: 3/3
+  second spectroscopy: 0.616550s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P33,P34
+  first spectroscopy: 0.019200s; notions decided: 3/3
+  second spectroscopy: 0.616156s; notions decided: 1/1
+  first only: divergence-preserving-weak-bisimulation, failures-divergence
+  second only: (none)
+  more precise: first
+P52,P51
+  first spectroscopy: 0.018922s; notions decided: 3/3
+  second spectroscopy: 0.621069s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P43,P42
+  first spectroscopy: 0.019338s; notions decided: 3/3
+  second spectroscopy: 0.623261s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P13,P14
+  first spectroscopy: 0.017333s; notions decided: 3/3
+  second spectroscopy: 0.616014s; notions decided: 1/1
+  first only: divergence-preserving-weak-bisimulation, failures-divergence
+  second only: (none)
+  more precise: first
+P41,P42
+  first spectroscopy: 0.018781s; notions decided: 3/3
+  second spectroscopy: 0.621925s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P15,P16
+  first spectroscopy: 0.018182s; notions decided: 3/3
+  second spectroscopy: 0.621509s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P53,P54
+  first spectroscopy: 0.018054s; notions decided: 3/3
+  second spectroscopy: 0.616392s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+P56,P57
+  first spectroscopy: 0.018822s; notions decided: 3/3
+  second spectroscopy: 0.617828s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+P31,P32
+  first spectroscopy: 0.018999s; notions decided: 3/3
+  second spectroscopy: 0.612742s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P16,P15
+  first spectroscopy: 0.017580s; notions decided: 3/3
+  second spectroscopy: 0.612710s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P25,P24
+  first spectroscopy: 0.018454s; notions decided: 3/3
+  second spectroscopy: 0.622940s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P57,P58
+  first spectroscopy: 0.017581s; notions decided: 3/3
+  second spectroscopy: 0.630395s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P24,P25
+  first spectroscopy: 0.018670s; notions decided: 3/3
+  second spectroscopy: 0.617200s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P23,P22
+  first spectroscopy: 0.017691s; notions decided: 3/3
+  second spectroscopy: 0.621356s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P54,P53
+  first spectroscopy: 0.018038s; notions decided: 3/3
+  second spectroscopy: 0.612882s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P21,P22
+  first spectroscopy: 0.018528s; notions decided: 3/3
+  second spectroscopy: 0.618833s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P44,P45
+  first spectroscopy: 0.018676s; notions decided: 3/3
+  second spectroscopy: 0.620224s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P42,P41
+  first spectroscopy: 0.018449s; notions decided: 3/3
+  second spectroscopy: 0.613730s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P14,P13
+  first spectroscopy: 0.018541s; notions decided: 3/3
+  second spectroscopy: 0.623142s; notions decided: 1/1
+  first only: divergence-preserving-weak-bisimulation, failures-divergence
+  second only: (none)
+  more precise: first
+P34,P33
+  first spectroscopy: 0.017062s; notions decided: 3/3
+  second spectroscopy: 0.635959s; notions decided: 1/1
+  first only: divergence-preserving-weak-bisimulation, failures-divergence
+  second only: (none)
+  more precise: first
+P22,P21
+  first spectroscopy: 0.018611s; notions decided: 3/3
+  second spectroscopy: 0.607915s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P32,P31
+  first spectroscopy: 0.018547s; notions decided: 3/3
+  second spectroscopy: 0.625458s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P45,P44
+  first spectroscopy: 0.019525s; notions decided: 3/3
+  second spectroscopy: 0.622450s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+P42,P43
+  first spectroscopy: 0.018971s; notions decided: 3/3
+  second spectroscopy: 0.613902s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+P11,P12
+  first spectroscopy: 0.018949s; notions decided: 3/3
+  second spectroscopy: 0.622651s; notions decided: 1/1
+  first only: divergence-preserving-weak-bisimulation, failures-divergence
+  second only: (none)
+  more precise: first

@@ -1,193 +1,192 @@
-Note: comparing symmetric equivalences with directional preorders; differences do not necessarily indicate inconsistencies.
-P11,P12
-  first spectroscopy: 0.116386s; notions decided: 8/8
-  second spectroscopy: 6.486708s; notions decided: 9/9
-  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
-  more precise: both
-P12,P11
-  first spectroscopy: 0.110403s; notions decided: 8/8
-  second spectroscopy: 6.225300s; notions decided: 9/9
-  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+P57,P58
+  first spectroscopy: 0.094930s; notions decided: 5/5
+  second spectroscopy: 5.511103s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
   more precise: both
 P13,P14
-  first spectroscopy: 0.110220s; notions decided: 8/8
-  second spectroscopy: 6.559677s; notions decided: 9/9
-  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  first spectroscopy: 0.094516s; notions decided: 5/5
+  second spectroscopy: 5.494948s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
-  more precise: both
-P14,P13
-  first spectroscopy: 0.109270s; notions decided: 8/8
-  second spectroscopy: 7.006409s; notions decided: 9/9
-  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
-  more precise: both
-P15,P16
-  first spectroscopy: 0.112431s; notions decided: 8/8
-  second spectroscopy: 7.282158s; notions decided: 9/9
-  first only: coupled-simulation, failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P16,P15
-  first spectroscopy: 0.115118s; notions decided: 8/8
-  second spectroscopy: 6.778024s; notions decided: 9/9
-  first only: coupled-simulation, failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P21,P22
-  first spectroscopy: 0.116046s; notions decided: 8/8
-  second spectroscopy: 6.455972s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P22,P21
-  first spectroscopy: 0.110722s; notions decided: 8/8
-  second spectroscopy: 6.074180s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P22,P23
-  first spectroscopy: 0.110165s; notions decided: 8/8
-  second spectroscopy: 7.079540s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: (none)
-  more precise: first
-P23,P22
-  first spectroscopy: 0.112352s; notions decided: 8/8
-  second spectroscopy: 6.208428s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
   more precise: both
 P24,P25
-  first spectroscopy: 0.112498s; notions decided: 8/8
-  second spectroscopy: 6.365798s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
+  first spectroscopy: 0.093800s; notions decided: 5/5
+  second spectroscopy: 5.273267s; notions decided: 8/8
+  first only: stable-failure
   second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
   more precise: both
-P25,P24
-  first spectroscopy: 0.111576s; notions decided: 8/8
-  second spectroscopy: 6.173301s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: (none)
-  more precise: first
-P31,P32
-  first spectroscopy: 0.110671s; notions decided: 8/8
-  second spectroscopy: 6.407429s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: (none)
-  more precise: first
 P32,P31
-  first spectroscopy: 0.108910s; notions decided: 8/8
-  second spectroscopy: 5.953853s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
+  first spectroscopy: 0.092481s; notions decided: 5/5
+  second spectroscopy: 5.249455s; notions decided: 8/8
+  first only: stable-failure
   second only: (none)
   more precise: first
-P33,P34
-  first spectroscopy: 0.110435s; notions decided: 8/8
-  second spectroscopy: 6.484638s; notions decided: 9/9
-  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+P14,P13
+  first spectroscopy: 0.095782s; notions decided: 5/5
+  second spectroscopy: 5.460857s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation
+  more precise: both
+P58,P57
+  first spectroscopy: 0.096095s; notions decided: 5/5
+  second spectroscopy: 5.504053s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
   more precise: both
 P34,P33
-  first spectroscopy: 0.107654s; notions decided: 8/8
-  second spectroscopy: 6.182050s; notions decided: 9/9
-  first only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence, stable-failure
+  first spectroscopy: 0.099263s; notions decided: 5/5
+  second spectroscopy: 5.526359s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
   second only: cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
-P41,P42
-  first spectroscopy: 0.109839s; notions decided: 8/8
-  second spectroscopy: 6.422446s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P42,P41
-  first spectroscopy: 0.136711s; notions decided: 8/8
-  second spectroscopy: 6.152327s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
+P25,P24
+  first spectroscopy: 0.094828s; notions decided: 5/5
+  second spectroscopy: 5.430670s; notions decided: 8/8
+  first only: stable-failure
   second only: (none)
   more precise: first
+P45,P44
+  first spectroscopy: 0.093524s; notions decided: 5/5
+  second spectroscopy: 5.526994s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P31,P32
+  first spectroscopy: 0.092436s; notions decided: 5/5
+  second spectroscopy: 5.287311s; notions decided: 8/8
+  first only: stable-failure
+  second only: (none)
+  more precise: first
+P54,P53
+  first spectroscopy: 0.094796s; notions decided: 5/5
+  second spectroscopy: 5.475381s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P42,P41
+  first spectroscopy: 0.093894s; notions decided: 5/5
+  second spectroscopy: 5.437154s; notions decided: 8/8
+  first only: stable-failure
+  second only: (none)
+  more precise: first
+P57,P56
+  first spectroscopy: 0.096881s; notions decided: 5/5
+  second spectroscopy: 5.519035s; notions decided: 8/8
+  first only: coupled-simulation
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P53,P54
+  first spectroscopy: 0.096403s; notions decided: 5/5
+  second spectroscopy: 5.408171s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P23,P22
+  first spectroscopy: 0.094881s; notions decided: 5/5
+  second spectroscopy: 5.271653s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P12,P11
+  first spectroscopy: 0.094800s; notions decided: 5/5
+  second spectroscopy: 5.514960s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
+P16,P15
+  first spectroscopy: 0.094412s; notions decided: 5/5
+  second spectroscopy: 5.505130s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P22,P21
+  first spectroscopy: 0.095753s; notions decided: 5/5
+  second spectroscopy: 5.405693s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P15,P16
+  first spectroscopy: 0.092003s; notions decided: 5/5
+  second spectroscopy: 5.478633s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P11,P12
+  first spectroscopy: 0.094497s; notions decided: 5/5
+  second spectroscopy: 5.459031s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
+  more precise: both
 P42,P43
-  first spectroscopy: 0.115408s; notions decided: 8/8
-  second spectroscopy: 6.329810s; notions decided: 9/9
+  first spectroscopy: 0.093601s; notions decided: 5/5
+  second spectroscopy: 5.451270s; notions decided: 8/8
   first only: (none)
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
   more precise: second
-P43,P42
-  first spectroscopy: 0.108394s; notions decided: 8/8
-  second spectroscopy: 6.080532s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P44,P45
-  first spectroscopy: 0.111467s; notions decided: 8/8
-  second spectroscopy: 6.708161s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
+P56,P55
+  first spectroscopy: 0.094702s; notions decided: 5/5
+  second spectroscopy: 5.437507s; notions decided: 8/8
+  first only: stable-failure
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
   more precise: both
-P45,P44
-  first spectroscopy: 0.113814s; notions decided: 8/8
-  second spectroscopy: 6.114641s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P51,P52
-  first spectroscopy: 0.113241s; notions decided: 8/8
-  second spectroscopy: 6.755844s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+P41,P42
+  first spectroscopy: 0.094025s; notions decided: 5/5
+  second spectroscopy: 5.285563s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-taustar-simulation, weak-simulation
   more precise: both
 P52,P51
-  first spectroscopy: 0.112843s; notions decided: 8/8
-  second spectroscopy: 6.384081s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
+  first spectroscopy: 0.093238s; notions decided: 5/5
+  second spectroscopy: 5.420620s; notions decided: 8/8
+  first only: stable-failure
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
   more precise: both
-P53,P54
-  first spectroscopy: 0.112501s; notions decided: 8/8
-  second spectroscopy: 6.436338s; notions decided: 9/9
+P22,P23
+  first spectroscopy: 0.094216s; notions decided: 5/5
+  second spectroscopy: 5.418608s; notions decided: 8/8
+  first only: stable-failure
+  second only: (none)
+  more precise: first
+P44,P45
+  first spectroscopy: 0.091885s; notions decided: 5/5
+  second spectroscopy: 5.449301s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P21,P22
+  first spectroscopy: 0.094355s; notions decided: 5/5
+  second spectroscopy: 5.430315s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P51,P52
+  first spectroscopy: 0.094888s; notions decided: 5/5
+  second spectroscopy: 5.484810s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
+  more precise: both
+P56,P57
+  first spectroscopy: 0.097985s; notions decided: 5/5
+  second spectroscopy: 5.430237s; notions decided: 8/8
   first only: coupled-simulation, stable-failure
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
-P54,P53
-  first spectroscopy: 0.108783s; notions decided: 8/8
-  second spectroscopy: 6.058187s; notions decided: 9/9
-  first only: coupled-simulation, failures-divergence, stable-failure
+P33,P34
+  first spectroscopy: 0.095256s; notions decided: 5/5
+  second spectroscopy: 5.573018s; notions decided: 8/8
+  first only: coupled-simulation, stable-failure
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
   more precise: both
 P55,P56
-  first spectroscopy: 0.111624s; notions decided: 8/8
-  second spectroscopy: 6.484436s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
+  first spectroscopy: 0.095069s; notions decided: 5/5
+  second spectroscopy: 5.475081s; notions decided: 8/8
+  first only: stable-failure
   second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
   more precise: both
-P56,P55
-  first spectroscopy: 0.107941s; notions decided: 8/8
-  second spectroscopy: 6.018478s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P56,P57
-  first spectroscopy: 0.110400s; notions decided: 8/8
-  second spectroscopy: 6.300212s; notions decided: 9/9
-  first only: coupled-simulation, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
-  more precise: both
-P57,P56
-  first spectroscopy: 0.111530s; notions decided: 8/8
-  second spectroscopy: 6.199534s; notions decided: 9/9
-  first only: coupled-simulation, failures-divergence
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation
-  more precise: both
-P57,P58
-  first spectroscopy: 0.112044s; notions decided: 8/8
-  second spectroscopy: 6.270188s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
-  more precise: both
-P58,P57
-  first spectroscopy: 0.110458s; notions decided: 8/8
-  second spectroscopy: 6.859935s; notions decided: 9/9
-  first only: failures-divergence, stable-failure
-  second only: cadp-branching-simulation, cadp-safety, cadp-taustar, cadp-taustar-simulation, weak-simulation
+P43,P42
+  first spectroscopy: 0.094799s; notions decided: 5/5
+  second spectroscopy: 5.422530s; notions decided: 8/8
+  first only: stable-failure
+  second only: cadp-branching-simulation, cadp-safety, cadp-taustar-simulation, weak-simulation
   more precise: both

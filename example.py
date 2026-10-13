@@ -2,6 +2,7 @@
 
 from itertools import combinations
 from pathlib import Path
+from random import Random
 
 from csv_to_aut import convert_csv_to_aut, parse_csv
 
@@ -43,6 +44,8 @@ def get_example(weak=False):
 
 
 def add_input_arguments(parser):
+    parser.add_argument("--benchmark-performance", action="store_true",
+                        help="Run every query five times in varying orders and report median timings")
     parser.add_argument("--csv", type=Path, help="Input LTS CSV (default: selected LTBTS example)")
     parser.add_argument("--pair", nargs=2, action="append", metavar=("LEFT", "RIGHT"),
                         help="Compare these named states in both directions; repeat for more pairs")
@@ -84,6 +87,17 @@ def directed_pairs(pairs):
     for left, right in pairs:
         yield left, right
         yield right, left
+
+
+def comparison_runs(pairs, comparisons=(None,), benchmark_performance=False):
+    queries = [(source, target, comparison)
+               for source, target in directed_pairs(pairs) for comparison in comparisons]
+    for run in range(1, 6 if benchmark_performance else 2):
+        ordered = queries.copy()
+        if benchmark_performance:
+            Random(run).shuffle(ordered)
+        for source, target, comparison in ordered:
+            yield run, source, target, comparison
 
 
 def prepare_auts(csv_path, pairs):

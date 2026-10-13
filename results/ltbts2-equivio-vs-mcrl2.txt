@@ -1,193 +1,192 @@
-Note: comparing symmetric equivalences with directional preorders; differences do not necessarily indicate inconsistencies.
-P11,P12
-  first spectroscopy: 0.214000s; notions decided: 26/26
-  second spectroscopy: 0.116386s; notions decided: 8/8
-  first only: eta-bisimulation, sr-delay-bisimulation
-  second only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence
+P55,P56
+  first spectroscopy: 0.237814s; notions decided: 26/26
+  second spectroscopy: 0.095069s; notions decided: 5/5
+  first only: 2-nested-weak-simulation, eta-simulation, stable-bisimulation
+  second only: (none)
+  more precise: first
+P42,P41
+  first spectroscopy: 0.262830s; notions decided: 26/26
+  second spectroscopy: 0.093894s; notions decided: 5/5
+  first only: s-impossible-future, stable-failure-trace, weak-impossible-future
+  second only: (none)
+  more precise: first
+P25,P24
+  first spectroscopy: 0.241810s; notions decided: 26/26
+  second spectroscopy: 0.094828s; notions decided: 5/5
+  first only: contrasimulation, stable-bisimulation
+  second only: (none)
+  more precise: first
+P24,P25
+  first spectroscopy: 0.256586s; notions decided: 26/26
+  second spectroscopy: 0.093800s; notions decided: 5/5
+  first only: contrasimulation, eta-simulation, stable-bisimulation, weak-possible-future, weak-ready-simulation
+  second only: (none)
+  more precise: first
+P56,P57
+  first spectroscopy: 0.226626s; notions decided: 26/26
+  second spectroscopy: 0.097985s; notions decided: 5/5
+  first only: s-impossible-future, s-ready-simulation
+  second only: coupled-simulation
   more precise: both
 P12,P11
-  first spectroscopy: 0.216000s; notions decided: 26/26
-  second spectroscopy: 0.110403s; notions decided: 8/8
+  first spectroscopy: 0.228994s; notions decided: 26/26
+  second spectroscopy: 0.094800s; notions decided: 5/5
   first only: eta-bisimulation, sr-delay-bisimulation
-  second only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence
-  more precise: both
-P13,P14
-  first spectroscopy: 0.208000s; notions decided: 26/26
-  second spectroscopy: 0.110220s; notions decided: 8/8
-  first only: eta-bisimulation, stable-bisimulation
-  second only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence
-  more precise: both
-P14,P13
-  first spectroscopy: 0.208000s; notions decided: 26/26
-  second spectroscopy: 0.109270s; notions decided: 8/8
-  first only: eta-bisimulation, stable-bisimulation
-  second only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence
-  more precise: both
-P15,P16
-  first spectroscopy: 0.216000s; notions decided: 26/26
-  second spectroscopy: 0.112431s; notions decided: 8/8
-  first only: contrasimulation, eta-simulation, stable-bisimulation
-  second only: coupled-simulation, failures-divergence
+  second only: coupled-simulation
   more precise: both
 P16,P15
-  first spectroscopy: 0.224000s; notions decided: 26/26
-  second spectroscopy: 0.115118s; notions decided: 8/8
+  first spectroscopy: 0.233401s; notions decided: 26/26
+  second spectroscopy: 0.094412s; notions decided: 5/5
   first only: 2-nested-weak-simulation, contrasimulation, eta-simulation, stable-bisimulation
-  second only: coupled-simulation, failures-divergence
+  second only: coupled-simulation
   more precise: both
-P21,P22
-  first spectroscopy: 0.231000s; notions decided: 26/26
-  second spectroscopy: 0.116046s; notions decided: 8/8
-  first only: eta-simulation, s-ready-simulation, weak-ready-simulation
-  second only: failures-divergence
+P15,P16
+  first spectroscopy: 0.241897s; notions decided: 26/26
+  second spectroscopy: 0.092003s; notions decided: 5/5
+  first only: contrasimulation, eta-simulation, stable-bisimulation
+  second only: coupled-simulation
   more precise: both
 P22,P21
-  first spectroscopy: 0.239000s; notions decided: 26/26
-  second spectroscopy: 0.110722s; notions decided: 8/8
+  first spectroscopy: 0.233413s; notions decided: 26/26
+  second spectroscopy: 0.095753s; notions decided: 5/5
   first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
-  second only: failures-divergence
-  more precise: both
-P22,P23
-  first spectroscopy: 0.243000s; notions decided: 26/26
-  second spectroscopy: 0.110165s; notions decided: 8/8
-  first only: s-impossible-future, stable-ready-trace, weak-impossible-future, weak-readiness
-  second only: failures-divergence
-  more precise: both
-P23,P22
-  first spectroscopy: 0.260000s; notions decided: 26/26
-  second spectroscopy: 0.112352s; notions decided: 8/8
-  first only: eta-simulation, s-ready-simulation, weak-ready-simulation
-  second only: failures-divergence
-  more precise: both
-P24,P25
-  first spectroscopy: 0.256000s; notions decided: 26/26
-  second spectroscopy: 0.112498s; notions decided: 8/8
-  first only: contrasimulation, eta-simulation, stable-bisimulation, weak-possible-future, weak-ready-simulation
-  second only: failures-divergence
-  more precise: both
-P25,P24
-  first spectroscopy: 0.265000s; notions decided: 26/26
-  second spectroscopy: 0.111576s; notions decided: 8/8
-  first only: contrasimulation, stable-bisimulation
-  second only: failures-divergence
-  more precise: both
-P31,P32
-  first spectroscopy: 0.292000s; notions decided: 26/26
-  second spectroscopy: 0.110671s; notions decided: 8/8
-  first only: stable-readiness, weak-readiness
-  second only: failures-divergence
-  more precise: both
-P32,P31
-  first spectroscopy: 0.301000s; notions decided: 26/26
-  second spectroscopy: 0.108910s; notions decided: 8/8
-  first only: stable-readiness, weak-readiness
-  second only: failures-divergence
-  more precise: both
-P33,P34
-  first spectroscopy: 0.220000s; notions decided: 26/26
-  second spectroscopy: 0.110435s; notions decided: 8/8
-  first only: eta-simulation, sr-delay-bisimulation
-  second only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence
-  more precise: both
-P34,P33
-  first spectroscopy: 0.213000s; notions decided: 26/26
-  second spectroscopy: 0.107654s; notions decided: 8/8
-  first only: sr-delay-bisimulation
-  second only: coupled-simulation, divergence-preserving-weak-bisimulation, failures-divergence
-  more precise: both
+  second only: (none)
+  more precise: first
 P41,P42
-  first spectroscopy: 0.238000s; notions decided: 26/26
-  second spectroscopy: 0.109839s; notions decided: 8/8
+  first spectroscopy: 0.259316s; notions decided: 26/26
+  second spectroscopy: 0.094025s; notions decided: 5/5
   first only: eta-simulation, s-impossible-future, s-ready-simulation, weak-possible-future, weak-ready-simulation
-  second only: failures-divergence
-  more precise: both
-P42,P41
-  first spectroscopy: 0.246000s; notions decided: 26/26
-  second spectroscopy: 0.136711s; notions decided: 8/8
-  first only: s-impossible-future, stable-failure-trace, weak-impossible-future
-  second only: failures-divergence
-  more precise: both
-P42,P43
-  first spectroscopy: 0.218000s; notions decided: 26/26
-  second spectroscopy: 0.115408s; notions decided: 8/8
-  first only: eta-simulation, stable-simulation
+  second only: (none)
+  more precise: first
+P23,P22
+  first spectroscopy: 0.260172s; notions decided: 26/26
+  second spectroscopy: 0.094881s; notions decided: 5/5
+  first only: eta-simulation, s-ready-simulation, weak-ready-simulation
   second only: (none)
   more precise: first
 P43,P42
-  first spectroscopy: 0.217000s; notions decided: 26/26
-  second spectroscopy: 0.108394s; notions decided: 8/8
+  first spectroscopy: 0.229211s; notions decided: 26/26
+  second spectroscopy: 0.094799s; notions decided: 5/5
   first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
-  second only: failures-divergence
-  more precise: both
-P44,P45
-  first spectroscopy: 0.271000s; notions decided: 26/26
-  second spectroscopy: 0.111467s; notions decided: 8/8
-  first only: eta-simulation, stable-readiness, weak-ready-simulation
-  second only: failures-divergence
+  second only: (none)
+  more precise: first
+P57,P58
+  first spectroscopy: 0.274120s; notions decided: 26/26
+  second spectroscopy: 0.094930s; notions decided: 5/5
+  first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
+  second only: (none)
+  more precise: first
+P32,P31
+  first spectroscopy: 0.298146s; notions decided: 26/26
+  second spectroscopy: 0.092481s; notions decided: 5/5
+  first only: stable-readiness, weak-readiness
+  second only: (none)
+  more precise: first
+P51,P52
+  first spectroscopy: 0.236565s; notions decided: 26/26
+  second spectroscopy: 0.094888s; notions decided: 5/5
+  first only: eta-simulation, s-ready-simulation
+  second only: (none)
+  more precise: first
+P11,P12
+  first spectroscopy: 0.229011s; notions decided: 26/26
+  second spectroscopy: 0.094497s; notions decided: 5/5
+  first only: eta-bisimulation, sr-delay-bisimulation
+  second only: coupled-simulation
   more precise: both
 P45,P44
-  first spectroscopy: 0.278000s; notions decided: 26/26
-  second spectroscopy: 0.113814s; notions decided: 8/8
+  first spectroscopy: 0.280400s; notions decided: 26/26
+  second spectroscopy: 0.093524s; notions decided: 5/5
   first only: eta-simulation, stable-readiness, weak-ready-simulation
-  second only: failures-divergence
-  more precise: both
-P51,P52
-  first spectroscopy: 0.227000s; notions decided: 26/26
-  second spectroscopy: 0.113241s; notions decided: 8/8
-  first only: eta-simulation, s-ready-simulation
-  second only: failures-divergence
-  more precise: both
+  second only: (none)
+  more precise: first
+P57,P56
+  first spectroscopy: 0.235973s; notions decided: 26/26
+  second spectroscopy: 0.096881s; notions decided: 5/5
+  first only: (none)
+  second only: coupled-simulation
+  more precise: second
+P21,P22
+  first spectroscopy: 0.228723s; notions decided: 26/26
+  second spectroscopy: 0.094355s; notions decided: 5/5
+  first only: eta-simulation, s-ready-simulation, weak-ready-simulation
+  second only: (none)
+  more precise: first
+P31,P32
+  first spectroscopy: 0.301604s; notions decided: 26/26
+  second spectroscopy: 0.092436s; notions decided: 5/5
+  first only: stable-readiness, weak-readiness
+  second only: (none)
+  more precise: first
+P44,P45
+  first spectroscopy: 0.279231s; notions decided: 26/26
+  second spectroscopy: 0.091885s; notions decided: 5/5
+  first only: eta-simulation, stable-readiness, weak-ready-simulation
+  second only: (none)
+  more precise: first
 P52,P51
-  first spectroscopy: 0.223000s; notions decided: 26/26
-  second spectroscopy: 0.112843s; notions decided: 8/8
+  first spectroscopy: 0.249050s; notions decided: 26/26
+  second spectroscopy: 0.093238s; notions decided: 5/5
   first only: 2-nested-weak-simulation, eta-simulation, stable-bisimulation
-  second only: failures-divergence
+  second only: (none)
+  more precise: first
+P33,P34
+  first spectroscopy: 0.223911s; notions decided: 26/26
+  second spectroscopy: 0.095256s; notions decided: 5/5
+  first only: eta-simulation, sr-delay-bisimulation
+  second only: coupled-simulation
+  more precise: both
+P34,P33
+  first spectroscopy: 0.226134s; notions decided: 26/26
+  second spectroscopy: 0.099263s; notions decided: 5/5
+  first only: sr-delay-bisimulation
+  second only: coupled-simulation
+  more precise: both
+P14,P13
+  first spectroscopy: 0.229456s; notions decided: 26/26
+  second spectroscopy: 0.095782s; notions decided: 5/5
+  first only: eta-bisimulation, stable-bisimulation
+  second only: coupled-simulation
+  more precise: both
+P58,P57
+  first spectroscopy: 0.276192s; notions decided: 26/26
+  second spectroscopy: 0.096095s; notions decided: 5/5
+  first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future
+  second only: (none)
+  more precise: first
+P13,P14
+  first spectroscopy: 0.225461s; notions decided: 26/26
+  second spectroscopy: 0.094516s; notions decided: 5/5
+  first only: eta-bisimulation, stable-bisimulation
+  second only: coupled-simulation
   more precise: both
 P53,P54
-  first spectroscopy: 0.225000s; notions decided: 26/26
-  second spectroscopy: 0.112501s; notions decided: 8/8
+  first spectroscopy: 0.228495s; notions decided: 26/26
+  second spectroscopy: 0.096403s; notions decided: 5/5
   first only: sr-branching-bisimulation
   second only: coupled-simulation
   more precise: both
 P54,P53
-  first spectroscopy: 0.214000s; notions decided: 26/26
-  second spectroscopy: 0.108783s; notions decided: 8/8
+  first spectroscopy: 0.227717s; notions decided: 26/26
+  second spectroscopy: 0.094796s; notions decided: 5/5
   first only: sr-branching-bisimulation
-  second only: coupled-simulation, failures-divergence
-  more precise: both
-P55,P56
-  first spectroscopy: 0.217000s; notions decided: 26/26
-  second spectroscopy: 0.111624s; notions decided: 8/8
-  first only: 2-nested-weak-simulation, eta-simulation, stable-bisimulation
-  second only: failures-divergence
-  more precise: both
-P56,P55
-  first spectroscopy: 0.230000s; notions decided: 26/26
-  second spectroscopy: 0.107941s; notions decided: 8/8
-  first only: eta-simulation, stable-bisimulation
-  second only: failures-divergence
-  more precise: both
-P56,P57
-  first spectroscopy: 0.227000s; notions decided: 26/26
-  second spectroscopy: 0.110400s; notions decided: 8/8
-  first only: s-impossible-future, s-ready-simulation
   second only: coupled-simulation
   more precise: both
-P57,P56
-  first spectroscopy: 0.225000s; notions decided: 26/26
-  second spectroscopy: 0.111530s; notions decided: 8/8
-  first only: (none)
-  second only: coupled-simulation, failures-divergence
-  more precise: second
-P57,P58
-  first spectroscopy: 0.258000s; notions decided: 26/26
-  second spectroscopy: 0.112044s; notions decided: 8/8
-  first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
-  second only: failures-divergence
-  more precise: both
-P58,P57
-  first spectroscopy: 0.260000s; notions decided: 26/26
-  second spectroscopy: 0.110458s; notions decided: 8/8
-  first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future
-  second only: failures-divergence
-  more precise: both
+P56,P55
+  first spectroscopy: 0.227810s; notions decided: 26/26
+  second spectroscopy: 0.094702s; notions decided: 5/5
+  first only: eta-simulation, stable-bisimulation
+  second only: (none)
+  more precise: first
+P42,P43
+  first spectroscopy: 0.222393s; notions decided: 26/26
+  second spectroscopy: 0.093601s; notions decided: 5/5
+  first only: eta-simulation, stable-simulation
+  second only: (none)
+  more precise: first
+P22,P23
+  first spectroscopy: 0.255805s; notions decided: 26/26
+  second spectroscopy: 0.094216s; notions decided: 5/5
+  first only: s-impossible-future, stable-ready-trace, weak-impossible-future, weak-readiness
+  second only: (none)
+  more precise: first
