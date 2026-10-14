@@ -32,10 +32,21 @@ WEAK_PAIRS = (
 
 PETERSON_PAIRS = (("Pe", "Mx"), ("Pe", "MxIC"))
 
+EDGECASE_PAIRS = (
+    ("ReviewL1", "ReviewR1"), ("ReviewL2", "ReviewR2"), ("ReviewL3", "ReviewR3"),
+    ("CCSP", "CCSQ"), ("SilentP", "SilentQ"),
+    ("Loop", "Deadlock"), ("LoopPart", "Deadlock"), ("Loop", "LoopPart"),
+    ("AcyclicP", "AcyclicQ"), ("TraceA", "TraceB"),
+    ("DivergenceP", "DivergenceQ"),
+    ("Lowlink0", "Lowlink1"), ("Lowlink0", "Lowlink2"), ("Lowlink0", "Lowlink3"),
+    ("Lowlink0", "LowlinkDeadlock"), ("NoDeadlockLoop", "Deadlock"),
+)
+
 SUITE_DATASETS = (
     ("ltbts1", PAIRS, False, False),
     ("ltbts2", WEAK_PAIRS, True, True),
     ("peterson-silent", PETERSON_PAIRS, True, True),
+    ("edgecases", EDGECASE_PAIRS, True, True),
 )
 
 

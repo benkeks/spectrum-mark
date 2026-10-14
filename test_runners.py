@@ -13,7 +13,7 @@ import run_suite
 import compare_results
 from compare_results import load_report, load_results, mcrl2_notion
 from csv_to_aut import parse_csv
-from example import PAIRS, PETERSON_PAIRS, WEAK_PAIRS, comparison_runs, resolve_input
+from example import EDGECASE_PAIRS, PAIRS, PETERSON_PAIRS, WEAK_PAIRS, comparison_runs, resolve_input
 from spectrum import WEAK_COMPARISON_SPECTRUM
 
 
@@ -658,19 +658,48 @@ class RunnerTests(unittest.TestCase):
             self.assertNotEqual(added["src"], added["tar"])
         self.assertEqual(source.read_bytes(), original)
 
+    def test_edgecase_dataset_models_and_curated_pairs(self):
+        source = Path(__file__).resolve().parent / "examples" / "edgecases.csv"
+        transitions, meta = parse_csv(source)
+        names = {entry["state_name"]: entry["state_id"] for entry in meta}
+        self.assertEqual(resolve_input(source, weak=True)[1], list(EDGECASE_PAIRS))
+        self.assertEqual(len(EDGECASE_PAIRS), 16)
+        self.assertEqual(set(names), {name for pair in EDGECASE_PAIRS for name in pair})
+        edges = {(row["src"], row["tar"], row["action"]) for row in transitions}
+        self.assertEqual({edge for edge in edges if 90 <= edge[0] <= 93}, {
+            (90, 90, "tau"), (90, 93, "a"), (90, 92, "tau"),
+            (91, 93, "a"), (91, 92, "tau"), (92, 92, "tau"),
+        })
+        self.assertEqual((names["DivergenceP"], names["DivergenceQ"]), (90, 91))
+        self.assertEqual({edge for edge in edges if 100 <= edge[0] <= 104}, {
+            (100, 101, "tau"), (101, 102, "tau"), (102, 101, "tau"),
+            (101, 103, "tau"), (103, 100, "tau"), (100, 104, "a"),
+        })
+        self.assertEqual({edge for edge in edges if edge[0] == names["NoDeadlockLoop"]},
+                         {(110, 110, "tau")})
+        components = [range(0, 6), range(10, 23), range(30, 38), range(40, 46),
+                      range(50, 53), range(60, 63), range(70, 73), range(80, 83),
+                      range(90, 94), range(100, 105), range(110, 111)]
+        owners = {state: component for component, states in enumerate(components) for state in states}
+        for source_id, target_id, _ in edges:
+            self.assertEqual(owners[source_id], owners[target_id])
+
     def test_suite_defaults_to_all_curated_csvs(self):
         with patch.object(run_suite.sys, "argv", ["run_suite.py"]), \
                 patch.object(run_suite, "run_dataset") as run_dataset:
             run_suite.main()
-        self.assertEqual(run_dataset.call_count, 3)
-        strong, weak, peterson = [call.args for call in run_dataset.call_args_list]
+        self.assertEqual(run_dataset.call_count, 4)
+        strong, weak, peterson, edgecases = [call.args for call in run_dataset.call_args_list]
         self.assertEqual((strong[0].name, strong[1], strong[2]), ("ltbts1.csv", list(PAIRS), False))
         self.assertEqual((weak[0].name, weak[1], weak[2]), ("ltbts2.csv", list(WEAK_PAIRS), True))
         self.assertEqual((peterson[0].name, peterson[1], peterson[2]),
                          ("peterson-silent.csv", list(PETERSON_PAIRS), True))
+        self.assertEqual((edgecases[0].name, edgecases[1], edgecases[2]),
+                 ("edgecases.csv", list(EDGECASE_PAIRS), True))
         self.assertFalse(run_dataset.call_args_list[0].kwargs["divergences"])
         self.assertTrue(run_dataset.call_args_list[1].kwargs["divergences"])
         self.assertTrue(run_dataset.call_args_list[2].kwargs["divergences"])
+        self.assertTrue(run_dataset.call_args_list[3].kwargs["divergences"])
 
     def test_weak_suite_includes_peterson(self):
         for extra_options in ([], ["--divergence"], ["--divergences"], ["--benchmark-performance"]):
@@ -679,7 +708,7 @@ class RunnerTests(unittest.TestCase):
                         patch.object(run_suite, "run_dataset") as run_dataset:
                     run_suite.main()
                 self.assertEqual([call.args[0].stem for call in run_dataset.call_args_list],
-                                 ["ltbts2", "peterson-silent"])
+                                 ["ltbts2", "peterson-silent", "edgecases"])
                 self.assertTrue(all(call.args[2] for call in run_dataset.call_args_list))
                 self.assertTrue(all(call.kwargs["divergences"] for call in run_dataset.call_args_list))
                 self.assertTrue(all(call.kwargs["benchmark_performance"] == ("--benchmark-performance" in extra_options)
