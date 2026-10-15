@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 from csv_to_aut import generate_aut, parse_csv
-from example import add_input_arguments, comparison_runs, prepare_auts, resolve_input
+from example import add_input_arguments, comparison_runs, prepare_auts, resolve_input, write_report_manifest
 
 
 EQUIVALENCES = ("bisim-bcg-cmp", "bisim-bisimulator", "trace")
@@ -165,6 +165,8 @@ def main():
         suffix = "cadp-divergences" if args.divergences else "cadp"
         report = args.output_dir / f"{csv_path.stem}-{suffix}.csv"
         report.parent.mkdir(exist_ok=True)
+        write_report_manifest(report, csv_path, pairs, args.weak, args.divergences,
+                      args.benchmark_performance, comparisons)
         with report.open("w", newline="") as result_file:
             writer = csv.writer(result_file)
             writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run"))

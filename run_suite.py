@@ -3,17 +3,82 @@
 
 import argparse
 import csv
+import hashlib
+import json
+import os
+import platform
+import shutil
 import subprocess
 import sys
 from collections import Counter
+from datetime import datetime, timezone
 from itertools import combinations
 from pathlib import Path
 
-from example import SUITE_DATASETS, add_input_arguments, resolve_input
+from compare_results import validate_report
+from example import SUITE_DATASETS, add_input_arguments, directed_pairs, resolve_input
 from run_equivio import validate_divergence_input
 
 
 TOOLS = ("equivio", "mcrl2", "cadp")
+
+
+def record_environment(output_dir, cadp_bin=None):
+    root = Path(__file__).resolve().parent
+
+    def capture(command):
+        try:
+            process = subprocess.run(command, capture_output=True, text=True, timeout=15)
+            return {"returncode": process.returncode, "output": (process.stdout + process.stderr).strip()}
+        except (OSError, subprocess.TimeoutExpired) as error:
+            return {"error": str(error)}
+
+    cadp_root = Path(os.environ.get("CADP", str(Path.home() / "Software" / "cadp")))
+    cadp_bin = (cadp_bin or Path(os.environ.get("CADP_BIN", str(cadp_root / "bin.x64")))).expanduser().resolve()
+    artifacts = [root / "build/mcrl2/stage/bin/ltscompare", cadp_bin / "bcg_cmp",
+                 cadp_bin / "bcg_io", cadp_bin / "bisimulator.a"]
+    artifacts.extend((root / "equivio/shared/target").glob("scala-*/shared-assembly-*.jar"))
+    artifacts.extend(root.glob("*.py"))
+    artifacts.extend(root.glob("*.sh"))
+    hashes = {}
+    for path in artifacts:
+        if path.is_file():
+            digest = hashlib.sha256()
+            with path.open("rb") as source:
+                for chunk in iter(lambda: source.read(1024 * 1024), b""):
+                    digest.update(chunk)
+            hashes[str(path)] = digest.hexdigest()
+    cache = root / "build/mcrl2/CMakeCache.txt"
+    settings = {}
+    if cache.is_file():
+        for line in cache.read_text().splitlines():
+            key, separator, value = line.partition("=")
+            if separator and key.split(":")[0] in {
+                "CMAKE_BUILD_TYPE", "CMAKE_CXX_COMPILER", "CMAKE_CXX_FLAGS", "CMAKE_CXX_FLAGS_RELEASE",
+            }:
+                settings[key] = value
+    repositories = {}
+    for name, path in (("spectrum-mark", root), ("equivio", root / "equivio"), ("mcrl2", root / "mcrl2")):
+        repositories[name] = {
+            "revision": capture(["git", "-C", str(path), "rev-parse", "HEAD"]),
+            "status": capture(["git", "-C", str(path), "status", "--porcelain"]),
+        }
+    metadata = {
+        "captured_utc": datetime.now(timezone.utc).isoformat(),
+        "command": sys.argv,
+        "platform": platform.platform(),
+        "machine": platform.machine(),
+        "cpu_count": os.cpu_count(),
+        "cpu_affinity": sorted(os.sched_getaffinity(0)) if hasattr(os, "sched_getaffinity") else None,
+        "python": sys.version,
+        "repositories": repositories,
+        "artifact_sha256": hashes,
+        "mcrl2_build_settings": settings,
+        "versions": {name: capture([shutil.which(name) or name, flag])
+                     for name, flag in (("java", "-version"), ("cc", "--version"),
+                                        (str(root / "build/mcrl2/stage/bin/ltscompare"), "--version"))},
+    }
+    (output_dir / "environment.json").write_text(json.dumps(metadata, indent=2) + "\n")
 
 
 def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=None, benchmark_performance=False):
@@ -50,6 +115,10 @@ def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=No
         with report.open(newline="") as result_file:
             statuses = Counter(row["status"] for row in csv.DictReader(result_file))
         print(f"{report_name}: {dict(statuses)}; {report}", flush=True)
+        if benchmark_performance:
+            validate_report(report, pairs=directed_pairs(pairs), expected_runs=5,
+                            require_manifest=True, input_path=csv_path)
+    record_environment(output_dir, cadp_bin)
     for marked, group in reports.items():
         suffix = "-divergences" if marked else ""
         for first, second in combinations(group, 2):

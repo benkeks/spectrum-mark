@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 from csv_to_aut import parse_csv
-from example import add_input_arguments, comparison_runs, resolve_input
+from example import add_input_arguments, comparison_runs, resolve_input, write_report_manifest
 
 
 def validate_divergence_input(csv_path):
@@ -97,6 +97,8 @@ def main():
     spectrum = "weak-divergences" if args.divergences else "weak" if args.weak else "strong"
     report = args.output_dir / f"{csv_path.stem}-{suffix}.csv"
     report.parent.mkdir(exist_ok=True)
+    write_report_manifest(report, csv_path, pairs, args.weak, args.divergences,
+                          args.benchmark_performance)
     with tempfile.TemporaryDirectory(prefix="spectrum-equivio-") as directory, \
             report.open("w", newline="") as result_file:
         compared_csv = prepare_divergence_input(csv_path, Path(directory) / csv_path.name) \

@@ -1,5 +1,8 @@
 """Shared CSV inputs, comparison pairs, and AUT preparation."""
 
+import hashlib
+import json
+import sys
 from itertools import combinations
 from pathlib import Path
 from random import Random
@@ -98,6 +101,21 @@ def directed_pairs(pairs):
     for left, right in pairs:
         yield left, right
         yield right, left
+
+
+def write_report_manifest(report, csv_path, pairs, weak=False, divergences=False,
+                          benchmark_performance=False, comparisons=None):
+    manifest = {
+        "schema_version": 1,
+        "input": str(csv_path.resolve()),
+        "input_sha256": hashlib.sha256(csv_path.read_bytes()).hexdigest(),
+        "pairs": list(directed_pairs(pairs)),
+        "runs": 5 if benchmark_performance else 1,
+        "spectrum": "weak-divergences" if divergences else "weak" if weak else "strong",
+        "comparisons": comparisons,
+        "command": sys.argv,
+    }
+    report.with_suffix(".manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
 
 
 def comparison_runs(pairs, comparisons=(None,), benchmark_performance=False):

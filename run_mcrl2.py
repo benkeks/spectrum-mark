@@ -11,7 +11,7 @@ import sys
 import time
 from pathlib import Path
 
-from example import add_input_arguments, comparison_runs, prepare_auts, resolve_input
+from example import add_input_arguments, comparison_runs, prepare_auts, resolve_input, write_report_manifest
 
 
 def available_equivalences(executable, weak=False):
@@ -114,6 +114,8 @@ def main():
     suffix = "mcrl2-divergences" if args.divergences else "mcrl2"
     report = args.output_dir / f"{csv_path.stem}-{suffix}.csv"
     report.parent.mkdir(exist_ok=True)
+    write_report_manifest(report, csv_path, pairs, args.weak, args.divergences,
+                          args.benchmark_performance, comparisons)
     with report.open("w", newline="") as result_file:
         writer = csv.writer(result_file)
         writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run"))

@@ -4,7 +4,7 @@
 import argparse
 from pathlib import Path
 
-from compare_results import load_report_details
+from compare_results import load_report_details, spectroscopy_notions, validate_report
 from csv_to_aut import parse_csv
 from example import SUITE_DATASETS, directed_pairs, resolve_input
 from run_suite import TOOLS
@@ -19,7 +19,7 @@ DATASET_GROUPS = (
 )
 
 
-def latex_escape(text):
+def latex_escape(text: str) -> str:
     replacements = {
         "\\": r"\textbackslash{}", "&": r"\&", "%": r"\%", "$": r"\$",
         "#": r"\#", "_": r"\_", "{": r"\{", "}": r"\}",
@@ -28,9 +28,10 @@ def latex_escape(text):
     return "".join(replacements.get(character, character) for character in text)
 
 
-def generate_latex(results_dir, examples_dir, groups=DATASET_GROUPS):
+def generate_latex(results_dir, examples_dir, groups=DATASET_GROUPS, strict=False):
     inputs = {}
     reports = {}
+    report_issues = {}
     for _, tracks in groups:
         for stem, divergent in tracks:
             if stem not in inputs:
@@ -45,6 +46,15 @@ def generate_latex(results_dir, examples_dir, groups=DATASET_GROUPS):
                     suffix = "-divergences" if divergent else ""
                     path = results_dir / f"{stem}-{tool}{suffix}.csv"
                     reports[key] = load_report_details(path) if path.is_file() else None
+                    try:
+                        validate_report(path, pairs=inputs[stem][0],
+                                        expected_runs=5 if strict else None,
+                                        require_manifest=strict,
+                                        input_path=examples_dir / f"{stem}.csv")
+                    except (OSError, ValueError) as error:
+                        if strict:
+                            raise ValueError(f"Final benchmark validation failed: {error}") from error
+                        report_issues[key] = str(error)
 
     lines = [
         r"\begin{longtable}{lrr rr rr rr}",
@@ -66,7 +76,7 @@ def generate_latex(results_dir, examples_dir, groups=DATASET_GROUPS):
                     for decisions in reports[(stem, divergent, tool)][2].values()
                     for family, _, _ in decisions if family in ("strong", "weak")}
         if any(divergent for _, divergent in tracks):
-            mode = "divergence"
+            mode = "weak+divergence" if any(not divergent for _, divergent in tracks) else "divergence"
         else:
             mode = "/".join(sorted(families)) or (
                 "weak" if any(stem in weak_datasets for stem in stems) else "strong")
@@ -86,12 +96,18 @@ def generate_latex(results_dir, examples_dir, groups=DATASET_GROUPS):
                     missing.append(f"{stem}-{tool}{suffix}.csv")
                     continue
                 _, costs, decisions = report
+                issue = report_issues.get((stem, divergent, tool))
+                if issue:
+                    incomplete = True
+                    notes.append(f"- {label}, {tool}: {issue}.")
                 expected = inputs[stem][0]
                 extra = set(costs) - expected
                 if extra:
                     raise ValueError(f"Unexpected pairs in {stem}/{tool}: {sorted(extra)}")
                 notions = {(family, notion) for pair in expected
                            for family, notion, _ in decisions.get(pair, {})}
+                independent = spectroscopy_notions(notion for _, notion in notions)
+                notions = {(family, notion) for family, notion in notions if notion in independent}
                 supported.update(notions)
                 supported_tasks += len(notions) * len(expected)
                 for pair in expected:
@@ -119,10 +135,10 @@ def generate_latex(results_dir, examples_dir, groups=DATASET_GROUPS):
         "% Compared pairs are the configured directed comparisons, counted once even when both ordinary and divergence tracks are included; missing results are marked below.",
         "% States count distinct state IDs (including named isolated states) in the original inputs; combined datasets are disjoint and each input is counted once.",
         "% Notions count distinct supported relations across included tracks, not algorithm variants or relation modes. Strong, weak and divergence-sensitive notions are distinct.",
-        "% Times sum per-pair spectroscopy costs: equiv.io uses the median successful call; native tools use the fastest algorithm median per notion, preferring preorder mode when available. Repetitions are not summed. Builds and input preparation are excluded.",
+        "% Times are derived best-algorithm spectroscopy estimates, not total measured suite time: equiv.io uses the median successful call; native tools sum the fastest algorithm median per notion and pair, preferring preorder mode when available. Repetitions are not summed. Builds and input preparation are excluded; process startup and CADP compilation/linking are included.",
         "% LTBTS1 and LTBTS2 include ordinary strong and weak reports respectively; the other rows include both ordinary weak and divergence-sensitive reports.",
         r"% The containing LaTeX document must load \usepackage{longtable} and define \states and \notions.",
-        "% An asterisk marks incomplete coverage and partial time; N/A marks missing or empty reports.",
+        "% An asterisk marks incomplete coverage or failed/missing repetitions; times then use only successful samples and decided notions. N/A marks missing or empty reports.",
     ))
     if notes:
         lines.extend(("", *("% " + note for note in notes)))
@@ -135,9 +151,11 @@ def main():
     parser.add_argument("--results-dir", type=Path, default=root / "results")
     parser.add_argument("--examples-dir", type=Path, default=root / "examples")
     parser.add_argument("--output", type=Path, help="Write LaTeX to this file instead of stdout")
+    parser.add_argument("--strict", action="store_true",
+                        help="Require query manifests and all five successful repetitions for every report")
     args = parser.parse_args()
     try:
-        latex = generate_latex(args.results_dir.expanduser(), args.examples_dir.expanduser())
+        latex = generate_latex(args.results_dir.expanduser(), args.examples_dir.expanduser(), strict=args.strict)
         if args.output is None:
             print(latex, end="")
         else:

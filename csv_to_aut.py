@@ -101,6 +101,7 @@ def generate_aut(transitions, meta_entry, basename):
     
     # Also include the initial state (in case it has no transitions)
     all_states.add(initial_state)
+    state_ids = {state: index for index, state in enumerate(sorted(all_states))}
     
     num_states = len(all_states)
     num_transitions = len(transitions)
@@ -109,13 +110,13 @@ def generate_aut(transitions, meta_entry, basename):
     lines = []
     
     # Header line
-    header = f"des ({initial_state},{num_transitions},{num_states})"
+    header = f"des ({state_ids[initial_state]},{num_transitions},{num_states})"
     lines.append(header)
     
     # Transition lines
     for t in transitions:
         action = 'i' if t['action'] in ('tau', 'i', '\u03c4') else t['action']
-        line = f"({t['src']},\"{action}\",{t['tar']})"
+        line = f"({state_ids[t['src']]},\"{action}\",{state_ids[t['tar']]})"
         lines.append(line)
     
     return "\n".join(lines) + "\n"

@@ -3,9 +3,12 @@
 
 import argparse
 import csv
+import hashlib
+import json
 import math
 import sys
 from dataclasses import dataclass
+from pathlib import Path
 from statistics import median
 
 from spectrum import STRONG_SPECTRUM, WEAK_COMPARISON_SPECTRUM, WEAK_SPECTRUM
@@ -85,6 +88,13 @@ def notion_family(notion):
     if notion in dict(STRONG_SPECTRUM.notions):
         return "strong"
     return "weak"
+
+
+def spectroscopy_notions(notions):
+    notions = set(notions)
+    if "cadp-taustar-simulation" in notions:
+        notions.discard("cadp-safety")
+    return notions
 
 
 def decision_mode(notion, mode):
@@ -215,6 +225,7 @@ def load_report_details(path):
     for pair, notion_checks in checks.items():
         decided = 0
         seconds = 0.0
+        supported_notions = spectroscopy_notions(notion_checks)
         pair_decisions = decisions.setdefault(pair, {})
         for notion, modes in notion_checks.items():
             conflicting = any(len(outcomes.get((*pair, notion, mode), set())) > 1 for mode in modes)
@@ -229,12 +240,14 @@ def load_report_details(path):
             if conflicting:
                 results[pair][0].discard(notion)
                 continue
+            if notion not in supported_notions:
+                continue
             mode = "preorder" if "preorder" in modes else "equivalence"
             timings = [median(samples) for samples in modes[mode].values() if samples]
             if timings:
                 decided += 1
                 seconds += min(timings)
-        costs[pair] = SpectroscopyCost(len(notion_checks), decided, seconds)
+        costs[pair] = SpectroscopyCost(len(supported_notions), decided, seconds)
     for (left, right), pair_decisions in decisions.items():
         reverse = decisions.get((right, left), {})
         for (family, notion, mode), answer in list(pair_decisions.items()):
@@ -256,6 +269,60 @@ def load_report_details(path):
 def load_report(path):
     results, costs, _ = load_report_details(path)
     return results, costs
+
+
+def validate_report(path, pairs=None, expected_runs=None, require_manifest=False, input_path=None):
+    path = Path(path)
+    manifest_path = path.with_suffix(".manifest.json")
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.is_file() else None
+    if require_manifest and manifest is None:
+        raise ValueError(f"Missing query manifest: {manifest_path}")
+    with path.open(newline="") as source:
+        reader = csv.DictReader(source)
+        fields = set(reader.fieldnames or ())
+        rows = list(reader)
+    if not rows:
+        raise ValueError(f"Empty report: {path}")
+    if not {"left", "right", "status", "seconds"} <= fields:
+        raise ValueError(f"Invalid report columns: {path}")
+    is_equivio = "spectrum" in fields
+    actual = []
+    for row in rows:
+        comparison = (row.get("equivalence"), row.get("mode"), row.get("spectrum"))
+        actual.append((row["left"], row["right"], *comparison, int(row.get("run", "1"))))
+    if len(set(actual)) != len(actual):
+        raise ValueError(f"Duplicate query/repetition in {path}")
+    if manifest is not None:
+        if manifest.get("schema_version") != 1 or manifest.get("runs") not in (1, 5):
+            raise ValueError(f"Invalid query manifest: {manifest_path}")
+        selected_pairs = {tuple(pair) for pair in manifest["pairs"]}
+        if pairs is not None and selected_pairs != set(pairs):
+            raise ValueError(f"Manifest pair selection differs from expected pairs in {path}")
+        if input_path is not None:
+            digest = hashlib.sha256(Path(input_path).read_bytes()).hexdigest()
+            if digest != manifest["input_sha256"]:
+                raise ValueError(f"Input changed since benchmarking: {input_path}")
+        if expected_runs is not None and manifest["runs"] != expected_runs:
+            raise ValueError(f"Expected {expected_runs} repetitions, manifest declares {manifest['runs']}: {path}")
+        runs = manifest["runs"]
+        comparisons = {(None, None, manifest["spectrum"])} if is_equivio else {
+            (name, mode, None) for name, mode in manifest["comparisons"]
+        }
+    else:
+        selected_pairs = set(pairs) if pairs is not None else {(row[0], row[1]) for row in actual}
+        runs = expected_runs if expected_runs is not None else max(row[-1] for row in actual)
+        comparisons = {row[2:5] for row in actual}
+    expected = {(left, right, *comparison, run) for left, right in selected_pairs
+                for comparison in comparisons for run in range(1, runs + 1)}
+    missing, extra = expected - set(actual), set(actual) - expected
+    if missing or extra:
+        raise ValueError(f"Query coverage in {path}: {len(missing)} missing, {len(extra)} unexpected repetitions")
+    failures = sum(row["status"] != "ok" for row in rows)
+    if failures:
+        raise ValueError(f"{failures} failed/timed-out calls in {path}")
+    results, _, _ = load_report_details(path)
+    if any(status != "ok" for _, status in results.values()):
+        raise ValueError(f"Conflicting answers in {path}")
 
 
 def load_results(path):

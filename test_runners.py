@@ -1,5 +1,6 @@
 import csv
 import io
+import json
 import tempfile
 import unittest
 from contextlib import ExitStack
@@ -13,12 +14,41 @@ import run_suite
 import compare_results
 import benchmark_table
 from compare_results import load_report, load_results, mcrl2_notion
-from csv_to_aut import parse_csv
-from example import EDGECASE_PAIRS, PAIRS, PETERSON_PAIRS, WEAK_PAIRS, comparison_runs, resolve_input
+from csv_to_aut import generate_aut, parse_csv
+from example import EDGECASE_PAIRS, PAIRS, PETERSON_PAIRS, WEAK_PAIRS, comparison_runs, resolve_input, write_report_manifest
 from spectrum import WEAK_COMPARISON_SPECTRUM
 
 
 class BenchmarkTableTests(unittest.TestCase):
+    def test_table_marks_unreliable_samples_and_strict_mode_rejects_them(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "custom.csv"
+            source.write_text("0,1,a\n0,P,implicit-main\n1,Q,implicit-main\n")
+            report = root / "custom-equivio.csv"
+            write_report_manifest(report, source, [("P", "Q")], benchmark_performance=True)
+            header = "left,right,spectrum,seconds,preorders,status,run\n"
+            rows = [f"{left},{right},strong,1,,ok,{run}\n"
+                    for left, right in (("P", "Q"), ("Q", "P")) for run in range(1, 6)]
+            groups = (("Custom", (("custom", False),)),)
+            for broken in (rows[:2], [row.replace(",ok,", ",timeout,") if index == 0 else row
+                                      for index, row in enumerate(rows)]):
+                report.write_text(header + "".join(broken))
+                latex = benchmark_table.generate_latex(root, root, groups)
+                self.assertIn("13*", latex)
+                with self.assertRaisesRegex(ValueError, "Final benchmark validation failed"):
+                    benchmark_table.generate_latex(root, root, groups, strict=True)
+            report.write_text(header + "".join(rows))
+            for tool in ("mcrl2", "cadp"):
+                native = root / f"custom-{tool}.csv"
+                write_report_manifest(native, source, [("P", "Q")], benchmark_performance=True,
+                                      comparisons=[("trace", "preorder")])
+                native.write_text("left,right,equivalence,mode,seconds,equivalent,status,run\n" + "".join(
+                    f"{left},{right},trace,preorder,1,false,ok,{run}\n"
+                    for left, right in (("P", "Q"), ("Q", "P")) for run in range(1, 6)))
+            latex = benchmark_table.generate_latex(root, root, groups, strict=True)
+            self.assertIn(r"\texttt{custom} (strong) & 2 & 2 & 13 & 2.000 & 1 & 2.000 & 1 & 2.000 \\", latex)
+
     def test_default_table_keeps_ltbts_datasets_separate(self):
         self.assertEqual(benchmark_table.DATASET_GROUPS[:2], (
             ("LTBTS1", (("ltbts1", False),)),
@@ -59,7 +89,7 @@ class BenchmarkTableTests(unittest.TestCase):
                       ("Divergence", (("weak", False), ("weak", True))))
             latex = benchmark_table.generate_latex(root, root, groups)
             self.assertIn(r"\texttt{combined} (strong/weak) & 4 & 4 & 39 & 4.000 & 2 & 4.000 & 2 & 4.000 \\", latex)
-            self.assertIn(r"\texttt{divergence} (divergence) & 2 & 2 & 52 & 4.000 & 2 & 4.000 & 2 & 4.000 \\", latex)
+            self.assertIn(r"\texttt{divergence} (weak+divergence) & 2 & 2 & 52 & 4.000 & 2 & 4.000 & 2 & 4.000 \\", latex)
             self.assertIn(r"\multicolumn{3}{c}{Dataset} & \multicolumn{2}{c}{equiv.io} & \multicolumn{2}{c}{mCRL2} & \multicolumn{2}{c}{CADP} \\", latex)
             self.assertIn(r"Name & Pairs & $\states$ & $\notions$ & time (s) & $\notions$ & time (s) & $\notions$ & time (s) \\", latex)
             self.assertIn(r"\begin{longtable}{lrr rr rr rr}", latex)
@@ -113,11 +143,91 @@ class BenchmarkTableTests(unittest.TestCase):
             self.assertIn(r"\texttt{custom} (weak) & 2 & 2 & 26* & 2.000* & 1* & 1.000* & N/A & N/A \\", latex)
             self.assertIn("% - Custom, equivio: 26/52 notion-pair tasks decided", latex)
             self.assertIn("% - Custom, mcrl2: 1/2 notion-pair tasks decided", latex)
-            self.assertIn(r"\texttt{custom} (divergence) & 2 & 2 & N/A & N/A & N/A & N/A & N/A & N/A \\", combined)
+            self.assertIn(r"\texttt{custom} (weak+divergence) & 2 & 2 & N/A & N/A & N/A & N/A & N/A & N/A \\", combined)
             self.assertIn("custom-equivio-divergences.csv", combined)
 
 
 class RunnerTests(unittest.TestCase):
+    def test_performance_suite_stops_before_comparisons_on_invalid_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "custom.csv"
+            source.write_text("0,1,a\n0,P,implicit-main\n1,Q,implicit-main\n")
+            (root / "custom-equivio.csv").write_text(
+                "left,right,spectrum,seconds,preorders,status,run\nP,Q,strong,1,,ok,1\n")
+            with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"), \
+                    patch.object(run_suite, "record_environment") as environment:
+                with self.assertRaisesRegex(ValueError, "Missing query manifest"):
+                    run_suite.run_dataset(source, [("P", "Q")], False, root, benchmark_performance=True)
+            self.assertEqual(run.call_count, 1)
+            environment.assert_not_called()
+
+    def test_aut_uses_dense_ids_and_preserves_an_isolated_initial_state(self):
+        transitions = [{"src": 90, "tar": 110, "action": "a"},
+                       {"src": 110, "tar": 110, "action": "tau"}]
+        output = generate_aut(transitions, {"state_id": 62, "state_name": "Deadlock"}, "sparse")
+        self.assertEqual(output, 'des (0,2,3)\n(1,"a",2)\n(2,"i",2)\n')
+        output = generate_aut(transitions, {"state_id": 110, "state_name": "Loop"}, "sparse")
+        self.assertEqual(output, 'des (1,2,2)\n(0,"a",1)\n(1,"i",1)\n')
+
+    def test_environment_records_machine_revisions_build_settings_and_hashes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "run_suite.py").write_text("pass\n")
+            cache = root / "build/mcrl2/CMakeCache.txt"
+            cache.parent.mkdir(parents=True)
+            cache.write_text("CMAKE_BUILD_TYPE:STRING=Release\nCMAKE_CXX_FLAGS_RELEASE:STRING=-O3 -DNDEBUG\n")
+            with patch.object(run_suite, "__file__", str(root / "run_suite.py")), \
+                    patch.object(run_suite.subprocess, "run", return_value=Mock(
+                        returncode=0, stdout="test-version", stderr="")):
+                run_suite.record_environment(root)
+            metadata = json.loads((root / "environment.json").read_text())
+            self.assertEqual(metadata["mcrl2_build_settings"]["CMAKE_BUILD_TYPE:STRING"], "Release")
+            self.assertIn(str(root / "run_suite.py"), metadata["artifact_sha256"])
+            self.assertEqual(set(metadata["repositories"]), {"spectrum-mark", "equivio", "mcrl2"})
+            self.assertIn("cpu_count", metadata)
+
+    def test_final_report_validation_requires_all_manifest_queries_and_runs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "input.csv"
+            source.write_text("0,1,a\n0,P,implicit-main\n1,Q,implicit-main\n")
+            report = root / "input-mcrl2.csv"
+            pairs = [("P", "Q")]
+            comparisons = [("trace", "preorder"), ("bisim", "equivalence")]
+            write_report_manifest(report, source, pairs, benchmark_performance=True, comparisons=comparisons)
+            header = "left,right,equivalence,mode,seconds,equivalent,status,run\n"
+            rows = [f"{left},{right},{name},{mode},1,false,ok,{run}\n"
+                    for left, right in (("P", "Q"), ("Q", "P"))
+                    for name, mode in comparisons for run in range(1, 6)]
+            report.write_text(header + "".join(rows))
+            compare_results.validate_report(report, expected_runs=5, require_manifest=True, input_path=source)
+            for broken in (rows[:-1], rows[:10], [row.replace(",ok,", ",timeout,") if index == 0 else row
+                                                for index, row in enumerate(rows)], rows + rows[:1]):
+                report.write_text(header + "".join(broken))
+                with self.assertRaises(ValueError):
+                    compare_results.validate_report(report, expected_runs=5, require_manifest=True)
+            report.write_text(header + "".join(rows))
+            source.write_text(source.read_text() + "1,1,b\n")
+            with self.assertRaisesRegex(ValueError, "Input changed"):
+                compare_results.validate_report(report, input_path=source)
+            report.with_suffix(".manifest.json").unlink()
+            with self.assertRaisesRegex(ValueError, "Missing query manifest"):
+                compare_results.validate_report(report, expected_runs=5, require_manifest=True)
+
+    def test_safety_equivalence_does_not_duplicate_simulation_cost(self):
+        report = io.StringIO(
+            "left,right,equivalence,mode,seconds,equivalent,status\n"
+            "P,Q,cadp-safety,equivalence,0.1,false,ok\n"
+            "P,Q,cadp-safety,preorder,2,false,ok\n"
+            "P,Q,cadp-taustar,preorder,1,false,ok\n"
+            "P,Q,cadp-taustar,equivalence,4,false,ok\n")
+        with patch("builtins.open", return_value=report):
+            _, costs, decisions = compare_results.load_report_details("probe.csv")
+        self.assertEqual((costs[("P", "Q")].supported, costs[("P", "Q")].seconds), (2, 5))
+        self.assertIn(("weak", "cadp-safety", "equivalence"), decisions[("P", "Q")])
+        self.assertEqual(compare_results.spectroscopy_notions({"cadp-safety"}), {"cadp-safety"})
+
     def test_performance_schedule_repeats_every_query_in_varying_orders(self):
         pairs = [("P", "Q"), ("A", "B")]
         comparisons = [("bisim", "equivalence"), ("trace", "preorder")]
@@ -831,8 +941,12 @@ class RunnerTests(unittest.TestCase):
             source.write_text("0,0,tau\n0,P,implicit-main\n1,Q,implicit-main\n")
             for tool in (*run_suite.TOOLS, *(f"{tool}-divergences" for tool in run_suite.TOOLS)):
                 (output_dir / f"custom-{tool}.csv").write_text("status\nok\n")
-            with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"):
+            with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"), \
+                    patch.object(run_suite, "validate_report") as validate, \
+                    patch.object(run_suite, "record_environment"):
                 run_suite.run_dataset(source, [("P", "Q")], True, output_dir, benchmark_performance=True)
+            self.assertEqual(validate.call_count, 6)
+            self.assertTrue(all(call.kwargs["require_manifest"] for call in validate.call_args_list))
             commands = [call.args[0] for call in run.call_args_list]
             self.assertEqual(len(commands), 12)
             self.assertEqual(Path(commands[3][1]).name, "run_equivio.py")
@@ -856,7 +970,8 @@ class RunnerTests(unittest.TestCase):
             source = output_dir / "custom.csv"
             for tool in run_suite.TOOLS:
                 (output_dir / f"custom-{tool}.csv").write_text("status\nok\n")
-            with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"):
+            with patch.object(run_suite.subprocess, "run") as run, patch("builtins.print"), \
+                    patch.object(run_suite, "record_environment"):
                 run_suite.run_dataset(source, [("P", "Q")], True, output_dir, Path("/cadp/bin.x64"),
                                       divergences=False)
             commands = [call.args[0] for call in run.call_args_list]
