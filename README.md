@@ -67,4 +67,19 @@ python3 compare_results.py --weak results/ltbts2-equivio.csv results/ltbts2-mcrl
 
 Mixed equivalence/preorder reports are not directly equivalent. Checker disagreements are flagged as `conflict` and excluded from aggregation. Relations outside the configured spectrum are compared by name without assumed ordering.
 
+### Benchmark Table
+
+Generate a nine-column LaTeX longtable from existing reports without rerunning tools. The containing document must load `\usepackage{longtable}` and define the math macros `\states` and `\notions`:
+
+```sh
+python3 benchmark_table.py
+python3 benchmark_table.py --results-dir results/performance --output results/performance/benchmark.tex
+```
+
+Rows cover `\texttt{ltbts1} (strong)`, `\texttt{ltbts2} (weak)`, `\texttt{ltbts2} (divergence)`, `\texttt{peterson} (divergence)` and `\texttt{edgecases} (divergence)`. Divergence rows retain both ordinary and divergence-sensitive weak tracks in their totals. Two-level headings group Name / Pairs / $\states$ under Dataset, and $\notions$ / time (s) under each of equiv.io, mCRL2 and CADP. The headings repeat on subsequent pages. Transition counts are omitted. `--examples-dir` selects another directory containing the dataset input CSVs. The emitted `longtable` environment can be included using `\input{benchmark.tex}` directly, not inside a floating `table`; aggregation rules and missing-data details appear as LaTeX comments after the table.
+
+Inputs and pair counts are counted once per row, even when both tracks are included. State counts include transition endpoints and named isolated states; combined inputs have separate state-ID namespaces. Notion counts distinguish strong, weak and divergence-sensitive families but do not count algorithm variants or equivalence/preorder modes separately.
+
+Times sum the comparator's per-pair costs, using successful-run medians and the fastest algorithm median per native notion, preferring preorder mode when available. They are not the sum of every recorded algorithm call or repetition, nor total suite wall-clock time. Missing/empty reports produce `N/A`; incomplete notion coverage produces an asterisk and an explained decided-task timing subtotal. Pair counts refer to the configured benchmark selection; reports containing unexpected pairs are rejected.
+
 Run the focused input, suite and runner tests with `python3 -m unittest -v test_runners`.

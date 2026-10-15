@@ -11,10 +11,110 @@ import run_equivio
 import run_mcrl2
 import run_suite
 import compare_results
+import benchmark_table
 from compare_results import load_report, load_results, mcrl2_notion
 from csv_to_aut import parse_csv
 from example import EDGECASE_PAIRS, PAIRS, PETERSON_PAIRS, WEAK_PAIRS, comparison_runs, resolve_input
 from spectrum import WEAK_COMPARISON_SPECTRUM
+
+
+class BenchmarkTableTests(unittest.TestCase):
+    def test_default_table_keeps_ltbts_datasets_separate(self):
+        self.assertEqual(benchmark_table.DATASET_GROUPS[:2], (
+            ("LTBTS1", (("ltbts1", False),)),
+            ("LTBTS2", (("ltbts2", False),)),
+        ))
+        self.assertEqual(len(benchmark_table.DATASET_GROUPS), 5)
+        self.assertEqual(benchmark_table.DATASET_GROUPS[2],
+                 ("LTBTS2", (("ltbts2", False), ("ltbts2", True))))
+
+    def test_latex_escapes_special_characters(self):
+        self.assertEqual(benchmark_table.latex_escape("A&B_50%$#{x}~^\\"),
+                         r"A\&B\_50\%\$\#\{x\}\textasciitilde{}\textasciicircum{}\textbackslash{}")
+
+    def test_table_combines_tracks_without_double_counting_inputs_or_pairs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for stem in ("strong", "weak"):
+                (root / f"{stem}.csv").write_text("0,1,a\n0,P,implicit-main\n1,Q,implicit-main\n")
+            tracks = (("strong", "strong", "trace", False),
+                      ("weak", "weak", "weak-trace", False),
+                      ("weak", "weak-divergences", "dpweak-bisim", True))
+            for stem, family, notion, divergent in tracks:
+                suffix = "-divergences" if divergent else ""
+                for tool in run_suite.TOOLS:
+                    with (root / f"{stem}-{tool}{suffix}.csv").open("w", newline="") as result_file:
+                        writer = csv.writer(result_file)
+                        if tool == "equivio":
+                            writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status"))
+                        else:
+                            writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status"))
+                        for left, right in (("P", "Q"), ("Q", "P")):
+                            if tool == "equivio":
+                                writer.writerow((left, right, family, 1, "", "ok"))
+                            else:
+                                mode = "equivalence" if divergent else "preorder"
+                                writer.writerow((left, right, notion, mode, 1, "false", "ok"))
+            groups = (("Combined", (("strong", False), ("weak", False))),
+                      ("Divergence", (("weak", False), ("weak", True))))
+            latex = benchmark_table.generate_latex(root, root, groups)
+            self.assertIn(r"\texttt{combined} (strong/weak) & 4 & 4 & 39 & 4.000 & 2 & 4.000 & 2 & 4.000 \\", latex)
+            self.assertIn(r"\texttt{divergence} (divergence) & 2 & 2 & 52 & 4.000 & 2 & 4.000 & 2 & 4.000 \\", latex)
+            self.assertIn(r"\multicolumn{3}{c}{Dataset} & \multicolumn{2}{c}{equiv.io} & \multicolumn{2}{c}{mCRL2} & \multicolumn{2}{c}{CADP} \\", latex)
+            self.assertIn(r"Name & Pairs & $\states$ & $\notions$ & time (s) & $\notions$ & time (s) & $\notions$ & time (s) \\", latex)
+            self.assertIn(r"\begin{longtable}{lrr rr rr rr}", latex)
+            self.assertIn(r"\endhead", latex)
+            self.assertIn(r"\end{longtable}", latex)
+            self.assertNotIn(r"\begin{table}", latex)
+            self.assertNotIn(r"\begin{tabular}", latex)
+            self.assertNotIn("transitions", latex)
+
+    def test_table_counts_states_pairs_notions_and_median_spectroscopy_costs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "custom.csv").write_text("10,20,a\n10,P,implicit-main\n20,Q,implicit-main\n99,Z,implicit-main\n")
+            for tool in run_suite.TOOLS:
+                with (root / f"custom-{tool}.csv").open("w", newline="") as result_file:
+                    writer = csv.writer(result_file)
+                    if tool == "equivio":
+                        writer.writerow(("left", "right", "spectrum", "seconds", "preorders", "status", "run"))
+                    else:
+                        writer.writerow(("left", "right", "equivalence", "mode", "seconds", "equivalent", "status", "run"))
+                    for left, right in (("P", "Q"), ("Q", "P")):
+                        for run, seconds in enumerate((1, 5, 3), 1):
+                            if tool == "equivio":
+                                writer.writerow((left, right, "strong", seconds, "", "ok", run))
+                            else:
+                                writer.writerow((left, right, "trace", "preorder", seconds, "false", "ok", run))
+                                writer.writerow((left, right, "trace-ac", "preorder", seconds + 10, "false", "ok", run))
+                                writer.writerow((left, right, "trace", "equivalence", seconds + 20, "false", "ok", run))
+            groups = (("Custom_A&B", (("custom", False),)),)
+            with patch.object(benchmark_table, "resolve_input", return_value=(root / "custom.csv", [("P", "Q")])):
+                latex = benchmark_table.generate_latex(root, root, groups)
+            self.assertIn(r"\texttt{custom\_a\&b} (strong) & 2 & 3 & 13 & 6.000 & 1 & 6.000 & 1 & 6.000 \\", latex)
+
+    def test_table_marks_missing_pairs_and_reports_without_zero_timings(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "custom.csv"
+            source.write_text("0,0,tau\n0,P,implicit-main\n1,Q,implicit-main\n")
+            (root / "custom-equivio.csv").write_text(
+                "left,right,spectrum,seconds,preorders,status\nP,Q,weak,2,,ok\n")
+            (root / "custom-mcrl2.csv").write_text(
+                "left,right,equivalence,mode,seconds,equivalent,status\n"
+                "P,Q,weak-trace,preorder,30,,timeout\nQ,P,weak-trace,preorder,1,false,ok\n")
+            (root / "custom-cadp.csv").write_text(
+                "left,right,equivalence,mode,seconds,equivalent,status\n")
+            groups = (("Custom", (("custom", False),)),)
+            with patch.object(benchmark_table, "resolve_input", return_value=(source, [("P", "Q")])):
+                latex = benchmark_table.generate_latex(root, root, groups)
+                combined = benchmark_table.generate_latex(
+                    root, root, (("Custom", (("custom", False), ("custom", True))),))
+            self.assertIn(r"\texttt{custom} (weak) & 2 & 2 & 26* & 2.000* & 1* & 1.000* & N/A & N/A \\", latex)
+            self.assertIn("% - Custom, equivio: 26/52 notion-pair tasks decided", latex)
+            self.assertIn("% - Custom, mcrl2: 1/2 notion-pair tasks decided", latex)
+            self.assertIn(r"\texttt{custom} (divergence) & 2 & 2 & N/A & N/A & N/A & N/A & N/A & N/A \\", combined)
+            self.assertIn("custom-equivio-divergences.csv", combined)
 
 
 class RunnerTests(unittest.TestCase):
