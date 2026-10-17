@@ -5,22 +5,18 @@
 Name & Pairs & $\states$ & $\notions$ & time (s) & $\notions$ & time (s) & $\notions$ & time (s) \\
 \hline
 \endhead
-\texttt{ltbts1} (strong) & 20 & 44 & 13 & 4.337 & 6 & 0.739 & 3 & 34.632 \\
-\texttt{ltbts2} (weak) & 32 & 55 & 26 & 7.868 & 5 & 3.030 & 8 & 174.019 \\
-\texttt{ltbts2} (divergence) & 32 & 55 & 52 & 15.898 & 8 & 3.620 & 9 & 193.822 \\
-\texttt{peterson} (divergence) & 4 & 26 & 52 & 3.693 & 8 & 0.269 & 9 & 24.514 \\
-\texttt{edgecases} (divergence) & 32 & 53 & N/A & N/A & N/A & N/A & N/A & N/A \\
+\texttt{ltbts1} (strong) & 20 & 44 & 13 & 5.256 & 6 & 0.830 & 3 & 34.637 \\
+\texttt{ltbts2} (weak) & 32 & 55 & 26 & 9.025 & 5 & 3.507 & 7 & 153.169 \\
+\texttt{ltbts2} (weak+divergence) & 32 & 55 & 52 & 18.513 & 8 & 4.119 & 8 & 173.479 \\
+\texttt{peterson} (weak+divergence) & 4 & 26 & 52 & 4.518 & 8 & 0.321 & 8 & 21.766 \\
+\texttt{edgecases} (weak+divergence) & 32 & 53 & 52 & 16.869 & 8 & 2.312 & 8 & 171.998 \\
 \hline
 \end{longtable}
 
 % Compared pairs are the configured directed comparisons, counted once even when both ordinary and divergence tracks are included; missing results are marked below.
 % States count distinct state IDs (including named isolated states) in the original inputs; combined datasets are disjoint and each input is counted once.
 % Notions count distinct supported relations across included tracks, not algorithm variants or relation modes. Strong, weak and divergence-sensitive notions are distinct.
-% Times sum per-pair spectroscopy costs: equiv.io uses the median successful call; native tools use the fastest algorithm median per notion, preferring preorder mode when available. Repetitions are not summed. Builds and input preparation are excluded.
+% Times are derived best-algorithm spectroscopy estimates, not total measured suite time: equiv.io uses the median successful call; native tools sum the fastest algorithm median per notion and pair, preferring preorder mode when available. Repetitions are not summed. Builds and input preparation are excluded; process startup and CADP compilation/linking are included.
 % LTBTS1 and LTBTS2 include ordinary strong and weak reports respectively; the other rows include both ordinary weak and divergence-sensitive reports.
 % The containing LaTeX document must load \usepackage{longtable} and define \states and \notions.
-% An asterisk marks incomplete coverage and partial time; N/A marks missing or empty reports.
-
-% - Edgecases, equivio: missing or empty reports: edgecases-equivio.csv, edgecases-equivio-divergences.csv.
-% - Edgecases, mcrl2: missing or empty reports: edgecases-mcrl2.csv, edgecases-mcrl2-divergences.csv.
-% - Edgecases, cadp: missing or empty reports: edgecases-cadp.csv, edgecases-cadp-divergences.csv.
+% An asterisk marks incomplete coverage or failed/missing repetitions; times then use only successful samples and decided notions. N/A marks missing or empty reports.

@@ -1,0 +1,120 @@
+R31,L31
+  first spectroscopy: 0.262065s; notions decided: 13/13
+  second spectroscopy: 0.041461s; notions decided: 6/6
+  first only: ready-trace
+  second only: (none)
+  more precise: first
+R21,L21
+  first spectroscopy: 0.265370s; notions decided: 13/13
+  second spectroscopy: 0.042068s; notions decided: 6/6
+  first only: readiness
+  second only: (none)
+  more precise: first
+R42,L42
+  first spectroscopy: 0.257880s; notions decided: 13/13
+  second spectroscopy: 0.040483s; notions decided: 6/6
+  first only: 2-nested-simulation
+  second only: (none)
+  more precise: first
+R50,L50
+  first spectroscopy: 0.267771s; notions decided: 13/13
+  second spectroscopy: 0.042651s; notions decided: 6/6
+  first only: ready-trace
+  second only: (none)
+  more precise: first
+R27,L27
+  first spectroscopy: 0.302660s; notions decided: 13/13
+  second spectroscopy: 0.041458s; notions decided: 6/6
+  first only: possible-future
+  second only: (none)
+  more precise: first
+L13,R13
+  first spectroscopy: 0.243689s; notions decided: 13/13
+  second spectroscopy: 0.042689s; notions decided: 6/6
+  first only: (none)
+  second only: (none)
+  more precise: neither
+L42,R42
+  first spectroscopy: 0.246577s; notions decided: 13/13
+  second spectroscopy: 0.042057s; notions decided: 6/6
+  first only: 2-nested-simulation
+  second only: (none)
+  more precise: first
+R13,L13
+  first spectroscopy: 0.237676s; notions decided: 13/13
+  second spectroscopy: 0.040874s; notions decided: 6/6
+  first only: 2-nested-simulation
+  second only: (none)
+  more precise: first
+R24,L38
+  first spectroscopy: 0.255896s; notions decided: 13/13
+  second spectroscopy: 0.039161s; notions decided: 6/6
+  first only: failure-trace
+  second only: (none)
+  more precise: first
+L24,R24
+  first spectroscopy: 0.261761s; notions decided: 13/13
+  second spectroscopy: 0.044199s; notions decided: 6/6
+  first only: possible-future
+  second only: (none)
+  more precise: first
+L31,R31
+  first spectroscopy: 0.275361s; notions decided: 13/13
+  second spectroscopy: 0.041832s; notions decided: 6/6
+  first only: (none)
+  second only: (none)
+  more precise: neither
+R31,L34
+  first spectroscopy: 0.255557s; notions decided: 13/13
+  second spectroscopy: 0.040979s; notions decided: 6/6
+  first only: 2-nested-simulation
+  second only: (none)
+  more precise: first
+L38,R24
+  first spectroscopy: 0.275908s; notions decided: 13/13
+  second spectroscopy: 0.041246s; notions decided: 6/6
+  first only: (none)
+  second only: (none)
+  more precise: neither
+L34,R31
+  first spectroscopy: 0.251774s; notions decided: 13/13
+  second spectroscopy: 0.040623s; notions decided: 6/6
+  first only: (none)
+  second only: (none)
+  more precise: neither
+R24,L24
+  first spectroscopy: 0.278009s; notions decided: 13/13
+  second spectroscopy: 0.040700s; notions decided: 6/6
+  first only: failure-trace
+  second only: (none)
+  more precise: first
+R16,L16
+  first spectroscopy: 0.248307s; notions decided: 13/13
+  second spectroscopy: 0.040937s; notions decided: 6/6
+  first only: 2-nested-simulation
+  second only: (none)
+  more precise: first
+L27,R27
+  first spectroscopy: 0.289540s; notions decided: 13/13
+  second spectroscopy: 0.039208s; notions decided: 6/6
+  first only: possible-future
+  second only: (none)
+  more precise: first
+L16,R16
+  first spectroscopy: 0.248619s; notions decided: 13/13
+  second spectroscopy: 0.044000s; notions decided: 6/6
+  first only: (none)
+  second only: (none)
+  more precise: neither
+L50,R50
+  first spectroscopy: 0.265890s; notions decided: 13/13
+  second spectroscopy: 0.041330s; notions decided: 6/6
+  first only: (none)
+  second only: (none)
+  more precise: neither
+L21,R21
+  first spectroscopy: 0.265447s; notions decided: 13/13
+  second spectroscopy: 0.041573s; notions decided: 6/6
+  first only: readiness
+  second only: (none)
+  more precise: first

@@ -1,0 +1,197 @@
+Note: marked and native divergence-preserving bisimulations share notions under Spectrum II; ordinary weak notions and failures-divergence remain separate.
+Lowlink0,Lowlink3
+  first spectroscopy: 0.253737s; notions decided: 26/26
+  second spectroscopy: 0.020081s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+AcyclicQ,AcyclicP
+  first spectroscopy: 0.257113s; notions decided: 26/26
+  second spectroscopy: 0.020342s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+Deadlock,Loop
+  first spectroscopy: 0.253937s; notions decided: 26/26
+  second spectroscopy: 0.018663s; notions decided: 3/3
+  first only: delta-eta-bisimulation, delta-stable-bisimulation
+  second only: failures-divergence
+  more precise: both
+  INCONSISTENCY: second reports divergence-preserving-weak-bisimulation (equivalence) false, but first implies it via delta-eta-bisimulation (equivalence)
+Loop,Deadlock
+  first spectroscopy: 0.257723s; notions decided: 26/26
+  second spectroscopy: 0.019795s; notions decided: 3/3
+  first only: (none)
+  second only: (none)
+  more precise: neither
+Lowlink0,LowlinkDeadlock
+  first spectroscopy: 0.256916s; notions decided: 26/26
+  second spectroscopy: 0.020527s; notions decided: 3/3
+  first only: (none)
+  second only: (none)
+  more precise: neither
+ReviewR1,ReviewL1
+  first spectroscopy: 0.311555s; notions decided: 26/26
+  second spectroscopy: 0.020769s; notions decided: 3/3
+  first only: delta-weak-enabledness
+  second only: (none)
+  more precise: first
+ReviewR3,ReviewL3
+  first spectroscopy: 0.304942s; notions decided: 26/26
+  second spectroscopy: 0.020263s; notions decided: 3/3
+  first only: delta-eta-simulation, delta-stable-simulation
+  second only: (none)
+  more precise: first
+ReviewL3,ReviewR3
+  first spectroscopy: 0.307136s; notions decided: 26/26
+  second spectroscopy: 0.020449s; notions decided: 3/3
+  first only: delta-2-nested-weak-simulation, delta-eta-simulation, delta-s-impossible-future, delta-s-ready-simulation
+  second only: failures-divergence
+  more precise: both
+CCSQ,CCSP
+  first spectroscopy: 0.294714s; notions decided: 26/26
+  second spectroscopy: 0.020688s; notions decided: 3/3
+  first only: delta-s-impossible-future, delta-stable-failure-trace, delta-weak-impossible-future
+  second only: failures-divergence
+  more precise: both
+AcyclicP,AcyclicQ
+  first spectroscopy: 0.259426s; notions decided: 26/26
+  second spectroscopy: 0.020296s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+SilentQ,SilentP
+  first spectroscopy: 0.264519s; notions decided: 26/26
+  second spectroscopy: 0.020097s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+TraceB,TraceA
+  first spectroscopy: 0.253234s; notions decided: 26/26
+  second spectroscopy: 0.019638s; notions decided: 3/3
+  first only: (none)
+  second only: failures-divergence
+  more precise: second
+NoDeadlockLoop,Deadlock
+  first spectroscopy: 0.264777s; notions decided: 26/26
+  second spectroscopy: 0.019637s; notions decided: 3/3
+  first only: (none)
+  second only: (none)
+  more precise: neither
+Deadlock,LoopPart
+  first spectroscopy: 0.253706s; notions decided: 26/26
+  second spectroscopy: 0.019739s; notions decided: 3/3
+  first only: delta-eta-bisimulation, delta-stable-bisimulation
+  second only: failures-divergence
+  more precise: both
+  INCONSISTENCY: second reports divergence-preserving-weak-bisimulation (equivalence) false, but first implies it via delta-eta-bisimulation (equivalence)
+Lowlink0,Lowlink1
+  first spectroscopy: 0.261473s; notions decided: 26/26
+  second spectroscopy: 0.018953s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+ReviewL1,ReviewR1
+  first spectroscopy: 0.314130s; notions decided: 26/26
+  second spectroscopy: 0.021176s; notions decided: 3/3
+  first only: delta-eta-simulation, delta-stable-readiness, delta-stable-simulation, delta-weak-readiness
+  second only: failures-divergence
+  more precise: both
+DivergenceQ,DivergenceP
+  first spectroscopy: 0.270370s; notions decided: 26/26
+  second spectroscopy: 0.019585s; notions decided: 3/3
+  first only: delta-eta-simulation, delta-sr-delay-bisimulation
+  second only: failures-divergence
+  more precise: both
+  INCONSISTENCY: second reports divergence-preserving-weak-bisimulation (equivalence) false, but first implies it via delta-delay-bisimulation (equivalence)
+LowlinkDeadlock,Lowlink0
+  first spectroscopy: 0.262665s; notions decided: 26/26
+  second spectroscopy: 0.019469s; notions decided: 3/3
+  first only: delta-eta-simulation
+  second only: failures-divergence
+  more precise: both
+CCSP,CCSQ
+  first spectroscopy: 0.284493s; notions decided: 26/26
+  second spectroscopy: 0.020853s; notions decided: 3/3
+  first only: delta-eta-simulation, delta-stable-simulation
+  second only: (none)
+  more precise: first
+LoopPart,Deadlock
+  first spectroscopy: 0.257062s; notions decided: 26/26
+  second spectroscopy: 0.018589s; notions decided: 3/3
+  first only: (none)
+  second only: (none)
+  more precise: neither
+DivergenceP,DivergenceQ
+  first spectroscopy: 0.277142s; notions decided: 26/26
+  second spectroscopy: 0.020473s; notions decided: 3/3
+  first only: delta-sr-delay-bisimulation
+  second only: failures-divergence
+  more precise: both
+  INCONSISTENCY: second reports divergence-preserving-weak-bisimulation (equivalence) false, but first implies it via delta-delay-bisimulation (equivalence)
+Lowlink1,Lowlink0
+  first spectroscopy: 0.261868s; notions decided: 26/26
+  second spectroscopy: 0.019175s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+Loop,LoopPart
+  first spectroscopy: 0.249910s; notions decided: 26/26
+  second spectroscopy: 0.021487s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+LoopPart,Loop
+  first spectroscopy: 0.255352s; notions decided: 26/26
+  second spectroscopy: 0.019405s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+ReviewR2,ReviewL2
+  first spectroscopy: 0.338702s; notions decided: 26/26
+  second spectroscopy: 0.021196s; notions decided: 3/3
+  first only: delta-weak-enabledness
+  second only: (none)
+  more precise: first
+Deadlock,NoDeadlockLoop
+  first spectroscopy: 0.264148s; notions decided: 26/26
+  second spectroscopy: 0.019533s; notions decided: 3/3
+  first only: delta-eta-simulation
+  second only: failures-divergence
+  more precise: both
+ReviewL2,ReviewR2
+  first spectroscopy: 0.346105s; notions decided: 26/26
+  second spectroscopy: 0.019618s; notions decided: 3/3
+  first only: delta-eta-simulation, delta-stable-readiness, delta-stable-simulation, delta-weak-readiness
+  second only: failures-divergence
+  more precise: both
+Lowlink0,Lowlink2
+  first spectroscopy: 0.257205s; notions decided: 26/26
+  second spectroscopy: 0.019164s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+Lowlink2,Lowlink0
+  first spectroscopy: 0.255224s; notions decided: 26/26
+  second spectroscopy: 0.021274s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+Lowlink3,Lowlink0
+  first spectroscopy: 0.253711s; notions decided: 26/26
+  second spectroscopy: 0.020067s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both
+TraceA,TraceB
+  first spectroscopy: 0.254882s; notions decided: 26/26
+  second spectroscopy: 0.020870s; notions decided: 3/3
+  first only: (none)
+  second only: failures-divergence
+  more precise: second
+SilentP,SilentQ
+  first spectroscopy: 0.253125s; notions decided: 26/26
+  second spectroscopy: 0.019158s; notions decided: 3/3
+  first only: delta-sr-branching-bisimulation
+  second only: failures-divergence
+  more precise: both

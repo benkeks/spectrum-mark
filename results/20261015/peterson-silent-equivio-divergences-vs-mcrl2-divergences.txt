@@ -1,0 +1,25 @@
+Note: marked and native divergence-preserving bisimulations share notions under Spectrum II; ordinary weak notions and failures-divergence remain separate.
+MxIC,Pe
+  first spectroscopy: 0.828721s; notions decided: 26/26
+  second spectroscopy: 0.020670s; notions decided: 3/3
+  first only: delta-2-nested-weak-simulation, delta-eta-simulation, delta-s-impossible-future, delta-stable-readiness
+  second only: failures-divergence
+  more precise: both
+Pe,Mx
+  first spectroscopy: 0.396195s; notions decided: 26/26
+  second spectroscopy: 0.021655s; notions decided: 3/3
+  first only: delta-eta-simulation, delta-stable-simulation
+  second only: (none)
+  more precise: first
+Pe,MxIC
+  first spectroscopy: 0.659152s; notions decided: 26/26
+  second spectroscopy: 0.020234s; notions decided: 3/3
+  first only: delta-eta-simulation, delta-s-ready-simulation, delta-weak-ready-simulation
+  second only: failures-divergence
+  more precise: both
+Mx,Pe
+  first spectroscopy: 0.417422s; notions decided: 26/26
+  second spectroscopy: 0.021875s; notions decided: 3/3
+  first only: delta-2-nested-weak-simulation, delta-s-impossible-future, delta-stable-revivals
+  second only: failures-divergence
+  more precise: both

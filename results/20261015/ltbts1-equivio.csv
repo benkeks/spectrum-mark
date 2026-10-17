@@ -1,0 +1,101 @@
+left,right,spectrum,seconds,preorders,status,run
+R31,L31,strong,0.266794,"ready-trace, impossible-future",ok,1
+R21,L21,strong,0.302024,readiness,ok,1
+R42,L42,strong,0.292609,2-nested-simulation,ok,1
+R50,L50,strong,0.267771,"ready-trace, impossible-future",ok,1
+R27,L27,strong,0.302660,possible-future,ok,1
+L13,R13,strong,0.263786,simulation,ok,1
+L42,R42,strong,0.252520,2-nested-simulation,ok,1
+R13,L13,strong,0.237676,2-nested-simulation,ok,1
+R24,L38,strong,0.255896,"failure-trace, impossible-future",ok,1
+L24,R24,strong,0.261761,"possible-future, ready-simulation",ok,1
+L31,R31,strong,0.279694,ready-simulation,ok,1
+R31,L34,strong,0.262038,2-nested-simulation,ok,1
+L38,R24,strong,0.285986,simulation,ok,1
+L34,R31,strong,0.257311,ready-simulation,ok,1
+R24,L24,strong,0.276034,"failure-trace, impossible-future",ok,1
+R16,L16,strong,0.248307,2-nested-simulation,ok,1
+L27,R27,strong,0.290383,possible-future,ok,1
+L16,R16,strong,0.248619,simulation,ok,1
+L50,R50,strong,0.269206,ready-simulation,ok,1
+L21,R21,strong,0.264773,readiness,ok,1
+R24,L24,strong,0.249902,"failure-trace, impossible-future",ok,2
+L24,R24,strong,0.248640,"possible-future, ready-simulation",ok,2
+R42,L42,strong,0.236821,2-nested-simulation,ok,2
+L27,R27,strong,0.279414,possible-future,ok,2
+R50,L50,strong,0.236028,"ready-trace, impossible-future",ok,2
+R24,L38,strong,0.250761,"failure-trace, impossible-future",ok,2
+R31,L34,strong,0.246161,2-nested-simulation,ok,2
+L13,R13,strong,0.230730,simulation,ok,2
+R16,L16,strong,0.242501,2-nested-simulation,ok,2
+R27,L27,strong,0.283681,possible-future,ok,2
+L38,R24,strong,0.262152,simulation,ok,2
+L21,R21,strong,0.267402,readiness,ok,2
+L31,R31,strong,0.253521,ready-simulation,ok,2
+L34,R31,strong,0.233216,ready-simulation,ok,2
+L42,R42,strong,0.264042,2-nested-simulation,ok,2
+R21,L21,strong,0.265370,readiness,ok,2
+R31,L31,strong,0.236746,"ready-trace, impossible-future",ok,2
+L50,R50,strong,0.254578,ready-simulation,ok,2
+L16,R16,strong,0.243174,simulation,ok,2
+R13,L13,strong,0.237342,2-nested-simulation,ok,2
+L27,R27,strong,0.283050,possible-future,ok,3
+R16,L16,strong,0.241109,2-nested-simulation,ok,3
+L24,R24,strong,0.257804,"possible-future, ready-simulation",ok,3
+R21,L21,strong,0.261643,readiness,ok,3
+R24,L38,strong,0.248571,"failure-trace, impossible-future",ok,3
+L42,R42,strong,0.236911,2-nested-simulation,ok,3
+L16,R16,strong,0.242277,simulation,ok,3
+L34,R31,strong,0.235073,ready-simulation,ok,3
+L13,R13,strong,0.228902,simulation,ok,3
+R13,L13,strong,0.235117,2-nested-simulation,ok,3
+R31,L34,strong,0.235939,2-nested-simulation,ok,3
+L31,R31,strong,0.240672,ready-simulation,ok,3
+R50,L50,strong,0.237454,"ready-trace, impossible-future",ok,3
+R27,L27,strong,0.287457,possible-future,ok,3
+L38,R24,strong,0.270706,simulation,ok,3
+R31,L31,strong,0.250939,"ready-trace, impossible-future",ok,3
+L21,R21,strong,0.265447,readiness,ok,3
+R42,L42,strong,0.242068,2-nested-simulation,ok,3
+L50,R50,strong,0.265890,ready-simulation,ok,3
+R24,L24,strong,0.278009,"failure-trace, impossible-future",ok,3
+R42,L42,strong,0.288279,2-nested-simulation,ok,4
+R50,L50,strong,0.291791,"ready-trace, impossible-future",ok,4
+L31,R31,strong,0.275361,ready-simulation,ok,4
+L38,R24,strong,0.275908,simulation,ok,4
+R21,L21,strong,0.262815,readiness,ok,4
+L50,R50,strong,0.252088,ready-simulation,ok,4
+L42,R42,strong,0.245411,2-nested-simulation,ok,4
+R31,L31,strong,0.262065,"ready-trace, impossible-future",ok,4
+L21,R21,strong,0.261592,readiness,ok,4
+L27,R27,strong,0.289540,possible-future,ok,4
+L24,R24,strong,0.276113,"possible-future, ready-simulation",ok,4
+L13,R13,strong,0.243689,simulation,ok,4
+R31,L34,strong,0.255557,2-nested-simulation,ok,4
+R13,L13,strong,0.259719,2-nested-simulation,ok,4
+L16,R16,strong,0.268514,simulation,ok,4
+R24,L38,strong,0.259079,"failure-trace, impossible-future",ok,4
+L34,R31,strong,0.251774,ready-simulation,ok,4
+R16,L16,strong,0.264995,2-nested-simulation,ok,4
+R27,L27,strong,0.340950,possible-future,ok,4
+R24,L24,strong,0.286141,"failure-trace, impossible-future",ok,4
+L21,R21,strong,0.287242,readiness,ok,5
+R27,L27,strong,0.346906,possible-future,ok,5
+L24,R24,strong,0.276277,"possible-future, ready-simulation",ok,5
+R21,L21,strong,0.284664,readiness,ok,5
+L38,R24,strong,0.299214,simulation,ok,5
+R42,L42,strong,0.257880,2-nested-simulation,ok,5
+L50,R50,strong,0.283617,ready-simulation,ok,5
+R13,L13,strong,0.260393,2-nested-simulation,ok,5
+L16,R16,strong,0.255068,simulation,ok,5
+R24,L38,strong,0.289515,"failure-trace, impossible-future",ok,5
+L31,R31,strong,0.290336,ready-simulation,ok,5
+R16,L16,strong,0.262572,2-nested-simulation,ok,5
+L34,R31,strong,0.290586,ready-simulation,ok,5
+R24,L24,strong,0.282673,"failure-trace, impossible-future",ok,5
+R31,L34,strong,0.272929,2-nested-simulation,ok,5
+L13,R13,strong,0.252893,simulation,ok,5
+L42,R42,strong,0.246577,2-nested-simulation,ok,5
+R31,L31,strong,0.276060,"ready-trace, impossible-future",ok,5
+L27,R27,strong,0.292647,possible-future,ok,5
+R50,L50,strong,0.278693,"ready-trace, impossible-future",ok,5

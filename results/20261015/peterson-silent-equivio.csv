@@ -1,0 +1,21 @@
+left,right,spectrum,seconds,preorders,status,run
+MxIC,Pe,weak,0.757097,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,1
+Pe,Mx,weak,0.397808,"eta-simulation, stable-simulation",ok,1
+Pe,MxIC,weak,0.653635,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+Mx,Pe,weak,0.420111,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,1
+Mx,Pe,weak,0.420090,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,2
+Pe,MxIC,weak,0.589285,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+MxIC,Pe,weak,0.737566,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,2
+Pe,Mx,weak,0.364896,"eta-simulation, stable-simulation",ok,2
+MxIC,Pe,weak,0.776566,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,3
+Pe,Mx,weak,0.354146,"eta-simulation, stable-simulation",ok,3
+Pe,MxIC,weak,0.704314,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+Mx,Pe,weak,0.498839,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,3
+Pe,MxIC,weak,0.751126,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+Pe,Mx,weak,0.385875,"eta-simulation, stable-simulation",ok,4
+MxIC,Pe,weak,0.764314,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,4
+Mx,Pe,weak,0.416525,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,4
+Pe,Mx,weak,0.426443,"eta-simulation, stable-simulation",ok,5
+Mx,Pe,weak,0.424175,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,5
+MxIC,Pe,weak,0.738116,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,5
+Pe,MxIC,weak,0.595275,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5

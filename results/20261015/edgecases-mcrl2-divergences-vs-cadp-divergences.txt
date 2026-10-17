@@ -1,0 +1,193 @@
+Note: marked and native divergence-preserving bisimulations share notions under Spectrum II; ordinary weak notions and failures-divergence remain separate.
+LowlinkDeadlock,Lowlink0
+  first spectroscopy: 0.019469s; notions decided: 3/3
+  second spectroscopy: 0.643214s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Deadlock,NoDeadlockLoop
+  first spectroscopy: 0.019533s; notions decided: 3/3
+  second spectroscopy: 0.656172s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+SilentP,SilentQ
+  first spectroscopy: 0.019158s; notions decided: 3/3
+  second spectroscopy: 0.639103s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Lowlink0,Lowlink1
+  first spectroscopy: 0.018953s; notions decided: 3/3
+  second spectroscopy: 0.644845s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+ReviewR1,ReviewL1
+  first spectroscopy: 0.020769s; notions decided: 3/3
+  second spectroscopy: 0.657475s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+Lowlink0,Lowlink3
+  first spectroscopy: 0.020081s; notions decided: 3/3
+  second spectroscopy: 0.654342s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Lowlink3,Lowlink0
+  first spectroscopy: 0.020067s; notions decided: 3/3
+  second spectroscopy: 0.643869s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Loop,LoopPart
+  first spectroscopy: 0.021487s; notions decided: 3/3
+  second spectroscopy: 0.651874s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Lowlink1,Lowlink0
+  first spectroscopy: 0.019175s; notions decided: 3/3
+  second spectroscopy: 0.639983s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+TraceB,TraceA
+  first spectroscopy: 0.019638s; notions decided: 3/3
+  second spectroscopy: 0.676958s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+ReviewL2,ReviewR2
+  first spectroscopy: 0.019618s; notions decided: 3/3
+  second spectroscopy: 0.638331s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+AcyclicP,AcyclicQ
+  first spectroscopy: 0.020296s; notions decided: 3/3
+  second spectroscopy: 0.632123s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+ReviewL3,ReviewR3
+  first spectroscopy: 0.020449s; notions decided: 3/3
+  second spectroscopy: 0.653776s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Lowlink0,Lowlink2
+  first spectroscopy: 0.019164s; notions decided: 3/3
+  second spectroscopy: 0.636926s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Lowlink0,LowlinkDeadlock
+  first spectroscopy: 0.020527s; notions decided: 3/3
+  second spectroscopy: 0.638962s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+LoopPart,Deadlock
+  first spectroscopy: 0.018589s; notions decided: 3/3
+  second spectroscopy: 0.636916s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+ReviewR3,ReviewL3
+  first spectroscopy: 0.020263s; notions decided: 3/3
+  second spectroscopy: 0.649821s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+Deadlock,Loop
+  first spectroscopy: 0.018663s; notions decided: 3/3
+  second spectroscopy: 0.642465s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+NoDeadlockLoop,Deadlock
+  first spectroscopy: 0.019637s; notions decided: 3/3
+  second spectroscopy: 0.655152s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+Loop,Deadlock
+  first spectroscopy: 0.019795s; notions decided: 3/3
+  second spectroscopy: 0.645830s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+SilentQ,SilentP
+  first spectroscopy: 0.020097s; notions decided: 3/3
+  second spectroscopy: 0.661099s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Lowlink2,Lowlink0
+  first spectroscopy: 0.021274s; notions decided: 3/3
+  second spectroscopy: 0.635124s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+CCSP,CCSQ
+  first spectroscopy: 0.020853s; notions decided: 3/3
+  second spectroscopy: 0.637001s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+DivergenceP,DivergenceQ
+  first spectroscopy: 0.020473s; notions decided: 3/3
+  second spectroscopy: 0.647375s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+AcyclicQ,AcyclicP
+  first spectroscopy: 0.020342s; notions decided: 3/3
+  second spectroscopy: 0.650308s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+ReviewR2,ReviewL2
+  first spectroscopy: 0.021196s; notions decided: 3/3
+  second spectroscopy: 0.662755s; notions decided: 1/1
+  first only: (none)
+  second only: (none)
+  more precise: neither
+LoopPart,Loop
+  first spectroscopy: 0.019405s; notions decided: 3/3
+  second spectroscopy: 0.634987s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+CCSQ,CCSP
+  first spectroscopy: 0.020688s; notions decided: 3/3
+  second spectroscopy: 0.639320s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+Deadlock,LoopPart
+  first spectroscopy: 0.019739s; notions decided: 3/3
+  second spectroscopy: 0.645208s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+DivergenceQ,DivergenceP
+  first spectroscopy: 0.019585s; notions decided: 3/3
+  second spectroscopy: 0.628239s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+TraceA,TraceB
+  first spectroscopy: 0.020870s; notions decided: 3/3
+  second spectroscopy: 0.651690s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first
+ReviewL1,ReviewR1
+  first spectroscopy: 0.021176s; notions decided: 3/3
+  second spectroscopy: 0.652869s; notions decided: 1/1
+  first only: failures-divergence
+  second only: (none)
+  more precise: first

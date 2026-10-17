@@ -1,0 +1,107 @@
+{
+  "captured_utc": "2026-10-15T21:27:33.569924+00:00",
+  "command": [
+    "run_suite.py",
+    "--benchmark-performance",
+    "--output-dir",
+    "results/final"
+  ],
+  "platform": "Linux-7.1.13+deb14-amd64-x86_64-with-glibc2.43",
+  "machine": "x86_64",
+  "cpu_count": 22,
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "python": "3.14.8 (main, Oct  1 2026, 19:55:55) [GCC 16.2.0]",
+  "repositories": {
+    "spectrum-mark": {
+      "revision": {
+        "returncode": 0,
+        "output": "6cc5663bc97467b75062a0a579db9eae4c7b1cf5"
+      },
+      "status": {
+        "returncode": 0,
+        "output": "M README.md\n M benchmark_table.py\n M compare_results.py\n M csv_to_aut.py\n M example.py\n M results/benchmark.tex\n M run_cadp.py\n M run_equivio.py\n M run_mcrl2.py\n M run_suite.py\n M test_runners.py\n?? examples/aut/edgecases_AcyclicP.aut\n?? examples/aut/edgecases_AcyclicQ.aut\n?? examples/aut/edgecases_CCSP.aut\n?? examples/aut/edgecases_CCSQ.aut\n?? examples/aut/edgecases_Deadlock.aut\n?? examples/aut/edgecases_DivergenceP.aut\n?? examples/aut/edgecases_DivergenceQ.aut\n?? examples/aut/edgecases_Loop.aut\n?? examples/aut/edgecases_LoopPart.aut\n?? examples/aut/edgecases_Lowlink0.aut\n?? examples/aut/edgecases_Lowlink1.aut\n?? examples/aut/edgecases_Lowlink2.aut\n?? examples/aut/edgecases_Lowlink3.aut\n?? examples/aut/edgecases_LowlinkDeadlock.aut\n?? examples/aut/edgecases_NoDeadlockLoop.aut\n?? examples/aut/edgecases_ReviewL1.aut\n?? examples/aut/edgecases_ReviewL2.aut\n?? examples/aut/edgecases_ReviewL3.aut\n?? examples/aut/edgecases_ReviewR1.aut\n?? examples/aut/edgecases_ReviewR2.aut\n?? examples/aut/edgecases_ReviewR3.aut\n?? examples/aut/edgecases_SilentP.aut\n?? examples/aut/edgecases_SilentQ.aut\n?? examples/aut/edgecases_TraceA.aut\n?? examples/aut/edgecases_TraceB.aut\n?? results/edgecase-smoke-20261015-T2XkOz/\n?? results/edgecase-smoke-fixed-20261015-CKl3I3/\n?? results/final/"
+      }
+    },
+    "equivio": {
+      "revision": {
+        "returncode": 0,
+        "output": "544495c0ffcbdcc80a3e4c262c365461a473a7b4"
+      },
+      "status": {
+        "returncode": 0,
+        "output": ""
+      }
+    },
+    "mcrl2": {
+      "revision": {
+        "returncode": 0,
+        "output": "2164f33ebdea1157feda7768575870765419a21b"
+      },
+      "status": {
+        "returncode": 0,
+        "output": ""
+      }
+    }
+  },
+  "artifact_sha256": {
+    "/home/ben/Documents/spectroscopy/spectrum-mark/build/mcrl2/stage/bin/ltscompare": "185aa053941e91c0d557e5de1904b49efda5b81734ab78f40d3f5922db3c9212",
+    "/home/ben/Software/cadp/bin.x64/bcg_cmp": "dcb70ceae7500f3b68cc6c36d9764bf9af5a3b74fb55fb9a61a9e6e560f2a202",
+    "/home/ben/Software/cadp/bin.x64/bcg_io": "4f2738048d543d60080ebddfa7d2b257425992ba50fcff881a65dc2361569242",
+    "/home/ben/Software/cadp/bin.x64/bisimulator.a": "601d960ecc00ff552cb475616d1b6a4e32a6297ddd11cc072cbdfb1d175439d1",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/equivio/shared/target/scala-2.13/shared-assembly-0.1.0-SNAPSHOT.jar": "a947aded79a5f411017299599f2b9006be3c7548807b5af4f82e1ac82311284b",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/benchmark_table.py": "59b45e817ae88a41bda4fb491494c26a10ac54d501d659f16e578bb556bc5393",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/csv_to_aut.py": "457cf6b43ee8293b31f72b1e8ece6e469b6b17b7e6df6f6e521f8cf7490d641d",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/run_cadp.py": "b65c695cba3a65260e6ec3849ae438201778daaac96c1dd4913f22b40f96a678",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/run_equivio.py": "7fc6c50d8c3262b45a1942c59b79267c40eb7f5dc9a939dca35bc65c4fe9e08b",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/compare_results.py": "8d71c3b695d9346c756a43818edc9b1f07e2357f67bb932c283cf54fcda76e18",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/run_mcrl2.py": "b735eb1a2fe122e508838bfeb32f42240c8fe88393286fff5ddbf95d285e0581",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/test_runners.py": "6095dd6673d5185d8dc8b623967e1a1cf901659d737e55cc92e5e3797f461078",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/spectrum.py": "ea18c6d5e76cd10863704dc4cc861750537f650d9ab6f316a6e079186c7db9b0",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/example.py": "c31796b303ddb6c80c505f9f88ef5c45f79e8dcf5c848f8893ccece4537dde46",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/run_suite.py": "a47069c5e1c30a0a8555e86fa1133d372c8ca2bd59bc190e4aa9eded09950380",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/build_mcrl2.sh": "d781aa04a11f21f974ebc928a5281211701fdc2a8441cd18d63d74fd43eef49c"
+  },
+  "mcrl2_build_settings": {
+    "CMAKE_BUILD_TYPE:STRING": "Release",
+    "CMAKE_CXX_COMPILER:FILEPATH": "/usr/bin/c++",
+    "CMAKE_CXX_FLAGS:STRING": "",
+    "CMAKE_CXX_FLAGS_RELEASE:STRING": "-O3 -DNDEBUG"
+  },
+  "versions": {
+    "java": {
+      "returncode": 0,
+      "output": "openjdk version \"17.0.15-ea\" 2025-04-15\nOpenJDK Runtime Environment (build 17.0.15-ea+5-Debian-1)\nOpenJDK 64-Bit Server VM (build 17.0.15-ea+5-Debian-1, mixed mode, sharing)"
+    },
+    "cc": {
+      "returncode": 0,
+      "output": "cc (Debian 16.2.0-3) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    },
+    "/home/ben/Documents/spectroscopy/spectrum-mark/build/mcrl2/stage/bin/ltscompare": {
+      "returncode": 0,
+      "output": "ltscompare mCRL2 toolset 202607.0.2164f33ebd (Release)\nCopyright (c) 2026 Technische Universiteit Eindhoven.\nThis is free software.  You may redistribute copies of it under the\nterms of the Boost Software License <http://www.boost.org/LICENSE_1_0.txt>.\nThere is NO WARRANTY, to the extent permitted by law.\n\nWritten by Muck van Weerdenburg."
+    }
+  }
+}

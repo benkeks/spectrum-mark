@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "input": "/home/ben/Documents/spectroscopy/spectrum-mark/examples/peterson-silent.csv",
+  "input_sha256": "2a831adf8d337efd3ac0ad4a98a45e1002b9e21cc80c3d36fe8fb536bc4e6c72",
+  "pairs": [
+    [
+      "Pe",
+      "Mx"
+    ],
+    [
+      "Mx",
+      "Pe"
+    ],
+    [
+      "Pe",
+      "MxIC"
+    ],
+    [
+      "MxIC",
+      "Pe"
+    ]
+  ],
+  "runs": 5,
+  "spectrum": "weak",
+  "comparisons": [
+    [
+      "branching-bisim",
+      "equivalence"
+    ],
+    [
+      "branching-bisim-gv",
+      "equivalence"
+    ],
+    [
+      "branching-bisim-gjkw",
+      "equivalence"
+    ],
+    [
+      "branching-bisim-jgkw",
+      "equivalence"
+    ],
+    [
+      "branching-bisim-gj",
+      "equivalence"
+    ],
+    [
+      "branching-bisim-gj-lazy-BLC",
+      "equivalence"
+    ],
+    [
+      "weak-bisim",
+      "equivalence"
+    ],
+    [
+      "weak-trace",
+      "equivalence"
+    ],
+    [
+      "coupled-sim",
+      "equivalence"
+    ],
+    [
+      "coupled-sim",
+      "preorder"
+    ],
+    [
+      "weak-failures",
+      "preorder"
+    ],
+    [
+      "weak-trace",
+      "preorder"
+    ],
+    [
+      "weak-trace-ac",
+      "preorder"
+    ]
+  ],
+  "command": [
+    "/home/ben/Documents/spectroscopy/spectrum-mark/run_mcrl2.py",
+    "--csv",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/examples/peterson-silent.csv",
+    "--output-dir",
+    "/home/ben/Documents/spectroscopy/spectrum-mark/results/final",
+    "--weak",
+    "--benchmark-performance",
+    "--pair",
+    "Pe",
+    "Mx",
+    "--pair",
+    "Pe",
+    "MxIC"
+  ]
+}

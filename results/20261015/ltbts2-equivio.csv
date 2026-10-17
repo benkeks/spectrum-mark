@@ -1,0 +1,161 @@
+left,right,spectrum,seconds,preorders,status,run
+P55,P56,weak,0.249655,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,1
+P42,P41,weak,0.290714,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,1
+P25,P24,weak,0.329134,"contrasimulation, stable-bisimulation",ok,1
+P24,P25,weak,0.302175,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,1
+P56,P57,weak,0.298242,"s-impossible-future, s-ready-simulation, branching-bisimulation",ok,1
+P12,P11,weak,0.269514,"sr-delay-bisimulation, eta-bisimulation",ok,1
+P16,P15,weak,0.261282,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,1
+P15,P16,weak,0.265761,"eta-simulation, contrasimulation, stable-bisimulation",ok,1
+P22,P21,weak,0.251601,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+P41,P42,weak,0.272466,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+P23,P22,weak,0.298219,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+P43,P42,weak,0.256945,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+P57,P58,weak,0.316618,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+P32,P31,weak,0.342993,"weak-readiness, stable-readiness",ok,1
+P51,P52,weak,0.292665,"eta-simulation, s-ready-simulation",ok,1
+P11,P12,weak,0.259334,"sr-delay-bisimulation, eta-bisimulation",ok,1
+P45,P44,weak,0.322577,"stable-readiness, eta-simulation, weak-ready-simulation",ok,1
+P57,P56,weak,0.273489,branching-bisimulation,ok,1
+P21,P22,weak,0.274615,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+P31,P32,weak,0.335447,"weak-readiness, stable-readiness",ok,1
+P44,P45,weak,0.333164,"stable-readiness, eta-simulation, weak-ready-simulation",ok,1
+P52,P51,weak,0.305435,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,1
+P33,P34,weak,0.275804,"eta-simulation, sr-delay-bisimulation",ok,1
+P34,P33,weak,0.253817,sr-delay-bisimulation,ok,1
+P14,P13,weak,0.256640,"stable-bisimulation, eta-bisimulation",ok,1
+P58,P57,weak,0.317598,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,1
+P13,P14,weak,0.249222,"stable-bisimulation, eta-bisimulation",ok,1
+P53,P54,weak,0.252339,sr-branching-bisimulation,ok,1
+P54,P53,weak,0.249156,sr-branching-bisimulation,ok,1
+P56,P55,weak,0.268076,"eta-simulation, stable-bisimulation",ok,1
+P42,P43,weak,0.251106,"eta-simulation, stable-simulation",ok,1
+P22,P23,weak,0.289450,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,1
+P41,P42,weak,0.289425,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+P54,P53,weak,0.252969,sr-branching-bisimulation,ok,2
+P42,P43,weak,0.255709,"eta-simulation, stable-simulation",ok,2
+P58,P57,weak,0.316655,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,2
+P57,P56,weak,0.270625,branching-bisimulation,ok,2
+P44,P45,weak,0.315732,"stable-readiness, eta-simulation, weak-ready-simulation",ok,2
+P11,P12,weak,0.275482,"sr-delay-bisimulation, eta-bisimulation",ok,2
+P15,P16,weak,0.265407,"eta-simulation, contrasimulation, stable-bisimulation",ok,2
+P24,P25,weak,0.300720,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,2
+P22,P21,weak,0.269830,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+P33,P34,weak,0.267987,"eta-simulation, sr-delay-bisimulation",ok,2
+P42,P41,weak,0.274228,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,2
+P51,P52,weak,0.272184,"eta-simulation, s-ready-simulation",ok,2
+P56,P57,weak,0.266388,"s-impossible-future, s-ready-simulation, branching-bisimulation",ok,2
+P34,P33,weak,0.259696,sr-delay-bisimulation,ok,2
+P31,P32,weak,0.341711,"weak-readiness, stable-readiness",ok,2
+P32,P31,weak,0.345197,"weak-readiness, stable-readiness",ok,2
+P56,P55,weak,0.281326,"eta-simulation, stable-bisimulation",ok,2
+P12,P11,weak,0.271674,"sr-delay-bisimulation, eta-bisimulation",ok,2
+P53,P54,weak,0.251903,sr-branching-bisimulation,ok,2
+P21,P22,weak,0.261044,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+P43,P42,weak,0.263396,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+P22,P23,weak,0.291138,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,2
+P23,P22,weak,0.306956,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+P45,P44,weak,0.315382,"stable-readiness, eta-simulation, weak-ready-simulation",ok,2
+P52,P51,weak,0.285405,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,2
+P16,P15,weak,0.283863,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,2
+P55,P56,weak,0.277114,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,2
+P25,P24,weak,0.287925,"contrasimulation, stable-bisimulation",ok,2
+P57,P58,weak,0.316853,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+P13,P14,weak,0.251253,"stable-bisimulation, eta-bisimulation",ok,2
+P14,P13,weak,0.244184,"stable-bisimulation, eta-bisimulation",ok,2
+P23,P22,weak,0.290787,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+P53,P54,weak,0.258947,sr-branching-bisimulation,ok,3
+P33,P34,weak,0.245812,"eta-simulation, sr-delay-bisimulation",ok,3
+P24,P25,weak,0.283364,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,3
+P56,P57,weak,0.269025,"s-impossible-future, s-ready-simulation, branching-bisimulation",ok,3
+P12,P11,weak,0.259383,"sr-delay-bisimulation, eta-bisimulation",ok,3
+P16,P15,weak,0.265981,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,3
+P14,P13,weak,0.253990,"stable-bisimulation, eta-bisimulation",ok,3
+P51,P52,weak,0.293413,"eta-simulation, s-ready-simulation",ok,3
+P45,P44,weak,0.341931,"stable-readiness, eta-simulation, weak-ready-simulation",ok,3
+P32,P31,weak,0.401971,"weak-readiness, stable-readiness",ok,3
+P31,P32,weak,0.455728,"weak-readiness, stable-readiness",ok,3
+P52,P51,weak,0.324844,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,3
+P41,P42,weak,0.304996,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+P56,P55,weak,0.267532,"eta-simulation, stable-bisimulation",ok,3
+P21,P22,weak,0.271860,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+P22,P21,weak,0.285766,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+P57,P56,weak,0.294922,branching-bisimulation,ok,3
+P22,P23,weak,0.294977,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,3
+P54,P53,weak,0.255046,sr-branching-bisimulation,ok,3
+P11,P12,weak,0.275678,"sr-delay-bisimulation, eta-bisimulation",ok,3
+P55,P56,weak,0.265189,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,3
+P13,P14,weak,0.249578,"stable-bisimulation, eta-bisimulation",ok,3
+P57,P58,weak,0.300824,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+P44,P45,weak,0.339752,"stable-readiness, eta-simulation, weak-ready-simulation",ok,3
+P58,P57,weak,0.309248,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,3
+P43,P42,weak,0.282381,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+P25,P24,weak,0.298397,"contrasimulation, stable-bisimulation",ok,3
+P15,P16,weak,0.302547,"eta-simulation, contrasimulation, stable-bisimulation",ok,3
+P42,P41,weak,0.301065,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,3
+P42,P43,weak,0.264702,"eta-simulation, stable-simulation",ok,3
+P34,P33,weak,0.267629,sr-delay-bisimulation,ok,3
+P22,P23,weak,0.284562,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,4
+P16,P15,weak,0.254778,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,4
+P43,P42,weak,0.256077,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+P44,P45,weak,0.312763,"stable-readiness, eta-simulation, weak-ready-simulation",ok,4
+P55,P56,weak,0.274003,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,4
+P32,P31,weak,0.333816,"weak-readiness, stable-readiness",ok,4
+P21,P22,weak,0.269617,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+P24,P25,weak,0.283427,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,4
+P51,P52,weak,0.277460,"eta-simulation, s-ready-simulation",ok,4
+P57,P56,weak,0.274025,branching-bisimulation,ok,4
+P33,P34,weak,0.265761,"eta-simulation, sr-delay-bisimulation",ok,4
+P42,P43,weak,0.256392,"eta-simulation, stable-simulation",ok,4
+P56,P57,weak,0.277196,"s-impossible-future, s-ready-simulation, branching-bisimulation",ok,4
+P45,P44,weak,0.313107,"stable-readiness, eta-simulation, weak-ready-simulation",ok,4
+P54,P53,weak,0.247892,sr-branching-bisimulation,ok,4
+P25,P24,weak,0.289615,"contrasimulation, stable-bisimulation",ok,4
+P41,P42,weak,0.321042,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+P22,P21,weak,0.266226,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+P12,P11,weak,0.267660,"sr-delay-bisimulation, eta-bisimulation",ok,4
+P57,P58,weak,0.323788,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+P42,P41,weak,0.290092,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,4
+P56,P55,weak,0.257607,"eta-simulation, stable-bisimulation",ok,4
+P11,P12,weak,0.261227,"sr-delay-bisimulation, eta-bisimulation",ok,4
+P53,P54,weak,0.280564,sr-branching-bisimulation,ok,4
+P13,P14,weak,0.255385,"stable-bisimulation, eta-bisimulation",ok,4
+P15,P16,weak,0.278486,"eta-simulation, contrasimulation, stable-bisimulation",ok,4
+P58,P57,weak,0.305224,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,4
+P31,P32,weak,0.343890,"weak-readiness, stable-readiness",ok,4
+P52,P51,weak,0.297071,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,4
+P14,P13,weak,0.250961,"stable-bisimulation, eta-bisimulation",ok,4
+P23,P22,weak,0.308002,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+P34,P33,weak,0.259039,sr-delay-bisimulation,ok,4
+P15,P16,weak,0.272762,"eta-simulation, contrasimulation, stable-bisimulation",ok,5
+P31,P32,weak,0.340445,"weak-readiness, stable-readiness",ok,5
+P53,P54,weak,0.252839,sr-branching-bisimulation,ok,5
+P13,P14,weak,0.255817,"stable-bisimulation, eta-bisimulation",ok,5
+P56,P57,weak,0.265333,"s-impossible-future, s-ready-simulation, branching-bisimulation",ok,5
+P24,P25,weak,0.284518,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,5
+P42,P43,weak,0.267580,"eta-simulation, stable-simulation",ok,5
+P56,P55,weak,0.253602,"eta-simulation, stable-bisimulation",ok,5
+P45,P44,weak,0.316469,"stable-readiness, eta-simulation, weak-ready-simulation",ok,5
+P23,P22,weak,0.290936,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5
+P43,P42,weak,0.267591,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+P22,P23,weak,0.289053,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,5
+P21,P22,weak,0.257179,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5
+P42,P41,weak,0.303968,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,5
+P32,P31,weak,0.335240,"weak-readiness, stable-readiness",ok,5
+P34,P33,weak,0.257555,sr-delay-bisimulation,ok,5
+P57,P56,weak,0.273244,branching-bisimulation,ok,5
+P14,P13,weak,0.269947,"stable-bisimulation, eta-bisimulation",ok,5
+P16,P15,weak,0.276615,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,5
+P12,P11,weak,0.278658,"sr-delay-bisimulation, eta-bisimulation",ok,5
+P22,P21,weak,0.265776,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+P33,P34,weak,0.257772,"eta-simulation, sr-delay-bisimulation",ok,5
+P11,P12,weak,0.262667,"sr-delay-bisimulation, eta-bisimulation",ok,5
+P58,P57,weak,0.302871,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,5
+P44,P45,weak,0.330921,"stable-readiness, eta-simulation, weak-ready-simulation",ok,5
+P57,P58,weak,0.332296,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+P55,P56,weak,0.267876,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,5
+P51,P52,weak,0.284982,"eta-simulation, s-ready-simulation",ok,5
+P54,P53,weak,0.251340,sr-branching-bisimulation,ok,5
+P25,P24,weak,0.286654,"contrasimulation, stable-bisimulation",ok,5
+P52,P51,weak,0.265589,"eta-simulation, 2-nested-weak-simulation, stable-bisimulation",ok,5
+P41,P42,weak,0.293238,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5

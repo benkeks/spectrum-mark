@@ -1,0 +1,161 @@
+left,right,spectrum,seconds,preorders,status,run
+P55,P56,weak-divergences,0.277826,"2-nested-weak-simulation, stable-bisimulation",ok,1
+P42,P41,weak-divergences,0.352925,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,1
+P25,P24,weak-divergences,0.338067,"contrasimulation, stable-bisimulation",ok,1
+P24,P25,weak-divergences,0.298894,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,1
+P56,P57,weak-divergences,0.323714,weak-enabledness,ok,1
+P12,P11,weak-divergences,0.284490,"sr-delay-bisimulation, eta-bisimulation",ok,1
+P16,P15,weak-divergences,0.284611,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,1
+P15,P16,weak-divergences,0.289134,"eta-simulation, contrasimulation, stable-bisimulation",ok,1
+P22,P21,weak-divergences,0.264138,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+P41,P42,weak-divergences,0.295830,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+P23,P22,weak-divergences,0.301911,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+P43,P42,weak-divergences,0.285980,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+P57,P58,weak-divergences,0.329729,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+P32,P31,weak-divergences,0.353751,"weak-readiness, stable-readiness",ok,1
+P51,P52,weak-divergences,0.286194,weak-enabledness,ok,1
+P11,P12,weak-divergences,0.270861,"sr-delay-bisimulation, eta-bisimulation",ok,1
+P45,P44,weak-divergences,0.321113,"stable-readiness, eta-simulation, weak-ready-simulation",ok,1
+P57,P56,weak-divergences,0.298450,eta-simulation,ok,1
+P21,P22,weak-divergences,0.285789,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+P31,P32,weak-divergences,0.368336,"weak-readiness, stable-readiness",ok,1
+P44,P45,weak-divergences,0.326096,"stable-readiness, eta-simulation, weak-ready-simulation",ok,1
+P52,P51,weak-divergences,0.294420,"eta-simulation, weak-ready-simulation, stable-bisimulation",ok,1
+P33,P34,weak-divergences,0.274467,"eta-simulation, sr-delay-bisimulation",ok,1
+P34,P33,weak-divergences,0.257680,sr-delay-bisimulation,ok,1
+P14,P13,weak-divergences,0.259676,"stable-bisimulation, eta-bisimulation",ok,1
+P58,P57,weak-divergences,0.316891,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,1
+P13,P14,weak-divergences,0.277069,"stable-bisimulation, eta-bisimulation",ok,1
+P53,P54,weak-divergences,0.261762,weak-enabledness,ok,1
+P54,P53,weak-divergences,0.274514,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+P56,P55,weak-divergences,0.277724,"eta-simulation, stable-bisimulation",ok,1
+P42,P43,weak-divergences,0.270734,"eta-simulation, stable-simulation",ok,1
+P22,P23,weak-divergences,0.308655,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,1
+P41,P42,weak-divergences,0.310748,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+P54,P53,weak-divergences,0.273095,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+P42,P43,weak-divergences,0.290279,"eta-simulation, stable-simulation",ok,2
+P58,P57,weak-divergences,0.329022,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,2
+P57,P56,weak-divergences,0.348762,eta-simulation,ok,2
+P44,P45,weak-divergences,0.371768,"stable-readiness, eta-simulation, weak-ready-simulation",ok,2
+P11,P12,weak-divergences,0.320903,"sr-delay-bisimulation, eta-bisimulation",ok,2
+P15,P16,weak-divergences,0.318624,"eta-simulation, contrasimulation, stable-bisimulation",ok,2
+P24,P25,weak-divergences,0.309624,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,2
+P22,P21,weak-divergences,0.286419,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+P33,P34,weak-divergences,0.276850,"eta-simulation, sr-delay-bisimulation",ok,2
+P42,P41,weak-divergences,0.336543,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,2
+P51,P52,weak-divergences,0.320642,weak-enabledness,ok,2
+P56,P57,weak-divergences,0.305341,weak-enabledness,ok,2
+P34,P33,weak-divergences,0.282319,sr-delay-bisimulation,ok,2
+P31,P32,weak-divergences,0.344712,"weak-readiness, stable-readiness",ok,2
+P32,P31,weak-divergences,0.356745,"weak-readiness, stable-readiness",ok,2
+P56,P55,weak-divergences,0.305454,"eta-simulation, stable-bisimulation",ok,2
+P12,P11,weak-divergences,0.282307,"sr-delay-bisimulation, eta-bisimulation",ok,2
+P53,P54,weak-divergences,0.293885,weak-enabledness,ok,2
+P21,P22,weak-divergences,0.273699,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+P43,P42,weak-divergences,0.280408,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+P22,P23,weak-divergences,0.305333,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,2
+P23,P22,weak-divergences,0.317617,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+P45,P44,weak-divergences,0.347184,"stable-readiness, eta-simulation, weak-ready-simulation",ok,2
+P52,P51,weak-divergences,0.278143,"eta-simulation, weak-ready-simulation, stable-bisimulation",ok,2
+P16,P15,weak-divergences,0.296171,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,2
+P55,P56,weak-divergences,0.276578,"2-nested-weak-simulation, stable-bisimulation",ok,2
+P25,P24,weak-divergences,0.303237,"contrasimulation, stable-bisimulation",ok,2
+P57,P58,weak-divergences,0.318817,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+P13,P14,weak-divergences,0.323697,"stable-bisimulation, eta-bisimulation",ok,2
+P14,P13,weak-divergences,0.290778,"stable-bisimulation, eta-bisimulation",ok,2
+P23,P22,weak-divergences,0.310572,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+P53,P54,weak-divergences,0.280746,weak-enabledness,ok,3
+P33,P34,weak-divergences,0.265944,"eta-simulation, sr-delay-bisimulation",ok,3
+P24,P25,weak-divergences,0.300645,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,3
+P56,P57,weak-divergences,0.288685,weak-enabledness,ok,3
+P12,P11,weak-divergences,0.279021,"sr-delay-bisimulation, eta-bisimulation",ok,3
+P16,P15,weak-divergences,0.292066,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,3
+P14,P13,weak-divergences,0.259918,"stable-bisimulation, eta-bisimulation",ok,3
+P51,P52,weak-divergences,0.277503,weak-enabledness,ok,3
+P45,P44,weak-divergences,0.326446,"stable-readiness, eta-simulation, weak-ready-simulation",ok,3
+P32,P31,weak-divergences,0.361476,"weak-readiness, stable-readiness",ok,3
+P31,P32,weak-divergences,0.354979,"weak-readiness, stable-readiness",ok,3
+P52,P51,weak-divergences,0.287541,"eta-simulation, weak-ready-simulation, stable-bisimulation",ok,3
+P41,P42,weak-divergences,0.294234,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+P56,P55,weak-divergences,0.281355,"eta-simulation, stable-bisimulation",ok,3
+P21,P22,weak-divergences,0.292506,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+P22,P21,weak-divergences,0.270581,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+P57,P56,weak-divergences,0.292332,eta-simulation,ok,3
+P22,P23,weak-divergences,0.308641,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,3
+P54,P53,weak-divergences,0.283719,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+P11,P12,weak-divergences,0.276508,"sr-delay-bisimulation, eta-bisimulation",ok,3
+P55,P56,weak-divergences,0.274873,"2-nested-weak-simulation, stable-bisimulation",ok,3
+P13,P14,weak-divergences,0.275501,"stable-bisimulation, eta-bisimulation",ok,3
+P57,P58,weak-divergences,0.314022,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+P44,P45,weak-divergences,0.335201,"stable-readiness, eta-simulation, weak-ready-simulation",ok,3
+P58,P57,weak-divergences,0.325099,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,3
+P43,P42,weak-divergences,0.280701,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+P25,P24,weak-divergences,0.289932,"contrasimulation, stable-bisimulation",ok,3
+P15,P16,weak-divergences,0.270687,"eta-simulation, contrasimulation, stable-bisimulation",ok,3
+P42,P41,weak-divergences,0.310013,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,3
+P42,P43,weak-divergences,0.269181,"eta-simulation, stable-simulation",ok,3
+P34,P33,weak-divergences,0.273189,sr-delay-bisimulation,ok,3
+P22,P23,weak-divergences,0.323108,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,4
+P16,P15,weak-divergences,0.285143,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,4
+P43,P42,weak-divergences,0.278410,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+P44,P45,weak-divergences,0.329042,"stable-readiness, eta-simulation, weak-ready-simulation",ok,4
+P55,P56,weak-divergences,0.300507,"2-nested-weak-simulation, stable-bisimulation",ok,4
+P32,P31,weak-divergences,0.365093,"weak-readiness, stable-readiness",ok,4
+P21,P22,weak-divergences,0.293221,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+P24,P25,weak-divergences,0.288043,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,4
+P51,P52,weak-divergences,0.296076,weak-enabledness,ok,4
+P57,P56,weak-divergences,0.295842,eta-simulation,ok,4
+P33,P34,weak-divergences,0.266091,"eta-simulation, sr-delay-bisimulation",ok,4
+P42,P43,weak-divergences,0.290044,"eta-simulation, stable-simulation",ok,4
+P56,P57,weak-divergences,0.280916,weak-enabledness,ok,4
+P45,P44,weak-divergences,0.327972,"stable-readiness, eta-simulation, weak-ready-simulation",ok,4
+P54,P53,weak-divergences,0.269462,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+P25,P24,weak-divergences,0.297891,"contrasimulation, stable-bisimulation",ok,4
+P41,P42,weak-divergences,0.290762,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+P22,P21,weak-divergences,0.274219,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+P12,P11,weak-divergences,0.285603,"sr-delay-bisimulation, eta-bisimulation",ok,4
+P57,P58,weak-divergences,0.325778,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+P42,P41,weak-divergences,0.299375,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,4
+P56,P55,weak-divergences,0.287847,"eta-simulation, stable-bisimulation",ok,4
+P11,P12,weak-divergences,0.282314,"sr-delay-bisimulation, eta-bisimulation",ok,4
+P53,P54,weak-divergences,0.281099,weak-enabledness,ok,4
+P13,P14,weak-divergences,0.264132,"stable-bisimulation, eta-bisimulation",ok,4
+P15,P16,weak-divergences,0.267464,"eta-simulation, contrasimulation, stable-bisimulation",ok,4
+P58,P57,weak-divergences,0.321857,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,4
+P31,P32,weak-divergences,0.359926,"weak-readiness, stable-readiness",ok,4
+P52,P51,weak-divergences,0.290548,"eta-simulation, weak-ready-simulation, stable-bisimulation",ok,4
+P14,P13,weak-divergences,0.270468,"stable-bisimulation, eta-bisimulation",ok,4
+P23,P22,weak-divergences,0.304771,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+P34,P33,weak-divergences,0.276792,sr-delay-bisimulation,ok,4
+P15,P16,weak-divergences,0.298329,"eta-simulation, contrasimulation, stable-bisimulation",ok,5
+P31,P32,weak-divergences,0.354222,"weak-readiness, stable-readiness",ok,5
+P53,P54,weak-divergences,0.292185,weak-enabledness,ok,5
+P13,P14,weak-divergences,0.285812,"stable-bisimulation, eta-bisimulation",ok,5
+P56,P57,weak-divergences,0.296780,weak-enabledness,ok,5
+P24,P25,weak-divergences,0.300181,"weak-possible-future, eta-simulation, weak-ready-simulation, contrasimulation, stable-bisimulation",ok,5
+P42,P43,weak-divergences,0.285048,"eta-simulation, stable-simulation",ok,5
+P56,P55,weak-divergences,0.301759,"eta-simulation, stable-bisimulation",ok,5
+P45,P44,weak-divergences,0.341999,"stable-readiness, eta-simulation, weak-ready-simulation",ok,5
+P23,P22,weak-divergences,0.320109,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5
+P43,P42,weak-divergences,0.299072,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+P22,P23,weak-divergences,0.303584,"weak-readiness, stable-ready-trace, s-impossible-future, weak-impossible-future",ok,5
+P21,P22,weak-divergences,0.282952,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5
+P42,P41,weak-divergences,0.313381,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,5
+P32,P31,weak-divergences,0.353879,"weak-readiness, stable-readiness",ok,5
+P34,P33,weak-divergences,0.278239,sr-delay-bisimulation,ok,5
+P57,P56,weak-divergences,0.290095,eta-simulation,ok,5
+P14,P13,weak-divergences,0.268851,"stable-bisimulation, eta-bisimulation",ok,5
+P16,P15,weak-divergences,0.278590,"eta-simulation, 2-nested-weak-simulation, contrasimulation, stable-bisimulation",ok,5
+P12,P11,weak-divergences,0.284148,"sr-delay-bisimulation, eta-bisimulation",ok,5
+P22,P21,weak-divergences,0.289577,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+P33,P34,weak-divergences,0.263257,"eta-simulation, sr-delay-bisimulation",ok,5
+P11,P12,weak-divergences,0.270619,"sr-delay-bisimulation, eta-bisimulation",ok,5
+P58,P57,weak-divergences,0.335520,"s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,5
+P44,P45,weak-divergences,0.348943,"stable-readiness, eta-simulation, weak-ready-simulation",ok,5
+P57,P58,weak-divergences,0.335304,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+P55,P56,weak-divergences,0.302111,"2-nested-weak-simulation, stable-bisimulation",ok,5
+P51,P52,weak-divergences,0.283246,weak-enabledness,ok,5
+P54,P53,weak-divergences,0.268012,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5
+P25,P24,weak-divergences,0.290238,"contrasimulation, stable-bisimulation",ok,5
+P52,P51,weak-divergences,0.281332,"eta-simulation, weak-ready-simulation, stable-bisimulation",ok,5
+P41,P42,weak-divergences,0.303301,"s-impossible-future, weak-possible-future, eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5

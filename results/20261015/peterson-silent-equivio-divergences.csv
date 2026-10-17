@@ -1,0 +1,21 @@
+left,right,spectrum,seconds,preorders,status,run
+MxIC,Pe,weak-divergences,0.828721,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,1
+Pe,Mx,weak-divergences,0.416359,"eta-simulation, stable-simulation",ok,1
+Pe,MxIC,weak-divergences,0.679979,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,1
+Mx,Pe,weak-divergences,0.434977,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,1
+Mx,Pe,weak-divergences,0.419956,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,2
+Pe,MxIC,weak-divergences,0.708312,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,2
+MxIC,Pe,weak-divergences,0.754903,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,2
+Pe,Mx,weak-divergences,0.401407,"eta-simulation, stable-simulation",ok,2
+MxIC,Pe,weak-divergences,0.827121,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,3
+Pe,Mx,weak-divergences,0.387781,"eta-simulation, stable-simulation",ok,3
+Pe,MxIC,weak-divergences,0.626988,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,3
+Mx,Pe,weak-divergences,0.410587,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,3
+Pe,MxIC,weak-divergences,0.659152,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,4
+Pe,Mx,weak-divergences,0.396195,"eta-simulation, stable-simulation",ok,4
+MxIC,Pe,weak-divergences,0.848083,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,4
+Mx,Pe,weak-divergences,0.417422,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,4
+Pe,Mx,weak-divergences,0.385505,"eta-simulation, stable-simulation",ok,5
+Mx,Pe,weak-divergences,0.408700,"stable-revivals, s-impossible-future, 2-nested-weak-simulation",ok,5
+MxIC,Pe,weak-divergences,0.850085,"stable-readiness, s-impossible-future, eta-simulation, 2-nested-weak-simulation",ok,5
+Pe,MxIC,weak-divergences,0.557380,"eta-simulation, weak-ready-simulation, s-ready-simulation",ok,5

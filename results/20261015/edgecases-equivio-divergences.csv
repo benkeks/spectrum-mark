@@ -1,0 +1,161 @@
+left,right,spectrum,seconds,preorders,status,run
+Lowlink0,Lowlink3,weak-divergences,0.253418,sr-branching-bisimulation,ok,1
+AcyclicQ,AcyclicP,weak-divergences,0.259057,sr-branching-bisimulation,ok,1
+Deadlock,Loop,weak-divergences,0.290962,"stable-bisimulation, eta-bisimulation",ok,1
+Loop,Deadlock,weak-divergences,0.285752,,ok,1
+Lowlink0,LowlinkDeadlock,weak-divergences,0.272414,,ok,1
+ReviewR1,ReviewL1,weak-divergences,0.315254,weak-enabledness,ok,1
+ReviewR3,ReviewL3,weak-divergences,0.317506,"eta-simulation, stable-simulation",ok,1
+ReviewL3,ReviewR3,weak-divergences,0.344819,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+CCSQ,CCSP,weak-divergences,0.294714,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,1
+AcyclicP,AcyclicQ,weak-divergences,0.261317,sr-branching-bisimulation,ok,1
+SilentQ,SilentP,weak-divergences,0.247645,sr-branching-bisimulation,ok,1
+TraceB,TraceA,weak-divergences,0.259949,,ok,1
+NoDeadlockLoop,Deadlock,weak-divergences,0.267782,,ok,1
+Deadlock,LoopPart,weak-divergences,0.249809,"stable-bisimulation, eta-bisimulation",ok,1
+Lowlink0,Lowlink1,weak-divergences,0.261473,sr-branching-bisimulation,ok,1
+ReviewL1,ReviewR1,weak-divergences,0.311310,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,1
+DivergenceQ,DivergenceP,weak-divergences,0.270370,"eta-simulation, sr-delay-bisimulation",ok,1
+LowlinkDeadlock,Lowlink0,weak-divergences,0.262665,eta-simulation,ok,1
+CCSP,CCSQ,weak-divergences,0.292587,"eta-simulation, stable-simulation",ok,1
+LoopPart,Deadlock,weak-divergences,0.251802,,ok,1
+DivergenceP,DivergenceQ,weak-divergences,0.277142,sr-delay-bisimulation,ok,1
+Lowlink1,Lowlink0,weak-divergences,0.262555,sr-branching-bisimulation,ok,1
+Loop,LoopPart,weak-divergences,0.249910,sr-branching-bisimulation,ok,1
+LoopPart,Loop,weak-divergences,0.275427,sr-branching-bisimulation,ok,1
+ReviewR2,ReviewL2,weak-divergences,0.328825,weak-enabledness,ok,1
+Deadlock,NoDeadlockLoop,weak-divergences,0.267495,eta-simulation,ok,1
+ReviewL2,ReviewR2,weak-divergences,0.346105,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,1
+Lowlink0,Lowlink2,weak-divergences,0.276862,sr-branching-bisimulation,ok,1
+Lowlink2,Lowlink0,weak-divergences,0.257935,sr-branching-bisimulation,ok,1
+Lowlink3,Lowlink0,weak-divergences,0.240929,sr-branching-bisimulation,ok,1
+TraceA,TraceB,weak-divergences,0.257925,,ok,1
+SilentP,SilentQ,weak-divergences,0.251755,sr-branching-bisimulation,ok,1
+AcyclicP,AcyclicQ,weak-divergences,0.250244,sr-branching-bisimulation,ok,2
+Lowlink2,Lowlink0,weak-divergences,0.253284,sr-branching-bisimulation,ok,2
+TraceA,TraceB,weak-divergences,0.253749,,ok,2
+Deadlock,NoDeadlockLoop,weak-divergences,0.249526,eta-simulation,ok,2
+LowlinkDeadlock,Lowlink0,weak-divergences,0.263953,eta-simulation,ok,2
+DivergenceP,DivergenceQ,weak-divergences,0.266142,sr-delay-bisimulation,ok,2
+ReviewL1,ReviewR1,weak-divergences,0.316482,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,2
+ReviewL3,ReviewR3,weak-divergences,0.294052,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+Loop,Deadlock,weak-divergences,0.264980,,ok,2
+CCSQ,CCSP,weak-divergences,0.278889,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,2
+Loop,LoopPart,weak-divergences,0.256048,sr-branching-bisimulation,ok,2
+AcyclicQ,AcyclicP,weak-divergences,0.257113,sr-branching-bisimulation,ok,2
+Lowlink0,Lowlink1,weak-divergences,0.316355,sr-branching-bisimulation,ok,2
+Lowlink0,LowlinkDeadlock,weak-divergences,0.256916,,ok,2
+LoopPart,Loop,weak-divergences,0.255352,sr-branching-bisimulation,ok,2
+LoopPart,Deadlock,weak-divergences,0.257062,,ok,2
+Deadlock,LoopPart,weak-divergences,0.256069,"stable-bisimulation, eta-bisimulation",ok,2
+Lowlink3,Lowlink0,weak-divergences,0.249310,sr-branching-bisimulation,ok,2
+ReviewR1,ReviewL1,weak-divergences,0.300449,weak-enabledness,ok,2
+Lowlink0,Lowlink2,weak-divergences,0.257205,sr-branching-bisimulation,ok,2
+CCSP,CCSQ,weak-divergences,0.281150,"eta-simulation, stable-simulation",ok,2
+TraceB,TraceA,weak-divergences,0.250888,,ok,2
+SilentP,SilentQ,weak-divergences,0.259460,sr-branching-bisimulation,ok,2
+SilentQ,SilentP,weak-divergences,0.260874,sr-branching-bisimulation,ok,2
+DivergenceQ,DivergenceP,weak-divergences,0.282914,"eta-simulation, sr-delay-bisimulation",ok,2
+Lowlink1,Lowlink0,weak-divergences,0.261294,sr-branching-bisimulation,ok,2
+ReviewR3,ReviewL3,weak-divergences,0.304942,"eta-simulation, stable-simulation",ok,2
+Lowlink0,Lowlink3,weak-divergences,0.253737,sr-branching-bisimulation,ok,2
+Deadlock,Loop,weak-divergences,0.251980,"stable-bisimulation, eta-bisimulation",ok,2
+NoDeadlockLoop,Deadlock,weak-divergences,0.252100,,ok,2
+ReviewL2,ReviewR2,weak-divergences,0.350970,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,2
+ReviewR2,ReviewL2,weak-divergences,0.345735,weak-enabledness,ok,2
+SilentQ,SilentP,weak-divergences,0.266415,sr-branching-bisimulation,ok,3
+Lowlink0,Lowlink2,weak-divergences,0.256919,sr-branching-bisimulation,ok,3
+Loop,LoopPart,weak-divergences,0.242391,sr-branching-bisimulation,ok,3
+Loop,Deadlock,weak-divergences,0.256824,,ok,3
+Lowlink0,LowlinkDeadlock,weak-divergences,0.256813,,ok,3
+ReviewR1,ReviewL1,weak-divergences,0.311555,weak-enabledness,ok,3
+ReviewR3,ReviewL3,weak-divergences,0.312850,"eta-simulation, stable-simulation",ok,3
+ReviewR2,ReviewL2,weak-divergences,0.341491,weak-enabledness,ok,3
+Lowlink0,Lowlink1,weak-divergences,0.259154,sr-branching-bisimulation,ok,3
+DivergenceQ,DivergenceP,weak-divergences,0.275215,"eta-simulation, sr-delay-bisimulation",ok,3
+Deadlock,LoopPart,weak-divergences,0.263695,"stable-bisimulation, eta-bisimulation",ok,3
+LoopPart,Deadlock,weak-divergences,0.258347,,ok,3
+Lowlink1,Lowlink0,weak-divergences,0.249277,sr-branching-bisimulation,ok,3
+AcyclicP,AcyclicQ,weak-divergences,0.263075,sr-branching-bisimulation,ok,3
+Lowlink3,Lowlink0,weak-divergences,0.259698,sr-branching-bisimulation,ok,3
+CCSP,CCSQ,weak-divergences,0.284493,"eta-simulation, stable-simulation",ok,3
+CCSQ,CCSP,weak-divergences,0.299359,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,3
+LowlinkDeadlock,Lowlink0,weak-divergences,0.282067,eta-simulation,ok,3
+SilentP,SilentQ,weak-divergences,0.259969,sr-branching-bisimulation,ok,3
+Lowlink2,Lowlink0,weak-divergences,0.255224,sr-branching-bisimulation,ok,3
+ReviewL1,ReviewR1,weak-divergences,0.304663,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,3
+Lowlink0,Lowlink3,weak-divergences,0.250756,sr-branching-bisimulation,ok,3
+ReviewL2,ReviewR2,weak-divergences,0.342150,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,3
+NoDeadlockLoop,Deadlock,weak-divergences,0.261009,,ok,3
+DivergenceP,DivergenceQ,weak-divergences,0.284470,sr-delay-bisimulation,ok,3
+Deadlock,NoDeadlockLoop,weak-divergences,0.270990,eta-simulation,ok,3
+TraceB,TraceA,weak-divergences,0.253234,,ok,3
+Deadlock,Loop,weak-divergences,0.257503,"stable-bisimulation, eta-bisimulation",ok,3
+ReviewL3,ReviewR3,weak-divergences,0.315279,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+AcyclicQ,AcyclicP,weak-divergences,0.278263,sr-branching-bisimulation,ok,3
+TraceA,TraceB,weak-divergences,0.256050,,ok,3
+LoopPart,Loop,weak-divergences,0.262968,sr-branching-bisimulation,ok,3
+SilentP,SilentQ,weak-divergences,0.249845,sr-branching-bisimulation,ok,4
+ReviewR3,ReviewL3,weak-divergences,0.302514,"eta-simulation, stable-simulation",ok,4
+TraceB,TraceA,weak-divergences,0.253921,,ok,4
+DivergenceP,DivergenceQ,weak-divergences,0.287615,sr-delay-bisimulation,ok,4
+Lowlink0,Lowlink3,weak-divergences,0.270685,sr-branching-bisimulation,ok,4
+Deadlock,LoopPart,weak-divergences,0.253613,"stable-bisimulation, eta-bisimulation",ok,4
+CCSP,CCSQ,weak-divergences,0.278919,"eta-simulation, stable-simulation",ok,4
+Loop,Deadlock,weak-divergences,0.257723,,ok,4
+Lowlink0,Lowlink1,weak-divergences,0.264668,sr-branching-bisimulation,ok,4
+LowlinkDeadlock,Lowlink0,weak-divergences,0.256101,eta-simulation,ok,4
+Loop,LoopPart,weak-divergences,0.256494,sr-branching-bisimulation,ok,4
+TraceA,TraceB,weak-divergences,0.254882,,ok,4
+Lowlink0,LowlinkDeadlock,weak-divergences,0.247803,,ok,4
+DivergenceQ,DivergenceP,weak-divergences,0.261424,"eta-simulation, sr-delay-bisimulation",ok,4
+Lowlink2,Lowlink0,weak-divergences,0.253267,sr-branching-bisimulation,ok,4
+Deadlock,Loop,weak-divergences,0.253937,"stable-bisimulation, eta-bisimulation",ok,4
+AcyclicP,AcyclicQ,weak-divergences,0.259426,sr-branching-bisimulation,ok,4
+CCSQ,CCSP,weak-divergences,0.280235,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,4
+ReviewR1,ReviewL1,weak-divergences,0.301816,weak-enabledness,ok,4
+NoDeadlockLoop,Deadlock,weak-divergences,0.265742,,ok,4
+AcyclicQ,AcyclicP,weak-divergences,0.256065,sr-branching-bisimulation,ok,4
+Lowlink3,Lowlink0,weak-divergences,0.254841,sr-branching-bisimulation,ok,4
+ReviewL1,ReviewR1,weak-divergences,0.314130,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,4
+Lowlink0,Lowlink2,weak-divergences,0.280105,sr-branching-bisimulation,ok,4
+ReviewL2,ReviewR2,weak-divergences,0.351783,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,4
+ReviewL3,ReviewR3,weak-divergences,0.307136,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+Deadlock,NoDeadlockLoop,weak-divergences,0.264148,eta-simulation,ok,4
+LoopPart,Deadlock,weak-divergences,0.252745,,ok,4
+Lowlink1,Lowlink0,weak-divergences,0.261868,sr-branching-bisimulation,ok,4
+ReviewR2,ReviewL2,weak-divergences,0.322518,weak-enabledness,ok,4
+SilentQ,SilentP,weak-divergences,0.264519,sr-branching-bisimulation,ok,4
+LoopPart,Loop,weak-divergences,0.250201,sr-branching-bisimulation,ok,4
+ReviewL3,ReviewR3,weak-divergences,0.303791,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+LoopPart,Deadlock,weak-divergences,0.263430,,ok,5
+Lowlink0,Lowlink2,weak-divergences,0.251548,sr-branching-bisimulation,ok,5
+ReviewL2,ReviewR2,weak-divergences,0.333719,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,5
+Lowlink0,LowlinkDeadlock,weak-divergences,0.262121,,ok,5
+Loop,Deadlock,weak-divergences,0.250100,,ok,5
+TraceA,TraceB,weak-divergences,0.254102,,ok,5
+Lowlink3,Lowlink0,weak-divergences,0.253711,sr-branching-bisimulation,ok,5
+DivergenceQ,DivergenceP,weak-divergences,0.266829,"eta-simulation, sr-delay-bisimulation",ok,5
+SilentQ,SilentP,weak-divergences,0.272518,sr-branching-bisimulation,ok,5
+TraceB,TraceA,weak-divergences,0.250685,,ok,5
+SilentP,SilentQ,weak-divergences,0.253125,sr-branching-bisimulation,ok,5
+CCSP,CCSQ,weak-divergences,0.296622,"eta-simulation, stable-simulation",ok,5
+AcyclicQ,AcyclicP,weak-divergences,0.254063,sr-branching-bisimulation,ok,5
+Deadlock,LoopPart,weak-divergences,0.253706,"stable-bisimulation, eta-bisimulation",ok,5
+LoopPart,Loop,weak-divergences,0.255350,sr-branching-bisimulation,ok,5
+LowlinkDeadlock,Lowlink0,weak-divergences,0.246702,eta-simulation,ok,5
+ReviewR2,ReviewL2,weak-divergences,0.338702,weak-enabledness,ok,5
+ReviewR3,ReviewL3,weak-divergences,0.302065,"eta-simulation, stable-simulation",ok,5
+ReviewR1,ReviewL1,weak-divergences,0.327629,weak-enabledness,ok,5
+CCSQ,CCSP,weak-divergences,0.301673,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,5
+Loop,LoopPart,weak-divergences,0.247000,sr-branching-bisimulation,ok,5
+ReviewL1,ReviewR1,weak-divergences,0.320502,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,5
+Deadlock,NoDeadlockLoop,weak-divergences,0.253708,eta-simulation,ok,5
+DivergenceP,DivergenceQ,weak-divergences,0.268360,sr-delay-bisimulation,ok,5
+NoDeadlockLoop,Deadlock,weak-divergences,0.264777,,ok,5
+Lowlink0,Lowlink3,weak-divergences,0.253994,sr-branching-bisimulation,ok,5
+Lowlink0,Lowlink1,weak-divergences,0.252305,sr-branching-bisimulation,ok,5
+Lowlink2,Lowlink0,weak-divergences,0.262091,sr-branching-bisimulation,ok,5
+Deadlock,Loop,weak-divergences,0.253864,"stable-bisimulation, eta-bisimulation",ok,5
+Lowlink1,Lowlink0,weak-divergences,0.263103,sr-branching-bisimulation,ok,5
+AcyclicP,AcyclicQ,weak-divergences,0.249820,sr-branching-bisimulation,ok,5

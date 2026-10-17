@@ -1,0 +1,161 @@
+left,right,spectrum,seconds,preorders,status,run
+Lowlink0,Lowlink3,weak,0.226254,sr-branching-bisimulation,ok,1
+AcyclicQ,AcyclicP,weak,0.302745,sr-branching-bisimulation,ok,1
+Deadlock,Loop,weak,0.288315,sr-branching-bisimulation,ok,1
+Loop,Deadlock,weak,0.269836,sr-branching-bisimulation,ok,1
+Lowlink0,LowlinkDeadlock,weak,0.307084,,ok,1
+ReviewR1,ReviewL1,weak,0.345369,weak-enabledness,ok,1
+ReviewR3,ReviewL3,weak,0.310301,"eta-simulation, stable-simulation",ok,1
+ReviewL3,ReviewR3,weak,0.291745,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,1
+CCSQ,CCSP,weak,0.274922,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,1
+AcyclicP,AcyclicQ,weak,0.277792,sr-branching-bisimulation,ok,1
+SilentQ,SilentP,weak,0.261532,sr-branching-bisimulation,ok,1
+TraceB,TraceA,weak,0.269349,,ok,1
+NoDeadlockLoop,Deadlock,weak,0.254052,"stable-bisimulation, branching-bisimulation",ok,1
+Deadlock,LoopPart,weak,0.227474,sr-branching-bisimulation,ok,1
+Lowlink0,Lowlink1,weak,0.225741,sr-branching-bisimulation,ok,1
+ReviewL1,ReviewR1,weak,0.285870,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,1
+DivergenceQ,DivergenceP,weak,0.255807,sr-branching-bisimulation,ok,1
+LowlinkDeadlock,Lowlink0,weak,0.252776,eta-simulation,ok,1
+CCSP,CCSQ,weak,0.267116,"eta-simulation, stable-simulation",ok,1
+LoopPart,Deadlock,weak,0.241148,sr-branching-bisimulation,ok,1
+DivergenceP,DivergenceQ,weak,0.247310,sr-branching-bisimulation,ok,1
+Lowlink1,Lowlink0,weak,0.232429,sr-branching-bisimulation,ok,1
+Loop,LoopPart,weak,0.226378,sr-branching-bisimulation,ok,1
+LoopPart,Loop,weak,0.223019,sr-branching-bisimulation,ok,1
+ReviewR2,ReviewL2,weak,0.315054,weak-enabledness,ok,1
+Deadlock,NoDeadlockLoop,weak,0.250513,branching-bisimulation,ok,1
+ReviewL2,ReviewR2,weak,0.323608,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,1
+Lowlink0,Lowlink2,weak,0.235156,sr-branching-bisimulation,ok,1
+Lowlink2,Lowlink0,weak,0.232202,sr-branching-bisimulation,ok,1
+Lowlink3,Lowlink0,weak,0.242582,sr-branching-bisimulation,ok,1
+TraceA,TraceB,weak,0.245160,,ok,1
+SilentP,SilentQ,weak,0.227450,sr-branching-bisimulation,ok,1
+AcyclicP,AcyclicQ,weak,0.246248,sr-branching-bisimulation,ok,2
+Lowlink2,Lowlink0,weak,0.226681,sr-branching-bisimulation,ok,2
+TraceA,TraceB,weak,0.248007,,ok,2
+Deadlock,NoDeadlockLoop,weak,0.246851,branching-bisimulation,ok,2
+LowlinkDeadlock,Lowlink0,weak,0.268289,eta-simulation,ok,2
+DivergenceP,DivergenceQ,weak,0.256885,sr-branching-bisimulation,ok,2
+ReviewL1,ReviewR1,weak,0.313256,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,2
+ReviewL3,ReviewR3,weak,0.292368,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,2
+Loop,Deadlock,weak,0.241626,sr-branching-bisimulation,ok,2
+CCSQ,CCSP,weak,0.269150,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,2
+Loop,LoopPart,weak,0.227574,sr-branching-bisimulation,ok,2
+AcyclicQ,AcyclicP,weak,0.247928,sr-branching-bisimulation,ok,2
+Lowlink0,Lowlink1,weak,0.226774,sr-branching-bisimulation,ok,2
+Lowlink0,LowlinkDeadlock,weak,0.253793,,ok,2
+LoopPart,Loop,weak,0.230127,sr-branching-bisimulation,ok,2
+LoopPart,Deadlock,weak,0.232732,sr-branching-bisimulation,ok,2
+Deadlock,LoopPart,weak,0.230817,sr-branching-bisimulation,ok,2
+Lowlink3,Lowlink0,weak,0.221482,sr-branching-bisimulation,ok,2
+ReviewR1,ReviewL1,weak,0.307889,weak-enabledness,ok,2
+Lowlink0,Lowlink2,weak,0.225229,sr-branching-bisimulation,ok,2
+CCSP,CCSQ,weak,0.263090,"eta-simulation, stable-simulation",ok,2
+TraceB,TraceA,weak,0.257717,,ok,2
+SilentP,SilentQ,weak,0.226729,sr-branching-bisimulation,ok,2
+SilentQ,SilentP,weak,0.227360,sr-branching-bisimulation,ok,2
+DivergenceQ,DivergenceP,weak,0.236023,sr-branching-bisimulation,ok,2
+Lowlink1,Lowlink0,weak,0.229841,sr-branching-bisimulation,ok,2
+ReviewR3,ReviewL3,weak,0.297401,"eta-simulation, stable-simulation",ok,2
+Lowlink0,Lowlink3,weak,0.233016,sr-branching-bisimulation,ok,2
+Deadlock,Loop,weak,0.249904,sr-branching-bisimulation,ok,2
+NoDeadlockLoop,Deadlock,weak,0.249221,"stable-bisimulation, branching-bisimulation",ok,2
+ReviewL2,ReviewR2,weak,0.333132,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,2
+ReviewR2,ReviewL2,weak,0.308561,weak-enabledness,ok,2
+SilentQ,SilentP,weak,0.238212,sr-branching-bisimulation,ok,3
+Lowlink0,Lowlink2,weak,0.223410,sr-branching-bisimulation,ok,3
+Loop,LoopPart,weak,0.224342,sr-branching-bisimulation,ok,3
+Loop,Deadlock,weak,0.231381,sr-branching-bisimulation,ok,3
+Lowlink0,LowlinkDeadlock,weak,0.250560,,ok,3
+ReviewR1,ReviewL1,weak,0.280339,weak-enabledness,ok,3
+ReviewR3,ReviewL3,weak,0.290015,"eta-simulation, stable-simulation",ok,3
+ReviewR2,ReviewL2,weak,0.323995,weak-enabledness,ok,3
+Lowlink0,Lowlink1,weak,0.238966,sr-branching-bisimulation,ok,3
+DivergenceQ,DivergenceP,weak,0.254408,sr-branching-bisimulation,ok,3
+Deadlock,LoopPart,weak,0.237202,sr-branching-bisimulation,ok,3
+LoopPart,Deadlock,weak,0.242987,sr-branching-bisimulation,ok,3
+Lowlink1,Lowlink0,weak,0.234720,sr-branching-bisimulation,ok,3
+AcyclicP,AcyclicQ,weak,0.243894,sr-branching-bisimulation,ok,3
+Lowlink3,Lowlink0,weak,0.267638,sr-branching-bisimulation,ok,3
+CCSP,CCSQ,weak,0.271270,"eta-simulation, stable-simulation",ok,3
+CCSQ,CCSP,weak,0.296567,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,3
+LowlinkDeadlock,Lowlink0,weak,0.267411,eta-simulation,ok,3
+SilentP,SilentQ,weak,0.231339,sr-branching-bisimulation,ok,3
+Lowlink2,Lowlink0,weak,0.226811,sr-branching-bisimulation,ok,3
+ReviewL1,ReviewR1,weak,0.322460,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,3
+Lowlink0,Lowlink3,weak,0.229372,sr-branching-bisimulation,ok,3
+ReviewL2,ReviewR2,weak,0.325891,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,3
+NoDeadlockLoop,Deadlock,weak,0.261104,"stable-bisimulation, branching-bisimulation",ok,3
+DivergenceP,DivergenceQ,weak,0.252573,sr-branching-bisimulation,ok,3
+Deadlock,NoDeadlockLoop,weak,0.245053,branching-bisimulation,ok,3
+TraceB,TraceA,weak,0.252803,,ok,3
+Deadlock,Loop,weak,0.227392,sr-branching-bisimulation,ok,3
+ReviewL3,ReviewR3,weak,0.279159,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,3
+AcyclicQ,AcyclicP,weak,0.252334,sr-branching-bisimulation,ok,3
+TraceA,TraceB,weak,0.248268,,ok,3
+LoopPart,Loop,weak,0.219873,sr-branching-bisimulation,ok,3
+SilentP,SilentQ,weak,0.267654,sr-branching-bisimulation,ok,4
+ReviewR3,ReviewL3,weak,0.289416,"eta-simulation, stable-simulation",ok,4
+TraceB,TraceA,weak,0.269619,,ok,4
+DivergenceP,DivergenceQ,weak,0.244951,sr-branching-bisimulation,ok,4
+Lowlink0,Lowlink3,weak,0.228995,sr-branching-bisimulation,ok,4
+Deadlock,LoopPart,weak,0.230891,sr-branching-bisimulation,ok,4
+CCSP,CCSQ,weak,0.259788,"eta-simulation, stable-simulation",ok,4
+Loop,Deadlock,weak,0.239075,sr-branching-bisimulation,ok,4
+Lowlink0,Lowlink1,weak,0.244032,sr-branching-bisimulation,ok,4
+LowlinkDeadlock,Lowlink0,weak,0.245969,eta-simulation,ok,4
+Loop,LoopPart,weak,0.226103,sr-branching-bisimulation,ok,4
+TraceA,TraceB,weak,0.245376,,ok,4
+Lowlink0,LowlinkDeadlock,weak,0.249710,,ok,4
+DivergenceQ,DivergenceP,weak,0.249886,sr-branching-bisimulation,ok,4
+Lowlink2,Lowlink0,weak,0.223692,sr-branching-bisimulation,ok,4
+Deadlock,Loop,weak,0.222822,sr-branching-bisimulation,ok,4
+AcyclicP,AcyclicQ,weak,0.240938,sr-branching-bisimulation,ok,4
+CCSQ,CCSP,weak,0.273000,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,4
+ReviewR1,ReviewL1,weak,0.274680,weak-enabledness,ok,4
+NoDeadlockLoop,Deadlock,weak,0.240610,"stable-bisimulation, branching-bisimulation",ok,4
+AcyclicQ,AcyclicP,weak,0.253540,sr-branching-bisimulation,ok,4
+Lowlink3,Lowlink0,weak,0.229998,sr-branching-bisimulation,ok,4
+ReviewL1,ReviewR1,weak,0.305097,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,4
+Lowlink0,Lowlink2,weak,0.222970,sr-branching-bisimulation,ok,4
+ReviewL2,ReviewR2,weak,0.349382,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,4
+ReviewL3,ReviewR3,weak,0.289718,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,4
+Deadlock,NoDeadlockLoop,weak,0.249015,branching-bisimulation,ok,4
+LoopPart,Deadlock,weak,0.223317,sr-branching-bisimulation,ok,4
+Lowlink1,Lowlink0,weak,0.226948,sr-branching-bisimulation,ok,4
+ReviewR2,ReviewL2,weak,0.310929,weak-enabledness,ok,4
+SilentQ,SilentP,weak,0.237710,sr-branching-bisimulation,ok,4
+LoopPart,Loop,weak,0.220469,sr-branching-bisimulation,ok,4
+ReviewL3,ReviewR3,weak,0.286204,"s-impossible-future, eta-simulation, s-ready-simulation, 2-nested-weak-simulation",ok,5
+LoopPart,Deadlock,weak,0.236314,sr-branching-bisimulation,ok,5
+Lowlink0,Lowlink2,weak,0.229861,sr-branching-bisimulation,ok,5
+ReviewL2,ReviewR2,weak,0.317446,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,5
+Lowlink0,LowlinkDeadlock,weak,0.254748,,ok,5
+Loop,Deadlock,weak,0.239193,sr-branching-bisimulation,ok,5
+TraceA,TraceB,weak,0.267546,,ok,5
+Lowlink3,Lowlink0,weak,0.263776,sr-branching-bisimulation,ok,5
+DivergenceQ,DivergenceP,weak,0.280211,sr-branching-bisimulation,ok,5
+SilentQ,SilentP,weak,0.250722,sr-branching-bisimulation,ok,5
+TraceB,TraceA,weak,0.285585,,ok,5
+SilentP,SilentQ,weak,0.276569,sr-branching-bisimulation,ok,5
+CCSP,CCSQ,weak,0.286445,"eta-simulation, stable-simulation",ok,5
+AcyclicQ,AcyclicP,weak,0.256102,sr-branching-bisimulation,ok,5
+Deadlock,LoopPart,weak,0.233201,sr-branching-bisimulation,ok,5
+LoopPart,Loop,weak,0.245846,sr-branching-bisimulation,ok,5
+LowlinkDeadlock,Lowlink0,weak,0.282017,eta-simulation,ok,5
+ReviewR2,ReviewL2,weak,0.323903,weak-enabledness,ok,5
+ReviewR3,ReviewL3,weak,0.281423,"eta-simulation, stable-simulation",ok,5
+ReviewR1,ReviewL1,weak,0.296154,weak-enabledness,ok,5
+CCSQ,CCSP,weak,0.278173,"stable-failure-trace, s-impossible-future, weak-impossible-future",ok,5
+Loop,LoopPart,weak,0.230267,sr-branching-bisimulation,ok,5
+ReviewL1,ReviewR1,weak,0.296669,"weak-readiness, stable-readiness, eta-simulation, stable-simulation",ok,5
+Deadlock,NoDeadlockLoop,weak,0.252625,branching-bisimulation,ok,5
+DivergenceP,DivergenceQ,weak,0.267154,sr-branching-bisimulation,ok,5
+NoDeadlockLoop,Deadlock,weak,0.247416,"stable-bisimulation, branching-bisimulation",ok,5
+Lowlink0,Lowlink3,weak,0.222199,sr-branching-bisimulation,ok,5
+Lowlink0,Lowlink1,weak,0.220511,sr-branching-bisimulation,ok,5
+Lowlink2,Lowlink0,weak,0.224285,sr-branching-bisimulation,ok,5
+Deadlock,Loop,weak,0.244709,sr-branching-bisimulation,ok,5
+Lowlink1,Lowlink0,weak,0.219219,sr-branching-bisimulation,ok,5
+AcyclicP,AcyclicQ,weak,0.264932,sr-branching-bisimulation,ok,5

@@ -1,0 +1,193 @@
+Lowlink0,Lowlink3
+  first spectroscopy: 0.228995s; notions decided: 26/26
+  second spectroscopy: 0.052143s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+AcyclicQ,AcyclicP
+  first spectroscopy: 0.253540s; notions decided: 26/26
+  second spectroscopy: 0.051626s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Deadlock,Loop
+  first spectroscopy: 0.244709s; notions decided: 26/26
+  second spectroscopy: 0.049917s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Loop,Deadlock
+  first spectroscopy: 0.239193s; notions decided: 26/26
+  second spectroscopy: 0.050702s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Lowlink0,LowlinkDeadlock
+  first spectroscopy: 0.253793s; notions decided: 26/26
+  second spectroscopy: 0.054044s; notions decided: 5/5
+  first only: (none)
+  second only: (none)
+  more precise: neither
+ReviewR1,ReviewL1
+  first spectroscopy: 0.296154s; notions decided: 26/26
+  second spectroscopy: 0.052566s; notions decided: 5/5
+  first only: weak-enabledness
+  second only: (none)
+  more precise: first
+ReviewR3,ReviewL3
+  first spectroscopy: 0.290015s; notions decided: 26/26
+  second spectroscopy: 0.053778s; notions decided: 5/5
+  first only: eta-simulation, stable-simulation
+  second only: (none)
+  more precise: first
+ReviewL3,ReviewR3
+  first spectroscopy: 0.289718s; notions decided: 26/26
+  second spectroscopy: 0.051926s; notions decided: 5/5
+  first only: 2-nested-weak-simulation, eta-simulation, s-impossible-future, s-ready-simulation
+  second only: (none)
+  more precise: first
+CCSQ,CCSP
+  first spectroscopy: 0.274922s; notions decided: 26/26
+  second spectroscopy: 0.055664s; notions decided: 5/5
+  first only: s-impossible-future, stable-failure-trace, weak-impossible-future
+  second only: (none)
+  more precise: first
+AcyclicP,AcyclicQ
+  first spectroscopy: 0.246248s; notions decided: 26/26
+  second spectroscopy: 0.050663s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+SilentQ,SilentP
+  first spectroscopy: 0.238212s; notions decided: 26/26
+  second spectroscopy: 0.053370s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+TraceB,TraceA
+  first spectroscopy: 0.269349s; notions decided: 26/26
+  second spectroscopy: 0.052763s; notions decided: 5/5
+  first only: (none)
+  second only: (none)
+  more precise: neither
+NoDeadlockLoop,Deadlock
+  first spectroscopy: 0.249221s; notions decided: 26/26
+  second spectroscopy: 0.049703s; notions decided: 5/5
+  first only: stable-bisimulation
+  second only: coupled-simulation
+  more precise: both
+  INCONSISTENCY: second reports stable-failure (equivalence) false, but first implies it via stable-bisimulation (equivalence)
+Deadlock,LoopPart
+  first spectroscopy: 0.230891s; notions decided: 26/26
+  second spectroscopy: 0.053422s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Lowlink0,Lowlink1
+  first spectroscopy: 0.226774s; notions decided: 26/26
+  second spectroscopy: 0.053175s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+ReviewL1,ReviewR1
+  first spectroscopy: 0.305097s; notions decided: 26/26
+  second spectroscopy: 0.053256s; notions decided: 5/5
+  first only: eta-simulation, stable-readiness, stable-simulation, weak-readiness
+  second only: (none)
+  more precise: first
+DivergenceQ,DivergenceP
+  first spectroscopy: 0.254408s; notions decided: 26/26
+  second spectroscopy: 0.050329s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+LowlinkDeadlock,Lowlink0
+  first spectroscopy: 0.267411s; notions decided: 26/26
+  second spectroscopy: 0.050356s; notions decided: 5/5
+  first only: eta-simulation
+  second only: (none)
+  more precise: first
+CCSP,CCSQ
+  first spectroscopy: 0.267116s; notions decided: 26/26
+  second spectroscopy: 0.051619s; notions decided: 5/5
+  first only: eta-simulation, stable-simulation
+  second only: (none)
+  more precise: first
+LoopPart,Deadlock
+  first spectroscopy: 0.236314s; notions decided: 26/26
+  second spectroscopy: 0.050904s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+DivergenceP,DivergenceQ
+  first spectroscopy: 0.252573s; notions decided: 26/26
+  second spectroscopy: 0.050928s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Lowlink1,Lowlink0
+  first spectroscopy: 0.229841s; notions decided: 26/26
+  second spectroscopy: 0.050183s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Loop,LoopPart
+  first spectroscopy: 0.226378s; notions decided: 26/26
+  second spectroscopy: 0.051039s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+LoopPart,Loop
+  first spectroscopy: 0.223019s; notions decided: 26/26
+  second spectroscopy: 0.053141s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+ReviewR2,ReviewL2
+  first spectroscopy: 0.315054s; notions decided: 26/26
+  second spectroscopy: 0.051247s; notions decided: 5/5
+  first only: weak-enabledness
+  second only: (none)
+  more precise: first
+Deadlock,NoDeadlockLoop
+  first spectroscopy: 0.249015s; notions decided: 26/26
+  second spectroscopy: 0.052650s; notions decided: 5/5
+  first only: (none)
+  second only: coupled-simulation
+  more precise: second
+ReviewL2,ReviewR2
+  first spectroscopy: 0.325891s; notions decided: 26/26
+  second spectroscopy: 0.052162s; notions decided: 5/5
+  first only: eta-simulation, stable-readiness, stable-simulation, weak-readiness
+  second only: (none)
+  more precise: first
+Lowlink0,Lowlink2
+  first spectroscopy: 0.225229s; notions decided: 26/26
+  second spectroscopy: 0.052011s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Lowlink2,Lowlink0
+  first spectroscopy: 0.226681s; notions decided: 26/26
+  second spectroscopy: 0.052484s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+Lowlink3,Lowlink0
+  first spectroscopy: 0.242582s; notions decided: 26/26
+  second spectroscopy: 0.055750s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
+TraceA,TraceB
+  first spectroscopy: 0.248007s; notions decided: 26/26
+  second spectroscopy: 0.053986s; notions decided: 5/5
+  first only: (none)
+  second only: (none)
+  more precise: neither
+SilentP,SilentQ
+  first spectroscopy: 0.231339s; notions decided: 26/26
+  second spectroscopy: 0.053554s; notions decided: 5/5
+  first only: sr-branching-bisimulation
+  second only: coupled-simulation
+  more precise: both
