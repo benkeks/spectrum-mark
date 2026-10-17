@@ -1,5 +1,11 @@
 # Spectrum Mark
 
+Spectrum Mark is a collection of examples and scripts to facilitate the comparison of equivalence checking across different concurrency verification tools.
+In particular, it enables to run all supported equivalence checks of equiv.io, mCRL2, and CADP on datasets from Rob van Glabbeek's finitary distinguishing examples of behavioral equivalences.
+
+Maintained by [Benjamin Bisping](https://bbisping.de).  
+<benjamin.bisping@centralesupelec.fr>
+
 ## Setup
 
 Python 3 is required. Tool-specific dependencies:
