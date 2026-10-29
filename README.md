@@ -34,6 +34,9 @@ This starts from the registered CSV datasets, builds the tools as needed, genera
 - `examples/ltbts2.csv`: 16 weak LTBTS2 pairs (ending with P57-P58), with ordinary and divergence-sensitive checks.
 - `examples/peterson-silent.csv`: Peterson implementation `Pe` versus specifications `Mx` and `MxIC`, with ordinary and delta-marked weak Equivio spectroscopy. mCRL2 and CADP also check their native divergence-sensitive relations.
 
+Without a licensed CADP installation, use `python3 run_suite.py --tools equivio mcrl2`.
+Only selected tools are executed and compared; omitted tools appear as `N/A` in benchmark tables.
+
 Run only the weak datasets, select a smaller comparison, or provide another CSV:
 
 ```sh

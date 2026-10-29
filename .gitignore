@@ -1,4 +1,5 @@
 /results/*.csv
 *.pyc
 /build/mcrl2/
+/artifact-results/
 settings.json

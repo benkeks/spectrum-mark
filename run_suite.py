@@ -81,7 +81,10 @@ def record_environment(output_dir, cadp_bin=None):
     (output_dir / "environment.json").write_text(json.dumps(metadata, indent=2) + "\n")
 
 
-def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=None, benchmark_performance=False):
+def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=None,
+                benchmark_performance=False, tools=TOOLS):
+    if not tools or len(set(tools)) != len(tools) or set(tools) - set(TOOLS):
+        raise ValueError(f"Expected distinct tools from {TOOLS}, got {tools}")
     if divergences is None:
         divergences = weak
     if divergences:
@@ -99,9 +102,9 @@ def run_dataset(csv_path, pairs, weak, output_dir, cadp_bin=None, divergences=No
     for left, right in pairs:
         options.extend(("--pair", left, right))
     reports = {False: {}, True: {}}
-    runs = [(tool, tool, False) for tool in TOOLS]
+    runs = [(tool, tool, False) for tool in tools]
     if divergences:
-        runs.extend((f"{tool}-divergences", tool, True) for tool in TOOLS)
+        runs.extend((f"{tool}-divergences", tool, True) for tool in tools)
     for report_name, tool, marked in runs:
         command = [sys.executable, str(root / f"run_{tool}.py"), *options]
         if marked:
@@ -139,6 +142,8 @@ def main():
     parser.add_argument("--divergences", action="store_true",
                         help="Include the divergence track (already standard for weak datasets)")
     parser.add_argument("--cadp-bin", type=Path, help="Override the CADP binary directory")
+    parser.add_argument("--tools", nargs="+", choices=TOOLS, default=TOOLS,
+                        help="Tools to run (default: all three; select equivio mcrl2 without CADP)")
     args = parser.parse_args()
     if args.divergences and not args.weak and (args.csv is not None or args.pair is not None):
         parser.error("--divergences requires --weak when selecting an input or pair")
@@ -156,7 +161,7 @@ def main():
         for csv_path, pairs, weak, divergences in datasets:
             run_dataset(csv_path, pairs, weak, args.output_dir, args.cadp_bin,
                         divergences=divergences or (args.divergences and weak),
-                        benchmark_performance=args.benchmark_performance)
+                        benchmark_performance=args.benchmark_performance, tools=args.tools)
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Suite failed: {error}\n")
 
