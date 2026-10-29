@@ -6,6 +6,9 @@ In particular, it enables to run all supported equivalence checks of equiv.io, m
 Maintained by [Benjamin Bisping](https://bbisping.de).  
 <benjamin.bisping@centralesupelec.fr>
 
+For an artifact Docker image, smoke test and paper-ordered reproduction
+walkthrough, see [artifact/README.md](artifact/README.md).
+
 ## Setup
 
 Python 3 is required. Tool-specific dependencies:
