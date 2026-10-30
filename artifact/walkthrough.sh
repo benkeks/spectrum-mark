@@ -70,7 +70,7 @@ if [[ "$section" == all || "$section" == examples ]]; then
     report 'Rebuilding equiv.io from bundled sources (JVM, JavaScript API and web client).\n'
     (cd equivio && test_summary sbt -batch -J-Xmx8G clean "shared/test" "shared/assembly" "jsApi/fastLinkJS" webStage)
     node equivio/js-api/src/main/jstest/TestApi.js
-    bash artifact/smoke-test.sh
+    show bash artifact/smoke-test.sh
     report 'Clean build and smoke test passed.\n'
     pause
 fi
