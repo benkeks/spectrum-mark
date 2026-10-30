@@ -2,4 +2,6 @@
 *.pyc
 /build/mcrl2/
 /artifact-results/
+/artifact-builds/
+/equivio-artifact.tar
 settings.json

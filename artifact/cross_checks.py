@@ -90,7 +90,8 @@ def reproduce(output, full=False, cadp="auto"):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--full", action="store_true", help="Five shuffled repetitions, as in the paper")
+    parser.add_argument("--full", "--full-5", action="store_true",
+                        help="Five shuffled repetitions, as in the paper")
     parser.add_argument("--cadp", choices=("auto", "off", "on"),
                         default=os.environ.get("CADP_MODE", "auto"))
     args = parser.parse_args()

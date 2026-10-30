@@ -25,6 +25,8 @@ bash build_mcrl2.sh
 
 The mCRL2 build initializes a shallow checkout if missing, preserves existing local edits, and builds only `ltscompare` under `build/mcrl2/stage/bin`. No system installation is needed.
 
+To assemble a distributable artifact, run `git submodule update --init` and `bash build-artifact.sh` with Docker available. This builds and smoke-tests an image, then collects it with an artifact README, license and current sources in a fresh `artifact-builds/equivio-artifact-.../`.
+
 ## Run
 
 ```sh

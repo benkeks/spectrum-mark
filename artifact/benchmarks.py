@@ -84,7 +84,8 @@ def reproduce(output, systems, runs, timeout, semantics):
     (output / "configuration.json").write_text(json.dumps({
         "systems": systems, "runs": runs, "timeout_seconds": timeout,
         "heap": "8g", "active_processors": 1, "semantics": semantics,
-        "timing": "mean of middle runs (discard min and max when runs > 2)",
+        "timing": ("single run" if runs == 1
+                   else "mean of middle runs (discard min and max when runs > 2)"),
     }, indent=2) + "\n")
     for family in semantics:
         fields = (*COLUMNS, *notions(family), "Run", "Status")
@@ -113,17 +114,20 @@ def reproduce(output, systems, runs, timeout, semantics):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--full", action="store_true", help="All 11 systems, five runs, 500 s limit")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--full", action="store_true", help="All 11 systems, one run, 500 s limit")
+    mode.add_argument("--full-5", action="store_true", help="All 11 systems, five runs, 500 s limit")
     parser.add_argument("--system", action="append", choices=SYSTEMS, help="Select individual systems")
     parser.add_argument("--runs", type=int, help="Override the number of repetitions")
     parser.add_argument("--timeout", type=float, help="Override seconds per isolated JVM")
     parser.add_argument("--semantics", choices=("strong", "weak", "both"), default="both")
     args = parser.parse_args()
-    runs = args.runs if args.runs is not None else 5 if args.full else 1
-    timeout = args.timeout if args.timeout is not None else 500 if args.full else 10
+    full = args.full or args.full_5
+    runs = args.runs if args.runs is not None else 5 if args.full_5 else 1
+    timeout = args.timeout if args.timeout is not None else 500 if full else 10
     if runs < 1 or timeout <= 0 or timeout == float("inf") or timeout != timeout:
         parser.error("--runs and --timeout must be positive finite values")
-    systems = tuple(dict.fromkeys(args.system)) if args.system else SYSTEMS if args.full else EASY
+    systems = tuple(dict.fromkeys(args.system)) if args.system else SYSTEMS if full else EASY
     semantics = ("strong", "weak") if args.semantics == "both" else (args.semantics,)
     try:
         reproduce(args.output_dir.expanduser().resolve(), systems, runs, timeout, semantics)

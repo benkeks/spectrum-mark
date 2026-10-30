@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import subprocess
@@ -12,6 +13,103 @@ from artifact import benchmarks, cross_checks
 
 
 class ArtifactBenchmarkTests(unittest.TestCase):
+    def test_cli_mode_defaults_and_explicit_overrides(self):
+        cases = (
+            ([], benchmarks.EASY, 1, 10, ("strong", "weak")),
+            (["--full"], benchmarks.SYSTEMS, 1, 500, ("strong", "weak")),
+            (["--full-5"], benchmarks.SYSTEMS, 5, 500, ("strong", "weak")),
+        )
+        for flags, systems, runs, timeout, semantics in cases:
+            with self.subTest(flags=flags), \
+                    patch("sys.argv", ["benchmarks.py", "--output-dir", "/tmp/vlts", *flags]), \
+                    patch.object(benchmarks, "reproduce") as reproduce:
+                benchmarks.main()
+                self.assertEqual(reproduce.call_args.args,
+                                 (Path("/tmp/vlts").resolve(), systems, runs, timeout, semantics))
+        for mode in ("--full", "--full-5"):
+            with self.subTest(mode=mode), \
+                    patch("sys.argv", ["benchmarks.py", "--output-dir", "/tmp/vlts", mode,
+                                       "--system", "peterson", "--system", "peterson",
+                                       "--runs", "2", "--timeout", "12", "--semantics", "weak"]), \
+                    patch.object(benchmarks, "reproduce") as reproduce:
+                benchmarks.main()
+                self.assertEqual(reproduce.call_args.args,
+                                 (Path("/tmp/vlts").resolve(), ("peterson",), 2, 12, ("weak",)))
+
+    def test_walkthrough_modes_write_and_report_the_expected_measurements(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            artifact = root / "artifact"
+            artifact.mkdir()
+            jar = root / "equivio/shared/target/scala-2.13/shared-assembly-test.jar"
+            jar.parent.mkdir(parents=True)
+            jar.touch()
+            (artifact / "benchmarks.py").write_text(
+                "import sys\n"
+                "from pathlib import Path\n"
+                f"sys.path.insert(0, {str(benchmarks.ROOT)!r})\n"
+                "from artifact import benchmarks\n"
+                "benchmarks.EQUIVIO = Path(__file__).resolve().parents[1] / 'equivio'\n"
+                "def measurement(jar, semantics, system, timeout, log):\n"
+                "    return {'System': benchmarks.input_path(system),\n"
+                "            **{name: '7' for name in benchmarks.COLUMNS[1:]},\n"
+                "            **{name: '7' for name in benchmarks.notions(semantics)},\n"
+                "            'Spectroscopy time': '1234', 'Status': 'ok'}\n"
+                "benchmarks.measurement = measurement\n"
+                "benchmarks.main()\n"
+            )
+            for mode, systems, runs, timeout in (
+                ("quick", benchmarks.EASY, 1, 10),
+                ("full", benchmarks.SYSTEMS, 1, 500),
+                ("full-5", benchmarks.SYSTEMS, 5, 500),
+            ):
+                with self.subTest(mode=mode):
+                    output = root / mode
+                    result = subprocess.run(
+                        ["bash", str(benchmarks.ROOT / "artifact/walkthrough.sh"),
+                         mode, str(output), "benchmarks"],
+                        env={**os.environ, "ARTIFACT_ROOT": str(root),
+                             "WALKTHROUGH_NONINTERACTIVE": "1"},
+                        capture_output=True, text=True, timeout=30,
+                    )
+                    self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    self.assertIn("peterson", result.stdout)
+                    self.assertIn("1.23", result.stdout)
+                    self.assertIn("Walkthrough finished.", result.stdout)
+                    metadata = json.loads((output / "vlts/configuration.json").read_text())
+                    self.assertEqual(metadata["systems"], list(systems))
+                    self.assertEqual(metadata["runs"], runs)
+                    self.assertEqual(metadata["timeout_seconds"], timeout)
+                    for semantics in ("strong", "weak"):
+                        with (output / f"vlts/benchmarking_{semantics}_game.csv").open() as file:
+                            rows = list(csv.DictReader(file))
+                        self.assertEqual(len(rows), len(systems) * runs)
+                        for run in range(1, runs + 1):
+                            self.assertEqual(
+                                {row["System"] for row in rows if row["Run"] == str(run)},
+                                {benchmarks.input_path(system) for system in systems},
+                            )
+                        with (output / f"vlts/table-{semantics}.csv").open() as file:
+                            summary = list(csv.DictReader(file))
+                        self.assertEqual(len(summary), len(systems))
+                        self.assertTrue(all(row["time (s)"] == "1.23" and row["Status"] == "ok"
+                                            for row in summary))
+
+    def test_single_run_summary_reports_time_and_timeouts(self):
+        row = {"System": benchmarks.input_path("peterson"), "Spectroscopy time": "1234",
+               "States": "100", "Bisim pre-minimized size": "26", "Game moves": "50",
+               "enabledness": "2", "trace": "5", "simulation": "8", "Status": "ok"}
+        result = benchmarks.summarize([row], ("peterson",), 1, "strong")[0]
+        self.assertEqual(result["time (s)"], "1.23")
+        self.assertEqual(result["trace"], "5")
+        self.assertEqual(result["Status"], "ok")
+        result = benchmarks.summarize(
+            [{"System": benchmarks.input_path("peterson"), "Status": "timeout"}],
+            ("peterson",), 1, "strong",
+        )[0]
+        self.assertEqual(result["time (s)"], "")
+        self.assertEqual(result["Status"], "timeout")
+
     def test_summary_uses_paper_trimmed_mean_and_preserves_quotients(self):
         rows = [
             {"System": benchmarks.input_path("peterson"), "Spectroscopy time": str(time),
@@ -71,6 +169,15 @@ class ArtifactBenchmarkTests(unittest.TestCase):
 
 
 class OptionalCADPTests(unittest.TestCase):
+    def test_full_cli_modes_both_keep_five_cross_check_repetitions(self):
+        for mode in ("--full", "--full-5"):
+            with self.subTest(mode=mode), \
+                    patch.object(cross_checks.sys, "argv",
+                                 ["cross_checks.py", "--output-dir", "/tmp/checks", mode, "--cadp", "off"]), \
+                    patch.object(cross_checks, "reproduce") as reproduce:
+                cross_checks.main()
+                reproduce.assert_called_once_with(Path("/tmp/checks").resolve(), True, "off")
+
     def test_cadp_absence_is_explicit_and_bad_configuration_is_not_ignored(self):
         with patch.dict(os.environ, {}, clear=True), \
                 patch.object(Path, "exists", return_value=False), patch("builtins.print") as printer:

@@ -5,8 +5,8 @@ cd "$root"
 mode=${1:-quick}
 output=${2:-/results/$mode}
 section=${3:-all}
-if [[ $# -gt 3 || ! "$mode" =~ ^(quick|full)$ || ! "$section" =~ ^(all|examples|cross-checks|benchmarks)$ ]]; then
-    printf 'Usage: bash artifact/walkthrough.sh [quick|full] [output-directory] [all|examples|cross-checks|benchmarks]\n' >&2
+if [[ $# -gt 3 || ! "$mode" =~ ^(quick|full|full-5)$ || ! "$section" =~ ^(all|examples|cross-checks|benchmarks)$ ]]; then
+    printf 'Usage: bash artifact/walkthrough.sh [quick|full|full-5] [output-directory] [all|examples|cross-checks|benchmarks]\n' >&2
     exit 2
 fi
 mkdir -p "$output"
@@ -53,7 +53,7 @@ pause() {
 
 report 'Full console output: %s\n' "$log"
 full=()
-[[ "$mode" != full ]] || full=(--full)
+[[ "$mode" == quick ]] || full=("--$mode")
 
 if [[ "$section" == all || "$section" == examples ]]; then
     report '\n== Section 2: running example and directional preorders ==\n'
@@ -66,9 +66,12 @@ if [[ "$section" == all || "$section" == examples ]]; then
     report '\n-- Hiding: weak failures are not a congruence --\n'
     show node artifact/examples.js hiding "$output/examples"
     pause
-    report '\n== Section 4: backend tests ==\n'
-    report 'Scala backend tests:\n'
-    (cd equivio && test_summary sbt -batch -J-Xmx8G "shared/test")
+    report '\n== Section 4: clean build and regression tests ==\n'
+    report 'Rebuilding equiv.io from bundled sources (JVM, JavaScript API and web client).\n'
+    (cd equivio && test_summary sbt -batch -J-Xmx8G clean "shared/test" "shared/assembly" "jsApi/fastLinkJS" webStage)
+    node equivio/js-api/src/main/jstest/TestApi.js
+    bash artifact/smoke-test.sh
+    report 'Clean build and smoke test passed.\n'
     pause
 fi
 if [[ "$section" == all || "$section" == cross-checks ]]; then

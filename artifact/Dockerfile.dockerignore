@@ -12,6 +12,8 @@
 build
 results
 artifact-results
+artifact-builds
+/equivio-artifact.tar
 notes
 examples/aut
 artifact/*.tar*
